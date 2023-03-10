@@ -21,9 +21,11 @@ func main() {
 	namespace := flag.String("namespace", "default", "The job's namespace to deploy to")
 	kuneConfigPath := flag.String("kubeConfigPath", "", "The path to the kubeconfig")
 	pollInterval := flag.Int("interval", 1, "The polling interval")
-	var wg sync.WaitGroup
 
+	//todo replace that with cobra
 	flag.Parse()
+
+	var wg sync.WaitGroup
 
 	server := tasker.GetServer()
 	wg.Add(1)
