@@ -14,14 +14,15 @@ import (
 	clientcmd "k8s.io/client-go/tools/clientcmd"
 )
 
-func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, image *string, cmd *string) {
+func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, image *string, cmd *string, namespace *string) {
 	jobs := clientset.BatchV1().Jobs("default")
 	var backOffLimit int32 = 0
+	var ttlSecondsAfterFinished int32 = 10
 
 	jobSpec := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      *jobName,
-			Namespace: "default",
+			Namespace: *namespace,
 		},
 		Spec: batchv1.JobSpec{
 			Template: v1.PodTemplateSpec{
@@ -36,7 +37,8 @@ func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, image *strin
 					RestartPolicy: v1.RestartPolicyNever,
 				},
 			},
-			BackoffLimit: &backOffLimit,
+			BackoffLimit:            &backOffLimit,
+			TTLSecondsAfterFinished: &ttlSecondsAfterFinished,
 		},
 	}
 
@@ -49,13 +51,18 @@ func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, image *strin
 	log.Println("Created K8s job successfully")
 }
 
-func ConnectToK8s() *kubernetes.Clientset {
-	home, exists := os.LookupEnv("HOME")
-	if !exists {
-		home = "/root"
-	}
+func ConnectToK8s(kuneConfigPath *string) *kubernetes.Clientset {
+	var configPath string = ""
 
-	configPath := filepath.Join(home, ".kube", "config")
+	if *kuneConfigPath != "" {
+		configPath = *kuneConfigPath
+	} else {
+		home, exists := os.LookupEnv("HOME")
+		if !exists {
+			home = "/root"
+		}
+		configPath = filepath.Join(home, ".kube", "config")
+	}
 
 	config, err := clientcmd.BuildConfigFromFlags("", configPath)
 	if err != nil {
