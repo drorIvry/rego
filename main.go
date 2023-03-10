@@ -2,16 +2,25 @@ package main
 
 import (
 	"flag"
+	"log"
 	"sync"
 
 	k8s_client "github.com/drorivry/matter/k8s"
 	"github.com/drorivry/matter/poller"
 	"github.com/drorivry/matter/tasker"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func runServer(server *gin.Engine) {
 	server.Run()
+}
+
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 }
 
 func main() {
