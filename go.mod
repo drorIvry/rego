@@ -1,4 +1,4 @@
-module matter
+module github.com/drorivry/matter
 
 go 1.20
 
