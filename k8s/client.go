@@ -36,6 +36,7 @@ func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, image *strin
 		}
 	}
 
+	// TODO: also add support for config, env, secrets, serviceaccounts
 	jobSpec := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      *jobName,
