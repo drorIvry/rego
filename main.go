@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	k8s_client "github.com/drorivry/matter/k8s"
+	"github.com/drorivry/matter/poller"
 	"github.com/drorivry/matter/tasker"
 	"github.com/gin-gonic/gin"
 )
@@ -19,7 +20,7 @@ func main() {
 	entryCommand := flag.String("command", "", "The command to run inside the container")
 	namespace := flag.String("namespace", "default", "The job's namespace to deploy to")
 	kuneConfigPath := flag.String("kubeConfigPath", "", "The path to the kubeconfig")
-
+	pollInterval := flag.Int("interval", 1, "The polling interval")
 	var wg sync.WaitGroup
 
 	flag.Parse()
@@ -27,6 +28,9 @@ func main() {
 	server := tasker.GetServer()
 	wg.Add(1)
 	go runServer(server)
+
+	wg.Add(1)
+	go poller.Run(*pollInterval)
 
 	clientset := k8s_client.ConnectToK8s(kuneConfigPath)
 	k8s_client.LaunchK8sJob(clientset, jobName, containerImage, entryCommand, namespace)
