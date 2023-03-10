@@ -18,6 +18,23 @@ func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, image *strin
 	jobs := clientset.BatchV1().Jobs("default")
 	var backOffLimit int32 = 0
 	var ttlSecondsAfterFinished int32 = 10
+	var containers []v1.Container = nil
+	if len(*cmd) > 0 {
+		containers = []v1.Container{
+			{
+				Name:    *jobName,
+				Image:   *image,
+				Command: strings.Split(*cmd, " "),
+			},
+		}
+	} else {
+		containers = []v1.Container{
+			{
+				Name:  *jobName,
+				Image: *image,
+			},
+		}
+	}
 
 	jobSpec := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
@@ -27,13 +44,7 @@ func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, image *strin
 		Spec: batchv1.JobSpec{
 			Template: v1.PodTemplateSpec{
 				Spec: v1.PodSpec{
-					Containers: []v1.Container{
-						{
-							Name:    *jobName,
-							Image:   *image,
-							Command: strings.Split(*cmd, " "),
-						},
-					},
+					Containers:    containers,
 					RestartPolicy: v1.RestartPolicyNever,
 				},
 			},
