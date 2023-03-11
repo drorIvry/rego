@@ -48,10 +48,6 @@ func InitDBConnection(dbName string) {
 		TaskDefinitionId:        taskDef.ID,
 	}
 
-	// Migrate the schema
-	DB.AutoMigrate(&models.TaskDefinition{})
-	DB.AutoMigrate(&models.TaskExecution{})
-
 	DB.Create(&taskDef)
 	DB.Create(&taskEx)
 
