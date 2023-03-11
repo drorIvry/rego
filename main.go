@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"log"
+	"os"
 	"sync"
 
 	"github.com/drorivry/matter/initializers"
@@ -17,6 +19,10 @@ func runServer(server *gin.Engine) {
 
 func init() {
 	initializers.LoadEnvVars()
+
+	dbUrl := os.Getenv("DB_URL")
+	log.Println("Init")
+	initializers.InitDBConnection(dbUrl)
 }
 
 func main() {
