@@ -1,11 +1,21 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type TaskDefinition struct {
 	gorm.Model
-	image                   string
-	ttlSecondsAfterFinished int
-	status                  Status
-	executionInterval       int
+	Image                   string
+	TtlSecondsAfterFinished int
+	Status                  Status `gorm:"type:text"`
+	ExecutionInterval       int
+	ExecutionsCounter       int
+	NextExecutionTime       time.Time
+	Enabled                 bool
+	Deleted                 bool
+	Args                    []string `gorm:"type:text"`
+	Cmd                     string
 }

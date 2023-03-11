@@ -2,6 +2,7 @@ package initializers
 
 import (
 	"log"
+	"time"
 
 	models "github.com/drorivry/matter/models"
 
@@ -18,8 +19,25 @@ func InitDBConnection(dbName string) {
 	if err != nil {
 		log.Fatal("failed to connect database")
 	}
+	args := []string{"aa"}
+
+	taskDef := models.TaskDefinition{
+		Image:                   "hello-world",
+		TtlSecondsAfterFinished: 10,
+		Status:                  models.READY,
+		ExecutionInterval:       10,
+		ExecutionsCounter:       0,
+		NextExecutionTime:       time.Now(),
+		Enabled:                 true,
+		Deleted:                 false,
+		Args:                    args,
+		Cmd:                     "",
+	}
 
 	// Migrate the schema
 	DB.AutoMigrate(&models.TaskDefinition{})
 	DB.AutoMigrate(&models.TaskExecution{})
+
+	DB.Create(&taskDef)
+
 }
