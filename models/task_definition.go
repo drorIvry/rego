@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -18,4 +19,5 @@ type TaskDefinition struct {
 	Deleted                 bool
 	Args                    []string `gorm:"type:text"`
 	Cmd                     string
+	Metadata                datatypes.JSON
 }

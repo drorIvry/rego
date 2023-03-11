@@ -6,6 +6,7 @@ import (
 
 	models "github.com/drorivry/matter/models"
 
+	"gorm.io/datatypes"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -32,6 +33,7 @@ func InitDBConnection(dbName string) {
 		Deleted:                 false,
 		Args:                    args,
 		Cmd:                     "",
+		Metadata:                datatypes.JSON([]byte(`{"name": "jinzhu", "age": 18, "tags": ["tag1", "tag2"], "orgs": {"orga": "orga"}}`)),
 	}
 
 	// Migrate the schema
