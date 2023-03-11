@@ -11,7 +11,6 @@ type TaskDefinition struct {
 	gorm.Model
 	Image                   string
 	TtlSecondsAfterFinished int
-	Status                  Status `gorm:"type:text"`
 	ExecutionInterval       int
 	ExecutionsCounter       int
 	NextExecutionTime       time.Time
@@ -20,4 +19,5 @@ type TaskDefinition struct {
 	Args                    []string `gorm:"type:text"`
 	Cmd                     string
 	Metadata                datatypes.JSON
+	ExecutionParameters		datatypes.JSON
 }

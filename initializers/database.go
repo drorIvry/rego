@@ -25,7 +25,6 @@ func InitDBConnection(dbName string) {
 	taskDef := models.TaskDefinition{
 		Image:                   "hello-world",
 		TtlSecondsAfterFinished: 10,
-		Status:                  models.READY,
 		ExecutionInterval:       10,
 		ExecutionsCounter:       0,
 		NextExecutionTime:       time.Now(),
@@ -36,10 +35,24 @@ func InitDBConnection(dbName string) {
 		Metadata:                datatypes.JSON([]byte(`{"name": "jinzhu", "age": 18, "tags": ["tag1", "tag2"], "orgs": {"orga": "orga"}}`)),
 	}
 
+	taskEx := models.TaskExecution{
+		Image:                   "hello-world",
+		TtlSecondsAfterFinished: 10,
+		NextExecutionTime:       time.Now(),
+		Enabled:                 true,
+		Deleted:                 false,
+		Args:                    args,
+		Cmd:                     "",
+		Metadata:                datatypes.JSON([]byte(`{"name": "jinzhu", "age": 18, "tags": ["tag1", "tag2"], "orgs": {"orga": "orga"}}`)),
+		Status:                  models.READY,
+		TaskDefinitionId:        taskDef.ID,
+	}
+
 	// Migrate the schema
 	DB.AutoMigrate(&models.TaskDefinition{})
 	DB.AutoMigrate(&models.TaskExecution{})
 
 	DB.Create(&taskDef)
+	DB.Create(&taskEx)
 
 }
