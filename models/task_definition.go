@@ -4,6 +4,8 @@ import "gorm.io/gorm"
 
 type TaskDefinition struct {
 	gorm.Model
-	image string
+	image                   string
 	ttlSecondsAfterFinished int
+	status                  Status
+	executionInterval       int
 }
