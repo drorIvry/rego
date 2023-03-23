@@ -52,7 +52,7 @@ func GetAllTaskDefinitions() []models.TaskDefinition {
 }
 
 func InsertTaskExecution(taskEx models.TaskExecution) error {
-	result := initializers.DB.Table("task_executions").Create(taskEx)
+	result := initializers.DB.Table("task_executions").Create(&taskEx)
 	if result.Error != nil {
 		log.Panic("Error saving to database", result.Error)
 		return result.Error

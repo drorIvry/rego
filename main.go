@@ -35,6 +35,7 @@ func main() {
 	namespace := flag.String("namespace", "default", "The job's namespace to deploy to")
 	kuneConfigPath := flag.String("kubeConfigPath", "", "The path to the kubeconfig")
 	pollInterval := flag.Int("interval", 1, "The polling interval")
+	clientset := k8s_client.ConnectToK8s(kuneConfigPath)
 
 	//todo replace that with cobra
 	flag.Parse()
@@ -46,9 +47,8 @@ func main() {
 	go runServer(server)
 
 	wg.Add(1)
-	go poller.Run(*pollInterval)
+	go poller.Run(*pollInterval, clientset)
 
-	clientset := k8s_client.ConnectToK8s(kuneConfigPath)
 	k8s_client.LaunchK8sJob(clientset, jobName, containerImage, entryCommand, namespace)
 	wg.Wait()
 }
