@@ -29,10 +29,6 @@ func init() {
 }
 
 func main() {
-	jobName := flag.String("jobname", "test-job", "The name of the job")
-	containerImage := flag.String("image", "ubuntu:latest", "Name of the container image")
-	entryCommand := flag.String("command", "", "The command to run inside the container")
-	namespace := flag.String("namespace", "default", "The job's namespace to deploy to")
 	kuneConfigPath := flag.String("kubeConfigPath", "", "The path to the kubeconfig")
 	pollInterval := flag.Int("interval", 1, "The polling interval")
 	clientset := k8s_client.ConnectToK8s(kuneConfigPath)
@@ -49,6 +45,5 @@ func main() {
 	wg.Add(1)
 	go poller.Run(*pollInterval, clientset)
 
-	k8s_client.LaunchK8sJob(clientset, jobName, containerImage, entryCommand, namespace)
 	wg.Wait()
 }

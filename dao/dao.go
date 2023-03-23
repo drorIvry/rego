@@ -20,6 +20,10 @@ func initDefaultFields(taskDef *models.TaskDefinition) {
 	taskDef.Enabled = true
 	taskDef.ExecutionsCounter = 0
 
+	if taskDef.NameSpace == "" {
+		taskDef.NameSpace = "default"
+	}
+
 	if taskDef.ExecutionInterval > 0 {
 		taskDef.NextExecutionTime = time.Now().Add(time.Duration(taskDef.ExecutionInterval) * time.Second)
 	}

@@ -15,7 +15,7 @@ import (
 )
 
 func Run(interval int, clientset *kubernetes.Clientset) {
-	ticker := time.NewTicker(time.Duration(interval) * time.Second * 10)
+	ticker := time.NewTicker(time.Duration(interval) * time.Second)
 	quit := make(chan struct{})
 
 	for {
@@ -45,7 +45,7 @@ func deployRedyTasks(clientset *kubernetes.Clientset) {
 		log.Println("deploying task ", task.ID)
 		taskEx := models.CreateExecutionFromDefinition(task)
 		jobName := buildJobName(taskEx)
-		k8s_client.LaunchK8sJob(clientset, &jobName, &taskEx.Image, &taskEx.Cmd, &taskEx.NameSpace)
+		k8s_client.LaunchK8sJob(clientset, &jobName, &taskEx)
 
 		taskEx.Status = models.JOB_DEPLOYED
 

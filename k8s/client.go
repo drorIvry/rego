@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/drorivry/matter/models"
 	batchv1 "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -14,24 +15,24 @@ import (
 	clientcmd "k8s.io/client-go/tools/clientcmd"
 )
 
-func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, image *string, cmd *string, namespace *string) {
-	jobs := clientset.BatchV1().Jobs("default")
+func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, taskEx *models.TaskExecution) {
+	jobs := clientset.BatchV1().Jobs(taskEx.NameSpace)
 	var backOffLimit int32 = 0
-	var ttlSecondsAfterFinished int32 = 10
+	var ttlSecondsAfterFinished int32 = int32(taskEx.TtlSecondsAfterFinished)
 	var containers []v1.Container = nil
-	if len(*cmd) > 0 {
+	if len(taskEx.Cmd) > 0 {
 		containers = []v1.Container{
 			{
 				Name:    *jobName,
-				Image:   *image,
-				Command: strings.Split(*cmd, " "),
+				Image:   taskEx.Image,
+				Command: strings.Split(taskEx.Cmd, " "),
 			},
 		}
 	} else {
 		containers = []v1.Container{
 			{
 				Name:  *jobName,
-				Image: *image,
+				Image: taskEx.Image,
 			},
 		}
 	}
@@ -40,7 +41,7 @@ func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, image *strin
 	jobSpec := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      *jobName,
-			Namespace: *namespace,
+			Namespace: taskEx.NameSpace,
 		},
 		Spec: batchv1.JobSpec{
 			Template: v1.PodTemplateSpec{
@@ -56,7 +57,7 @@ func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, image *strin
 
 	_, err := jobs.Create(context.TODO(), jobSpec, metav1.CreateOptions{})
 	if err != nil {
-		log.Fatalln("Failed to create K8s job.")
+		log.Fatalln("Failed to create K8s job. ", err)
 	}
 
 	//print job details
@@ -78,12 +79,12 @@ func ConnectToK8s(kuneConfigPath *string) *kubernetes.Clientset {
 
 	config, err := clientcmd.BuildConfigFromFlags("", configPath)
 	if err != nil {
-		log.Fatalln("failed to create K8s config")
+		log.Fatalln("failed to create K8s config ", err)
 	}
 
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		log.Fatalln("Failed to create K8s clientset")
+		log.Fatalln("Failed to create K8s clientset ", err)
 	}
 
 	return clientset
