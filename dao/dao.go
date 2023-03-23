@@ -10,7 +10,7 @@ import (
 
 func GetPendingTasks() []models.TaskDefinition {
 	var tasks []models.TaskDefinition
-	initializers.DB.Table("task_definitions").Where("next_execution_time < ?", time.Now()).Find(&tasks)
+	initializers.DB.Table("task_definitions").Where("enabled = true AND next_execution_time < ?", time.Now()).Find(&tasks)
 	return tasks
 }
 

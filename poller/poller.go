@@ -15,7 +15,7 @@ import (
 )
 
 func Run(interval int, clientset *kubernetes.Clientset) {
-	ticker := time.NewTicker(time.Duration(interval) * time.Second)
+	ticker := time.NewTicker(time.Duration(interval) * time.Second * 10)
 	quit := make(chan struct{})
 
 	for {
@@ -55,6 +55,8 @@ func deployRedyTasks(clientset *kubernetes.Clientset) {
 
 		if task.ExecutionInterval > 0 {
 			task.NextExecutionTime = time.Now().Add(time.Duration(task.ExecutionInterval) * time.Second)
+		} else {
+			task.Enabled = false
 		}
 
 		initializers.DB.Table("task_definitions").Save(&task)
