@@ -19,8 +19,8 @@ func runServer(server *gin.Engine) {
 
 func init() {
 	initializers.LoadEnvVars()
-
 	dbUrl := os.Getenv("DB_URL")
+
 	initializers.InitDBConnection(dbUrl)
 
 	// Migrate the schema

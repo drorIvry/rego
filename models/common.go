@@ -11,3 +11,21 @@ const (
 	APP_ERROR    Status = 420
 	SUCCESS      Status = 500
 )
+
+func CreateExecutionFromDefinition(taskdef TaskDefinition) TaskExecution {
+	return TaskExecution{
+		Status:                  READY,
+		TaskDefinitionId:        taskdef.ID,
+		Image:                   taskdef.Image,
+		TtlSecondsAfterFinished: taskdef.TtlSecondsAfterFinished,
+		ExecutionInterval:       taskdef.ExecutionInterval,
+		ExecutionsCounter:       taskdef.ExecutionsCounter,
+		NextExecutionTime:       taskdef.NextExecutionTime,
+		Enabled:                 taskdef.Enabled,
+		Deleted:                 taskdef.Deleted,
+		Args:                    taskdef.Args,
+		Cmd:                     taskdef.Cmd,
+		Metadata:                taskdef.Metadata,
+		ExecutionParameters:     taskdef.ExecutionParameters,
+	}
+}

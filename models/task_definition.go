@@ -9,15 +9,12 @@ import (
 
 type TaskDefinition struct {
 	gorm.Model
-	Image                   string
-	TtlSecondsAfterFinished int
-	ExecutionInterval       int
-	ExecutionsCounter       int
-	NextExecutionTime       time.Time
-	Enabled                 bool
-	Deleted                 bool
-	Args                    []string `gorm:"type:text"`
-	Cmd                     string
-	Metadata                datatypes.JSON
-	ExecutionParameters		datatypes.JSON
+	Image                   string         `json:"image" binding:"required"`
+	TtlSecondsAfterFinished int            `json:"ttl_seconds_after_finished"`
+	ExecutionInterval       int            `json:"execution_interval"`
+	ExecutionsCounter       int            `json:"execution_counter"`
+	NextExecutionTime       time.Time      `json:"next_execution_time"`
+	Enabled                 bool           `json:"enabled"`
+	Deleted                 bool           `json:"deleted"`
+C
 }
