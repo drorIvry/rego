@@ -3,8 +3,11 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/drorivry/matter/dao"
+	"github.com/drorivry/matter/initializers"
 	"github.com/drorivry/matter/models"
 	"github.com/gin-gonic/gin"
 )
@@ -44,4 +47,21 @@ func GetAllTaskDefinitions(c *gin.Context) {
 func GetAllPendingTaskDefinitions(c *gin.Context) {
 	tasks := dao.GetPendingTasks()
 	c.IndentedJSON(http.StatusOK, tasks)
+}
+
+func RerunTask(c *gin.Context) {
+	definitionId := c.Param("definitionId")
+	numericDefinitionId, err := strconv.Atoi(definitionId)
+	if err != nil {
+		log.Fatal(err)
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	task := dao.GetTaskDefinitionById(uint(numericDefinitionId))
+	task.NextExecutionTime = time.Now()
+	initializers.DB.Table("task_definitions").Save(&task)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "updated",
+	})
 }

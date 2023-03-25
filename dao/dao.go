@@ -63,3 +63,10 @@ func InsertTaskExecution(taskEx models.TaskExecution) error {
 	}
 	return nil
 }
+
+func GetTaskDefinitionById(id uint) models.TaskDefinition {
+	var task_def models.TaskDefinition
+	initializers.DB.Table("task_definitions").Where("id = ?", id).Find(&task_def)
+
+	return task_def
+}

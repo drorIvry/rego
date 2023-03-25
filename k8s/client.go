@@ -15,7 +15,11 @@ import (
 	clientcmd "k8s.io/client-go/tools/clientcmd"
 )
 
-func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, taskEx *models.TaskExecution) {
+func LaunchK8sJob(
+	clientset *kubernetes.Clientset,
+	jobName *string,
+	taskEx *models.TaskExecution,
+) {
 	jobs := clientset.BatchV1().Jobs(taskEx.NameSpace)
 	var backOffLimit int32 = 0
 	var ttlSecondsAfterFinished int32 = int32(taskEx.TtlSecondsAfterFinished)
@@ -58,17 +62,18 @@ func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, taskEx *mode
 	_, err := jobs.Create(context.TODO(), jobSpec, metav1.CreateOptions{})
 	if err != nil {
 		log.Fatalln("Failed to create K8s job. ", err)
+		return
 	}
 
 	//print job details
 	log.Println("Created K8s job successfully")
 }
 
-func ConnectToK8s(kuneConfigPath *string) *kubernetes.Clientset {
+func ConnectToK8s(kubeConfigPath *string) *kubernetes.Clientset {
 	var configPath string = ""
 
-	if *kuneConfigPath != "" {
-		configPath = *kuneConfigPath
+	if *kubeConfigPath != "" {
+		configPath = *kubeConfigPath
 	} else {
 		home, exists := os.LookupEnv("HOME")
 		if !exists {

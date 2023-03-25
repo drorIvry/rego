@@ -15,16 +15,23 @@ func ErrorHandler(c *gin.Context) {
 		log.Fatal("Error", err)
 	}
 
-	c.JSON(http.StatusInternalServerError, "")
+	c.JSON(http.StatusInternalServerError, "Internal Server Error")
 }
 
 func GetServer() *gin.Engine {
 	r := gin.Default()
 	r.Use(ErrorHandler)
 
-	r.GET("/ping", controllers.Ping)
-	r.POST("/task", controllers.CreateTaskDefinition)
-	r.GET("/task", controllers.GetAllTaskDefinitions)
+	r.GET("/ping", controllers.Ping) // V
+	r.POST("/task", controllers.CreateTaskDefinition) // V
+	r.GET("/task", controllers.GetAllTaskDefinitions) // V
+	r.POST("/task/:definitionId/rerun", controllers.RerunTask) // dror
+	r.GET("/task/:definitionId/latest") // dror
+	r.PUT("/task") // dror
+	r.DELETE("/task/:definitionId") // dror
+
+	r.GET("/execution", controllers.RerunTask)
+	r.POST("/execution/:execId/abort", controllers.RerunTask)
 	r.GET("/tasks/pending", controllers.GetAllPendingTaskDefinitions)
 
 	return r

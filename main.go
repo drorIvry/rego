@@ -29,9 +29,9 @@ func init() {
 }
 
 func main() {
-	kuneConfigPath := flag.String("kubeConfigPath", "", "The path to the kubeconfig")
+	kubeConfigPath := flag.String("kubeConfigPath", "", "The path to the kubeconfig")
 	pollInterval := flag.Int("interval", 1, "The polling interval")
-	clientset := k8s_client.ConnectToK8s(kuneConfigPath)
+	clientset := k8s_client.ConnectToK8s(kubeConfigPath)
 
 	//todo replace that with cobra
 	flag.Parse()
