@@ -25,6 +25,6 @@ func InitDBConnection(dbName string) {
 	DB.AutoMigrate(&models.TaskExecution{})
 
 	// Create Table References
-	DefinitionsTable = DefinitionsTable
-	ExecutionsTable = ExecutionsTable
+	DefinitionsTable = DB.Table("task_definitions")
+	ExecutionsTable = DB.Table("task_executions")
 }
