@@ -1,14 +1,14 @@
 package controllers
 
 import (
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/drorivry/matter/dao"
-	"github.com/drorivry/matter/initializers"
 	"github.com/drorivry/matter/models"
+	"github.com/drorivry/matter/poller"
 	"github.com/gin-gonic/gin"
 )
 
@@ -61,14 +61,12 @@ func RerunTask(c *gin.Context) {
 	task := dao.GetTaskDefinitionById(uint(numericDefinitionId))
 
 	if task.Deleted {
-		var err Error = 
-		c.AbortWithError(http.StatusInternalServerError, )
+		c.AbortWithError(http.StatusInternalServerError, errors.New("Can't rerun deleted task"))
 		return
 	}
 
-	task.NextExecutionTime = time.Now()
-	task.Enabled = true
-	initializers.DB.Table("task_definitions").Save(&task)
+	poller.DeployJob(task)
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "updated",
 	})

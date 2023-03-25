@@ -31,8 +31,7 @@ func init() {
 func main() {
 	kubeConfigPath := flag.String("kubeConfigPath", "", "The path to the kubeconfig")
 	pollInterval := flag.Int("interval", 1, "The polling interval")
-	clientset := k8s_client.ConnectToK8s(kubeConfigPath)
-
+	k8s_client.InitK8SClientSet(kubeConfigPath)
 	//todo replace that with cobra
 	flag.Parse()
 
@@ -43,7 +42,7 @@ func main() {
 	go runServer(server)
 
 	wg.Add(1)
-	go poller.Run(*pollInterval, clientset)
+	go poller.Run(*pollInterval)
 
 	wg.Wait()
 }
