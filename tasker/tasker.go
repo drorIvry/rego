@@ -9,7 +9,7 @@ func ErrorHandler(c *gin.Context) {
 	c.Next()
 
 	// for _, err := range c.Errors {
-	// 	log.Fatal("Error", err)
+	//     log.Fatal("Error", err)
 	// }
 
 	// c.JSON(http.StatusInternalServerError, "Internal Server Error")
