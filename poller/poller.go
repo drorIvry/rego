@@ -21,7 +21,7 @@ func Run(interval int, clientset *kubernetes.Clientset) {
 	for {
 		select {
 		case <-ticker.C:
-			go deployRedyTasks(clientset)
+			go deployReadyTasks(clientset)
 			go timeoutTasks()
 		case <-quit:
 			ticker.Stop()
@@ -38,7 +38,7 @@ func buildJobName(taskEx models.TaskExecution) string {
 	return jobName
 }
 
-func deployRedyTasks(clientset *kubernetes.Clientset) {
+func deployReadyTasks(clientset *kubernetes.Clientset) {
 	tasks := dao.GetPendingTasks()
 
 	for _, task := range tasks {
