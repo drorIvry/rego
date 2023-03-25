@@ -59,7 +59,15 @@ func RerunTask(c *gin.Context) {
 	}
 
 	task := dao.GetTaskDefinitionById(uint(numericDefinitionId))
+
+	if task.Deleted {
+		var err Error = 
+		c.AbortWithError(http.StatusInternalServerError, )
+		return
+	}
+
 	task.NextExecutionTime = time.Now()
+	task.Enabled = true
 	initializers.DB.Table("task_definitions").Save(&task)
 	c.JSON(http.StatusOK, gin.H{
 		"message": "updated",
