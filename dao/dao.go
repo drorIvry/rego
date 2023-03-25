@@ -6,6 +6,7 @@ import (
 
 	"github.com/drorivry/matter/initializers"
 	"github.com/drorivry/matter/models"
+	"github.com/google/uuid"
 )
 
 func GetPendingTasks() []models.TaskDefinition {
@@ -64,26 +65,38 @@ func InsertTaskExecution(taskEx models.TaskExecution) error {
 	return nil
 }
 
-func GetExecutionById(executionId uint) *models.TaskExecution {
+func GetExecutionById(executionId uuid.UUID) *models.TaskExecution {
 	var execution models.TaskExecution
-	err := initializers.ExecutionsTable.Where(
+	initializers.ExecutionsTable.Where(
 		"id = ?",
 		executionId,
-	).Find(
+	).First(
 		&execution,
 	)
 
-	if err != nil {
-		log.Panic("Task execution not found ", executionId)
-		return nil
-	}
 	return &execution
-
 }
 
-func GetTaskDefinitionById(id uint) models.TaskDefinition {
+func GetTaskDefinitionById(definitionId uuid.UUID) models.TaskDefinition {
 	var task_def models.TaskDefinition
-	initializers.DB.Table("task_definitions").Where("id = ?", id).Find(&task_def)
+	initializers.DefinitionsTable.Where(
+		"id = ?",
+		definitionId,
+	).First(
+		&task_def,
+	)
 
 	return task_def
+}
+
+func UpdateExecutionAborted(executionId uuid.UUID) {
+	initializers.ExecutionsTable.Where(
+		"id = ?",
+		executionId,
+	).Updates(
+		models.TaskExecution{
+			Status: models.TIMEOUT,
+			// UpdatedAt: time.Now(),
+		},
+	)
 }

@@ -2,6 +2,7 @@
 
 # TODOS:
 
+- Refactor task execution model (no need for interval, next_exec_time, disabled, enabled etc,)
 - timeout tasks
 - abort task
 - kube metadata

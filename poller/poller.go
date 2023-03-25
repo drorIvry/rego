@@ -29,13 +29,8 @@ func Run(interval int) {
 
 func deployReadyTasks() {
 	tasks := dao.GetPendingTasks()
-	log.Println("polling")
-
 	for _, task := range tasks {
 		log.Println("deploying task ", task.ID)
-		taskEx := models.CreateExecutionFromDefinition(task)
-		jobName := k8s_client.BuildJobName(taskEx)
-		k8s_client.LaunchK8sJob(clientset, &jobName, &taskEx)
 		DeployJob(task)
 	}
 }
@@ -50,16 +45,15 @@ func DeployJob(task models.TaskDefinition) {
 
 	task.ExecutionsCounter++
 
-	initializers.DefinitionsTable.Save(&task)
-	initializers.ExecutionsTable.Save(&taskEx)
+	// TODO: Move to dao
 	if task.ExecutionInterval > 0 {
 		task.NextExecutionTime = time.Now().Add(time.Duration(task.ExecutionInterval) * time.Second)
 	} else {
 		task.Enabled = false
 	}
 
-	initializers.DB.Table("task_definitions").Save(&task)
-	initializers.DB.Table("task_executions").Save(&taskEx)
+	initializers.DefinitionsTable.Save(&task)
+	initializers.ExecutionsTable.Save(&taskEx)
 	k8s_client.LaunchK8sJob(&jobName, &taskEx)
 }
 

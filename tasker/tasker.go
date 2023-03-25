@@ -28,7 +28,7 @@ func GetServer() *gin.Engine {
 	r.DELETE("/task/:definitionId")                            // dror
 
 	r.GET("/execution", controllers.RerunTask)
-	r.POST("/execution/:execId/abort", controllers.RerunTask)
+	r.POST("/execution/:executionId/abort", controllers.AbortTaskExecution)
 	r.GET("/tasks/pending", controllers.GetAllPendingTaskDefinitions)
 
 	return r

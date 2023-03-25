@@ -1,26 +1,23 @@
 package models
 
 import (
-	"time"
-
+	"github.com/google/uuid"
+	"github.com/lib/pq"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
 type TaskExecution struct {
 	gorm.Model
-	Status                  Status
-	TaskDefinitionId        uint           `json:"task_definition_id"`
+	ID                      uuid.UUID      `json:"id" gorm:"type:uuid` //;default:uuid_generate_v4()"
+	TaskDefinitionId        uuid.UUID      `json:"task_definition_id"`
+	Status                  Status         `json:"status"`
 	Image                   string         `json:"image" binding:"required"`
 	Name                    string         `json:"name"`
 	TtlSecondsAfterFinished int            `json:"ttl_seconds_after_finished"`
-	NameSpace               string         `json:"nameSpace"`
-	ExecutionInterval       int            `json:"execution_interval"`
-	NextExecutionTime       time.Time      `json:"next_execution_time"`
-	Enabled                 bool           `json:"enabled"`
-	Deleted                 bool           `json:"deleted"`
+	NameSpace               string         `json:"namespace"`
 	Args                    string         `json:"args"`
-	Cmd                     string         `json:"cmd"`
+	Cmd                     pq.StringArray `json:"cmd" gorm:"type:text[]"`
 	Metadata                datatypes.JSON `json:"metadata"`
 	ExecutionParameters     datatypes.JSON `json:"execution_parameters"`
 }
