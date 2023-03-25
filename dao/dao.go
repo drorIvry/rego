@@ -77,6 +77,13 @@ func GetExecutionById(executionId uint) *models.TaskExecution {
 		log.Panic("Task execution not found ", executionId)
 		return nil
 	}
-
 	return &execution
+
+}
+
+func GetTaskDefinitionById(id uint) models.TaskDefinition {
+	var task_def models.TaskDefinition
+	initializers.DB.Table("task_definitions").Where("id = ?", id).Find(&task_def)
+
+	return task_def
 }

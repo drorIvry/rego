@@ -17,6 +17,8 @@ import (
 	clientcmd "k8s.io/client-go/tools/clientcmd"
 )
 
+var ClientSet *kubernetes.Clientset
+
 func BuildJobName(taskEx models.TaskExecution) string {
 	jobName := taskEx.Name + "-" + taskEx.Image + "-" + strconv.FormatUint(uint64(taskEx.ID), 10)
 
@@ -25,6 +27,17 @@ func BuildJobName(taskEx models.TaskExecution) string {
 
 func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, taskEx *models.TaskExecution) {
 	jobs := clientset.BatchV1().Jobs(taskEx.NameSpace)
+}
+
+func InitK8SClientSet(kubeConfigPath *string) {
+	ClientSet = ConnectToK8s(kubeConfigPath)
+}
+
+func LaunchK8sJob(
+	jobName *string,
+	taskEx *models.TaskExecution,
+) {
+	jobs := ClientSet.BatchV1().Jobs(taskEx.NameSpace)
 	var backOffLimit int32 = 0
 	var ttlSecondsAfterFinished int32 = int32(taskEx.TtlSecondsAfterFinished)
 	var containers []v1.Container = nil
@@ -66,17 +79,18 @@ func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, taskEx *mode
 	_, err := jobs.Create(context.TODO(), jobSpec, metav1.CreateOptions{})
 	if err != nil {
 		log.Fatalln("Failed to create K8s job. ", err)
+		return
 	}
 
 	//print job details
 	log.Println("Created K8s job successfully")
 }
 
-func ConnectToK8s(kuneConfigPath *string) *kubernetes.Clientset {
+func ConnectToK8s(kubeConfigPath *string) *kubernetes.Clientset {
 	var configPath string = ""
 
-	if *kuneConfigPath != "" {
-		configPath = *kuneConfigPath
+	if *kubeConfigPath != "" {
+		configPath = *kubeConfigPath
 	} else {
 		home, exists := os.LookupEnv("HOME")
 		if !exists {
