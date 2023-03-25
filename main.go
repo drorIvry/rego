@@ -7,7 +7,6 @@ import (
 
 	"github.com/drorivry/matter/initializers"
 	k8s_client "github.com/drorivry/matter/k8s"
-	"github.com/drorivry/matter/models"
 	"github.com/drorivry/matter/poller"
 	"github.com/drorivry/matter/tasker"
 	"github.com/gin-gonic/gin"
@@ -22,10 +21,6 @@ func init() {
 	dbUrl := os.Getenv("DB_URL")
 
 	initializers.InitDBConnection(dbUrl)
-
-	// Migrate the schema
-	initializers.DB.AutoMigrate(&models.TaskDefinition{})
-	initializers.DB.AutoMigrate(&models.TaskExecution{})
 }
 
 func main() {

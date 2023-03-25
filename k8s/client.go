@@ -5,8 +5,10 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
+	"github.com/drorivry/matter/dao"
 	"github.com/drorivry/matter/models"
 	batchv1 "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
@@ -14,6 +16,12 @@ import (
 	kubernetes "k8s.io/client-go/kubernetes"
 	clientcmd "k8s.io/client-go/tools/clientcmd"
 )
+
+func BuildJobName(taskEx models.TaskExecution) string {
+	jobName := taskEx.Name + "-" + taskEx.Image + "-" + strconv.FormatUint(uint64(taskEx.ID), 10)
+
+	return jobName
+}
 
 func LaunchK8sJob(clientset *kubernetes.Clientset, jobName *string, taskEx *models.TaskExecution) {
 	jobs := clientset.BatchV1().Jobs(taskEx.NameSpace)
@@ -79,7 +87,10 @@ func ConnectToK8s(kuneConfigPath *string) *kubernetes.Clientset {
 
 	config, err := clientcmd.BuildConfigFromFlags("", configPath)
 	if err != nil {
-		log.Fatalln("failed to create K8s config ", err)
+		log.Fatalln(
+			"failed to create K8s config ",
+			err,
+		)
 	}
 
 	clientset, err := kubernetes.NewForConfig(config)
@@ -88,4 +99,18 @@ func ConnectToK8s(kuneConfigPath *string) *kubernetes.Clientset {
 	}
 
 	return clientset
+}
+
+func AbortTask(executionId uint) error {
+	execution := dao.GetExecutionById(executionId)
+	jobName := BuildJobName(*execution)
+	deleteOptions := metav1.DeleteOptions{}
+
+	jobs := initializers.ClientSet.BatchV1().Jobs(execution.NameSpace)
+	err := jobs.Delete(context.TODO(), jobName, deleteOptions)
+	if err != nil {
+		log.Panic("Could not delete job ", jobName)
+		return err
+	}
+	return nil
 }

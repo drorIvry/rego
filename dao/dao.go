@@ -64,6 +64,19 @@ func InsertTaskExecution(taskEx models.TaskExecution) error {
 	return nil
 }
 
-func GetNamespaceFromExecutionId(executionId uint) {
+func GetExecutionById(executionId uint) *models.TaskExecution {
+	var execution models.TaskExecution
+	err := initializers.ExecutionsTable.Where(
+		"id = ?",
+		executionId,
+	).Find(
+		&execution,
+	)
 
+	if err != nil {
+		log.Panic("Task execution not found ", executionId)
+		return nil
+	}
+
+	return &execution
 }
