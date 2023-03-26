@@ -25,8 +25,8 @@ func init() {
 //	@version		1.0
 //	@description	Schedualing workloads made easy.
 
-//	@contact.name	Dror Ivry
-//	@contact.email	drorivry@gmail.com
+//	@contact.name	XXXX
+//	@contact.email	XXX@gmail.com
 
 //	@license.name	MIT
 //	@license.url	https://opensource.org/license/mit/

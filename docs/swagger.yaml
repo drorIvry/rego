@@ -119,8 +119,8 @@ definitions:
 host: localhost:3000
 info:
   contact:
-    email: drorivry@gmail.com
-    name: Dror Ivry
+    email: XXX@gmail.com
+    name: XXXX
   description: Schedualing workloads made easy.
   license:
     name: MIT
