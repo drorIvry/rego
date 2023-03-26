@@ -1,4 +1,121 @@
 basePath: /api/v1
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.Status:
+    enum:
+    - 100
+    - 200
+    - 250
+    - 300
+    - 400
+    - 410
+    - 420
+    - 430
+    - 500
+    type: integer
+    x-enum-varnames:
+    - READY
+    - JOB_DEPLOYED
+    - PENDING
+    - RUNNING
+    - TIMEOUT
+    - PROC_ERROR
+    - APP_ERROR
+    - ABORTED
+    - SUCCESS
+  models.TaskDefinition:
+    properties:
+      args:
+        type: string
+      cmd:
+        items:
+          type: string
+        type: array
+      createdAt:
+        type: string
+      deleted:
+        type: boolean
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      enabled:
+        type: boolean
+      execution_counter:
+        type: integer
+      execution_interval:
+        type: integer
+      execution_parameters:
+        items:
+          type: integer
+        type: array
+      id:
+        description: ;default:uuid_generate_v4()"
+        type: string
+      image:
+        type: string
+      metadata:
+        items:
+          type: integer
+        type: array
+      name:
+        type: string
+      namespace:
+        type: string
+      next_execution_time:
+        type: string
+      ttl_seconds_after_finished:
+        type: integer
+      updatedAt:
+        type: string
+    required:
+    - image
+    type: object
+  models.TaskExecution:
+    properties:
+      args:
+        type: string
+      cmd:
+        items:
+          type: string
+        type: array
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      execution_parameters:
+        items:
+          type: integer
+        type: array
+      id:
+        description: ;default:uuid_generate_v4()"
+        type: string
+      image:
+        type: string
+      metadata:
+        items:
+          type: integer
+        type: array
+      name:
+        type: string
+      namespace:
+        type: string
+      status:
+        $ref: '#/definitions/models.Status'
+      task_definition_id:
+        type: string
+      ttl_seconds_after_finished:
+        type: integer
+      updatedAt:
+        type: string
+    required:
+    - image
+    type: object
 host: localhost:3000
 info:
   contact:
@@ -28,4 +145,137 @@ paths:
       summary: Abort a running task and kill the pod
       tags:
       - execution
+  /ping:
+    get:
+      description: Used for health check
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Health check route
+      tags:
+      - Health
+  /task:
+    get:
+      description: Filter to get the task definitions you need
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TaskDefinition'
+            type: array
+      summary: Get all task definitions
+      tags:
+      - definition
+    post:
+      description: Generate a new definition of a task to run with cadence, parameters
+        and runtime data
+      parameters:
+      - description: Task definition JSON
+        in: body
+        name: newTaskDef
+        required: true
+        schema:
+          $ref: '#/definitions/models.TaskDefinition'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create a new task definition
+      tags:
+      - definition
+    put:
+      description: Update a definition of a task to run with cadence, parameters and
+        runtime data
+      parameters:
+      - description: Task definition JSON
+        in: body
+        name: newTaskDef
+        required: true
+        schema:
+          $ref: '#/definitions/models.TaskDefinition'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update a task definition
+      tags:
+      - definition
+  /task/{definitionId}:
+    delete:
+      description: Mark a task definition as deleted (it is not actually deleted from
+        the db)
+      parameters:
+      - description: The task definition id
+        in: path
+        name: definitionId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete a task definition
+      tags:
+      - definition
+  /task/{definitionId}/latest:
+    get:
+      description: Filter to get the task definitions you need
+      parameters:
+      - description: The task definition id
+        in: path
+        name: definitionId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TaskExecution'
+            type: array
+      summary: Get the latest execution of a given definitions
+      tags:
+      - definition
+  /task/{definitionId}/rerun:
+    get:
+      description: Rerun a task definition previously created
+      parameters:
+      - description: The task definition id
+        in: path
+        name: definitionId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Rerun a task definition
+      tags:
+      - definition
+  /task/pending:
+    get:
+      description: Filter to get the task pending tasks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TaskDefinition'
+            type: array
+      summary: Get all of the pending task definitions
+      tags:
+      - definition
 swagger: "2.0"
