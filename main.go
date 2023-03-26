@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"os"
 	"sync"
 
+	"github.com/drorivry/matter/config"
 	"github.com/drorivry/matter/initializers"
 	k8s_client "github.com/drorivry/matter/k8s"
 	"github.com/drorivry/matter/poller"
@@ -17,10 +17,8 @@ func runServer(server *gin.Engine) {
 }
 
 func init() {
-	initializers.LoadEnvVars()
-	dbUrl := os.Getenv("DB_URL")
-
-	initializers.InitDBConnection(dbUrl)
+	config.InitConfig()
+	initializers.InitDBConnection(config.DB_URL)
 }
 
 func main() {

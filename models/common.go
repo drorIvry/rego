@@ -11,6 +11,7 @@ const (
 	TIMEOUT      Status = 400
 	PROC_ERROR   Status = 410
 	APP_ERROR    Status = 420
+	ABORTED		 Status = 430
 	SUCCESS      Status = 500
 )
 

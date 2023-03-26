@@ -9,6 +9,7 @@ import (
 
 	dao "github.com/drorivry/matter/dao"
 	k8s_client "github.com/drorivry/matter/k8s"
+	"github.com/drorivry/matter/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,7 +32,7 @@ func AbortTaskExecution(c *gin.Context) {
 		return
 	}
 
-	dao.UpdateExecutionAborted(executionId)
+	dao.UpdateExecutionAborted(executionId, models.ABORTED)
 
 	c.JSON(
 		http.StatusOK,

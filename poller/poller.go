@@ -58,5 +58,11 @@ func DeployJob(task models.TaskDefinition) {
 }
 
 func timeoutTasks() {
-	//log.Println("killing timed out tasks")
+	tasksExecutions := dao.GetTasksToTimeout()
+
+	for _, tasksExecution := range tasksExecutions {
+		log.Println("timing out task ", tasksExecution.ID)
+		k8s_client.AbortTask(tasksExecution.ID)
+		dao.UpdateExecutionAborted(tasksExecution.ID, models.TIMEOUT)
+	}
 }
