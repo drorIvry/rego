@@ -11,7 +11,7 @@ import (
 
 func GetPendingTasks() []models.TaskDefinition {
 	var tasks []models.TaskDefinition
-	initializers.DefinitionsTable.Where("enabled = true AND next_execution_time < ?", time.Now()).Find(&tasks)
+	initializers.GetTaskDefinitionsTable().Where("enabled = true AND next_execution_time < ?", time.Now()).Find(&tasks)
 	return tasks
 }
 
@@ -33,7 +33,7 @@ func initDefaultFields(taskDef *models.TaskDefinition) {
 func CreateTaskDefinition(taskDef *models.TaskDefinition) error {
 	initDefaultFields(taskDef)
 
-	result := initializers.DefinitionsTable.Create(taskDef)
+	result := initializers.GetTaskDefinitionsTable().Create(taskDef)
 	if result.Error != nil {
 		log.Panic("Error saving to database", result.Error)
 		return result.Error
@@ -52,12 +52,12 @@ func CreateTaskExecution(taskDef models.TaskExecution) error {
 
 func GetAllTaskDefinitions() []models.TaskDefinition {
 	var tasks []models.TaskDefinition
-	initializers.DefinitionsTable.Find(&tasks)
+	initializers.GetTaskDefinitionsTable().Find(&tasks)
 	return tasks
 }
 
 func InsertTaskExecution(taskEx models.TaskExecution) error {
-	result := initializers.ExecutionsTable.Create(&taskEx)
+	result := initializers.GetTaskExecutionsTable().Create(&taskEx)
 	if result.Error != nil {
 		log.Panic("Error saving to database", result.Error)
 		return result.Error
@@ -67,7 +67,7 @@ func InsertTaskExecution(taskEx models.TaskExecution) error {
 
 func GetExecutionById(executionId uuid.UUID) *models.TaskExecution {
 	var execution models.TaskExecution
-	initializers.ExecutionsTable.Where(
+	initializers.GetTaskExecutionsTable().Where(
 		"id = ?",
 		executionId,
 	).First(
@@ -79,7 +79,7 @@ func GetExecutionById(executionId uuid.UUID) *models.TaskExecution {
 
 func GetTaskDefinitionById(definitionId uuid.UUID) models.TaskDefinition {
 	var task_def models.TaskDefinition
-	initializers.DefinitionsTable.Where(
+	initializers.GetTaskDefinitionsTable().Where(
 		"id = ?",
 		definitionId,
 	).First(
@@ -90,7 +90,7 @@ func GetTaskDefinitionById(definitionId uuid.UUID) models.TaskDefinition {
 }
 
 func UpdateExecutionAborted(executionId uuid.UUID) {
-	initializers.ExecutionsTable.Where(
+	initializers.GetTaskExecutionsTable().Where(
 		"id = ?",
 		executionId,
 	).Updates(

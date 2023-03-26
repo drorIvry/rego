@@ -55,7 +55,8 @@ func GetAllPendingTaskDefinitions(c *gin.Context) {
 }
 
 func RerunTask(c *gin.Context) {
-	var definitionId, err = uuid.Parse(c.Param("executionId"))
+	uuidParam := c.Param("definitionId")
+	var definitionId, err = uuid.Parse(uuidParam)
 
 	if err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)

@@ -52,8 +52,8 @@ func DeployJob(task models.TaskDefinition) {
 		task.Enabled = false
 	}
 
-	initializers.DefinitionsTable.Save(&task)
-	initializers.ExecutionsTable.Save(&taskEx)
+	initializers.GetTaskDefinitionsTable().Save(&task)
+	initializers.GetTaskExecutionsTable().Save(&taskEx)
 	k8s_client.LaunchK8sJob(&jobName, &taskEx)
 }
 

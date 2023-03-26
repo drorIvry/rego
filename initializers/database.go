@@ -9,8 +9,14 @@ import (
 )
 
 var DB *gorm.DB
-var DefinitionsTable *gorm.DB
-var ExecutionsTable *gorm.DB
+
+func GetTaskDefinitionsTable() *gorm.DB {
+	return DB.Table("task_definitions")
+}
+
+func GetTaskExecutionsTable() *gorm.DB {
+	return DB.Table("task_executions")
+}
 
 func InitDBConnection(dbName string) {
 	log.Println("initializing DB")
@@ -24,7 +30,4 @@ func InitDBConnection(dbName string) {
 	DB.AutoMigrate(&models.TaskDefinition{})
 	DB.AutoMigrate(&models.TaskExecution{})
 
-	// Create Table References
-	DefinitionsTable = DB.Table("task_definitions")
-	ExecutionsTable = DB.Table("task_executions")
 }
