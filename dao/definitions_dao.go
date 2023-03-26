@@ -21,8 +21,8 @@ func initDefaultFields(taskDef *models.TaskDefinition) {
 	taskDef.Enabled = true
 	taskDef.ExecutionsCounter = 0
 
-	if taskDef.NameSpace == "" {
-		taskDef.NameSpace = "default"
+	if taskDef.Namespace == "" {
+		taskDef.Namespace = "default"
 	}
 
 	if taskDef.ExecutionInterval > 0 {
@@ -41,13 +41,11 @@ func CreateTaskDefinition(taskDef *models.TaskDefinition) error {
 	return nil
 }
 
-
 func GetAllTaskDefinitions() []models.TaskDefinition {
 	var tasks []models.TaskDefinition
 	initializers.GetTaskDefinitionsTable().Find(&tasks)
 	return tasks
 }
-
 
 func GetTaskDefinitionById(definitionId uuid.UUID) models.TaskDefinition {
 	var task_def models.TaskDefinition
@@ -60,4 +58,3 @@ func GetTaskDefinitionById(definitionId uuid.UUID) models.TaskDefinition {
 
 	return task_def
 }
-

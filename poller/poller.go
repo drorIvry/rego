@@ -20,6 +20,7 @@ func Run(interval int) {
 		case <-ticker.C:
 			go deployReadyTasks()
 			go timeoutTasks()
+			go updateTaskStatus()
 		case <-quit:
 			ticker.Stop()
 			return
@@ -63,6 +64,20 @@ func timeoutTasks() {
 	for _, tasksExecution := range tasksExecutions {
 		log.Println("timing out task ", tasksExecution.ID)
 		k8s_client.AbortTask(tasksExecution.ID)
-		dao.UpdateExecutionAborted(tasksExecution.ID, models.TIMEOUT)
+		dao.UpdateExecutionStatus(tasksExecution.ID, models.TIMEOUT)
+	}
+}
+
+func updateTaskStatus() {
+	tasksExecutions := dao.GetExecutionsToWatch()
+	for _, tasksExecution := range tasksExecutions {
+		status, err := k8s_client.GetJobStatus(tasksExecution.ID)
+		if err != nil {
+			log.Fatal("Error while gettign job status ", err)
+		}
+		if status != tasksExecution.Status {
+			log.Println("Updating task status ", tasksExecution.ID)
+			dao.UpdateExecutionStatus(tasksExecution.ID, status)
+		}
 	}
 }

@@ -10,8 +10,8 @@ import (
 	"github.com/google/uuid"
 )
 
-func GetTasksToTimeout() []models.TaskDefinition {
-	var tasks []models.TaskDefinition
+func GetTasksToTimeout() []models.TaskExecution {
+	var tasks []models.TaskExecution
 	timeoutTime := time.Now().Add(time.Duration(-config.TASK_TIMEOUT) * time.Second)
 	initializers.GetTaskExecutionsTable().Where("status < 400 AND created_at < ?", timeoutTime).Find(&tasks)
 	return tasks
@@ -47,7 +47,7 @@ func GetExecutionById(executionId uuid.UUID) *models.TaskExecution {
 	return &execution
 }
 
-func UpdateExecutionAborted(executionId uuid.UUID, status models.Status) {
+func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
 	initializers.GetTaskExecutionsTable().Where(
 		"id = ?",
 		executionId,
@@ -56,4 +56,10 @@ func UpdateExecutionAborted(executionId uuid.UUID, status models.Status) {
 			Status: status,
 		},
 	)
+}
+
+func GetExecutionsToWatch() []models.TaskExecution {
+	var tasks []models.TaskExecution
+	initializers.GetTaskExecutionsTable().Where("status < ?", models.TIMEOUT).Find(&tasks)
+	return tasks
 }

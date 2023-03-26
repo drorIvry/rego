@@ -14,7 +14,7 @@ type TaskDefinition struct {
 	ID                      uuid.UUID      `json:"id" gorm:"type:uuid` //;default:uuid_generate_v4()"
 	Image                   string         `json:"image" binding:"required"`
 	Name                    string         `json:"name"`
-	NameSpace               string         `json:"namespace"`
+	Namespace               string         `json:"namespace"`
 	TtlSecondsAfterFinished int            `json:"ttl_seconds_after_finished"`
 	ExecutionInterval       int            `json:"execution_interval"`
 	ExecutionsCounter       int            `json:"execution_counter"`

@@ -35,7 +35,7 @@ func LaunchK8sJob(
 	jobName *string,
 	taskEx *models.TaskExecution,
 ) {
-	jobs := ClientSet.BatchV1().Jobs(taskEx.NameSpace)
+	jobs := ClientSet.BatchV1().Jobs(taskEx.Namespace)
 	var backOffLimit int32 = 0
 	var ttlSecondsAfterFinished int32 = int32(taskEx.TtlSecondsAfterFinished)
 	var containers []v1.Container = nil
@@ -60,7 +60,7 @@ func LaunchK8sJob(
 	jobSpec := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      *jobName,
-			Namespace: taskEx.NameSpace,
+			Namespace: taskEx.Namespace,
 		},
 		Spec: batchv1.JobSpec{
 			Template: v1.PodTemplateSpec{
@@ -122,11 +122,41 @@ func AbortTask(executionId uuid.UUID) error {
 	deleteOptions.GracePeriodSeconds = &zero
 	deleteOptions.PropagationPolicy = &bg
 
-	jobs := ClientSet.BatchV1().Jobs(execution.NameSpace)
+	jobs := ClientSet.BatchV1().Jobs(execution.Namespace)
 	err := jobs.Delete(context.TODO(), jobName, deleteOptions)
 	if err != nil {
 		log.Panic("Could not delete job ", jobName)
 		return err
 	}
 	return nil
+}
+
+func GetJobStatus(executionId uuid.UUID) (models.Status, error) {
+	execution := dao.GetExecutionById(executionId)
+	jobName := BuildJobName(*execution)
+	job, err := ClientSet.BatchV1().Jobs(
+		execution.Namespace,
+	).Get(
+		context.TODO(),
+		jobName,
+		metav1.GetOptions{},
+	)
+
+	if err != nil {
+		return models.PROC_ERROR, err
+	}
+
+	if job.Status.Active == 0 && job.Status.Succeeded == 0 && job.Status.Failed == 0 {
+		return models.PENDING, nil
+	}
+
+	if job.Status.Active > 0 {
+		return models.RUNNING, nil
+	}
+
+	if job.Status.Succeeded > 0 {
+		return models.SUCCESS, nil // Job ran successfully
+	}
+
+	return models.APP_ERROR, nil
 }

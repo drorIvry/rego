@@ -32,7 +32,7 @@ func AbortTaskExecution(c *gin.Context) {
 		return
 	}
 
-	dao.UpdateExecutionAborted(executionId, models.ABORTED)
+	dao.UpdateExecutionStatus(executionId, models.ABORTED)
 
 	c.JSON(
 		http.StatusOK,
