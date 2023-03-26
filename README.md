@@ -2,8 +2,6 @@
 
 # TODOS:
 
-- Refactor task execution model (no need for interval, next_exec_time, disabled, enabled etc,)
-- Poller status updated automatically
 - kube metadata
   - request / limit
     - CPU

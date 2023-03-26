@@ -13,6 +13,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// AbortTaskExecution             godoc
+// @Summary      				  Abort a running task and kill the pod
+// @Description                   Kill a running k8s job and update its task execution
+// @Tags                          execution
+// @Produce                       json
+// @Param                         executionId  path string  true  "The task execution id"
+// @Success                       200
+// @Router                        /execution/{executionId}/abort [get]
 func AbortTaskExecution(c *gin.Context) {
 	var executionIdUnparsed = strings.TrimSpace(c.Param("executionId"))
 

@@ -21,6 +21,18 @@ func init() {
 	initializers.InitDBConnection(config.DB_URL)
 }
 
+//	@title			Matter
+//	@version		1.0
+//	@description	Schedualing workloads made easy.
+
+//	@contact.name	Dror Ivry
+//	@contact.email	drorivry@gmail.com
+
+//	@license.name	MIT
+//	@license.url	https://opensource.org/license/mit/
+
+//	@host		localhost:3000
+//	@BasePath	/api/v1
 func main() {
 	kubeConfigPath := flag.String("kubeConfigPath", "", "The path to the kubeconfig")
 	pollInterval := flag.Int("interval", 1, "The polling interval")

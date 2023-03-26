@@ -1,0 +1,31 @@
+basePath: /api/v1
+host: localhost:3000
+info:
+  contact:
+    email: drorivry@gmail.com
+    name: Dror Ivry
+  description: Schedualing workloads made easy.
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit/
+  title: Matter
+  version: "1.0"
+paths:
+  /execution/{executionId}/abort:
+    get:
+      description: Kill a running k8s job and update its task execution
+      parameters:
+      - description: The task execution id
+        in: path
+        name: executionId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Abort a running task and kill the pod
+      tags:
+      - execution
+swagger: "2.0"

@@ -2,7 +2,11 @@ package tasker
 
 import (
 	"github.com/drorivry/matter/controllers"
+	_ "github.com/drorivry/matter/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func ErrorHandler(c *gin.Context) {
@@ -17,19 +21,24 @@ func ErrorHandler(c *gin.Context) {
 
 func GetServer() *gin.Engine {
 	r := gin.Default()
+
 	r.Use(ErrorHandler)
 
-	r.GET("/ping", controllers.Ping)                           // V
-	r.POST("/task", controllers.CreateTaskDefinition)          // V
-	r.GET("/task", controllers.GetAllTaskDefinitions)          // V
-	r.POST("/task/:definitionId/rerun", controllers.RerunTask) // dror
-	r.GET("/task/:definitionId/latest")                        // dror
-	r.PUT("/task")                                             // dror
-	r.DELETE("/task/:definitionId")                            // dror
+	r.GET("/ping", controllers.Ping)
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	r.GET("/execution", controllers.RerunTask)
-	r.POST("/execution/:executionId/abort", controllers.AbortTaskExecution)
-	r.GET("/tasks/pending", controllers.GetAllPendingTaskDefinitions)
+	v1 := r.Group("/api/v1")
+	{
+		v1.GET("/task", controllers.GetAllTaskDefinitions)
+		v1.POST("/task", controllers.CreateTaskDefinition)
+		v1.POST("/task/:definitionId/rerun", controllers.RerunTask)
+		v1.GET("/task/:definitionId/latest")
+		v1.PUT("/task")
+		v1.DELETE("/task/:definitionId")
+		v1.GET("/execution", controllers.RerunTask)
+		v1.POST("/execution/:executionId/abort", controllers.AbortTaskExecution)
+		v1.GET("/tasks/pending", controllers.GetAllPendingTaskDefinitions)
+	}
 
 	return r
 }

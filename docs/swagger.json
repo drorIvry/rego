@@ -1,0 +1,46 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Schedualing workloads made easy.",
+        "title": "Matter",
+        "contact": {
+            "name": "Dror Ivry",
+            "email": "drorivry@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/license/mit/"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "/api/v1",
+    "paths": {
+        "/execution/{executionId}/abort": {
+            "get": {
+                "description": "Kill a running k8s job and update its task execution",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "execution"
+                ],
+                "summary": "Abort a running task and kill the pod",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The task execution id",
+                        "name": "executionId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    }
+}
