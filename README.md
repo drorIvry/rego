@@ -15,6 +15,8 @@
   - serviceaccount
   - replicas
 - status api
+- tasks pagination and filters
+- CI using github actions
 - replicas
 - workflow task
 - encryption
