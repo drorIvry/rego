@@ -1,6 +1,10 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Status int
 
@@ -11,12 +15,12 @@ const (
 	TIMEOUT      Status = 400
 	PROC_ERROR   Status = 410
 	APP_ERROR    Status = 420
-	ABORTED		 Status = 430
+	ABORTED      Status = 430
 	SUCCESS      Status = 500
 )
 
 func CreateExecutionFromDefinition(taskdef TaskDefinition) TaskExecution {
-	return TaskExecution{
+	taskEx := TaskExecution{
 		ID:                      uuid.New(),
 		Status:                  READY,
 		TaskDefinitionId:        taskdef.ID,
@@ -29,4 +33,8 @@ func CreateExecutionFromDefinition(taskdef TaskDefinition) TaskExecution {
 		Metadata:                taskdef.Metadata,
 		ExecutionParameters:     taskdef.ExecutionParameters,
 	}
+
+	taskEx.CreatedAt = time.Now()
+
+	return taskEx
 }
