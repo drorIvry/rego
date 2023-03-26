@@ -12,11 +12,6 @@ import (
 	"github.com/google/uuid"
 )
 
-func Ping(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "pong",
-	})
-}
 
 func CreateTaskDefinition(c *gin.Context) {
 	var newTaskDef models.TaskDefinition
@@ -75,4 +70,16 @@ func RerunTask(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "updated",
 	})
+}
+
+func GetLatestExecution(c *gin.Context) {
+
+}
+
+func UpdateTaskDefinition(c *gin.Context) {
+
+}
+
+func DeleteTaskDefinition(c *gin.Context) {
+
 }
