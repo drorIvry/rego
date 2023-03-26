@@ -4,12 +4,12 @@ import (
 	"errors"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/drorivry/matter/dao"
 	"github.com/drorivry/matter/models"
 	"github.com/drorivry/matter/poller"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func Ping(c *gin.Context) {
@@ -27,6 +27,8 @@ func CreateTaskDefinition(c *gin.Context) {
 		return
 	}
 
+	newTaskDef.ID = uuid.New()
+
 	err := dao.CreateTaskDefinition(&newTaskDef)
 
 	if err != nil {
@@ -34,9 +36,12 @@ func CreateTaskDefinition(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "created",
-	})
+	c.JSON(
+		http.StatusOK, gin.H{
+			"message":       "created",
+			"definition_id": newTaskDef.ID.String(),
+		},
+	)
 }
 
 func GetAllTaskDefinitions(c *gin.Context) {
@@ -50,15 +55,14 @@ func GetAllPendingTaskDefinitions(c *gin.Context) {
 }
 
 func RerunTask(c *gin.Context) {
-	definitionId := c.Param("definitionId")
-	numericDefinitionId, err := strconv.Atoi(definitionId)
+	var definitionId, err = uuid.Parse(c.Param("executionId"))
+
 	if err != nil {
-		log.Fatal(err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	task := dao.GetTaskDefinitionById(uint(numericDefinitionId))
+	task := dao.GetTaskDefinitionById(definitionId)
 
 	if task.Deleted {
 		c.AbortWithError(http.StatusInternalServerError, errors.New("Can't rerun deleted task"))

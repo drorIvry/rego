@@ -4,8 +4,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/google/uuid"
-
 	"github.com/drorivry/matter/dao"
 	"github.com/drorivry/matter/initializers"
 	"github.com/drorivry/matter/models"
@@ -29,20 +27,8 @@ func Run(interval int) {
 	}
 }
 
-func buildJobName(taskEx models.TaskExecution) string {
-	id := uuid.New()
-	jobName := ""
-	if taskEx.Name != "" {
-		jobName = taskEx.Name + "-"
-	}
-	jobName += taskEx.Image + "-" + id.String()
-	return jobName
-}
-
 func deployReadyTasks() {
 	tasks := dao.GetPendingTasks()
-	log.Println("polling")
-
 	for _, task := range tasks {
 		log.Println("deploying task ", task.ID)
 		DeployJob(task)
@@ -51,7 +37,7 @@ func deployReadyTasks() {
 
 func DeployJob(task models.TaskDefinition) {
 	taskEx := models.CreateExecutionFromDefinition(task)
-	jobName := buildJobName(taskEx)
+	jobName := k8s_client.BuildJobName(taskEx)
 
 	taskEx.Status = models.JOB_DEPLOYED
 
@@ -59,14 +45,15 @@ func DeployJob(task models.TaskDefinition) {
 
 	task.ExecutionsCounter++
 
+	// TODO: Move to dao
 	if task.ExecutionInterval > 0 {
 		task.NextExecutionTime = time.Now().Add(time.Duration(task.ExecutionInterval) * time.Second)
 	} else {
 		task.Enabled = false
 	}
 
-	initializers.DB.Table("task_definitions").Save(&task)
-	initializers.DB.Table("task_executions").Save(&taskEx)
+	initializers.DefinitionsTable.Save(&task)
+	initializers.ExecutionsTable.Save(&taskEx)
 	k8s_client.LaunchK8sJob(&jobName, &taskEx)
 }
 

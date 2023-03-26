@@ -1,5 +1,7 @@
 package models
 
+import "github.com/google/uuid"
+
 type Status int
 
 const (
@@ -14,16 +16,13 @@ const (
 
 func CreateExecutionFromDefinition(taskdef TaskDefinition) TaskExecution {
 	return TaskExecution{
+		ID:                      uuid.New(),
 		Status:                  READY,
 		TaskDefinitionId:        taskdef.ID,
 		Image:                   taskdef.Image,
 		Name:                    taskdef.Name,
 		NameSpace:               taskdef.NameSpace,
 		TtlSecondsAfterFinished: taskdef.TtlSecondsAfterFinished,
-		ExecutionInterval:       taskdef.ExecutionInterval,
-		NextExecutionTime:       taskdef.NextExecutionTime,
-		Enabled:                 taskdef.Enabled,
-		Deleted:                 taskdef.Deleted,
 		Args:                    taskdef.Args,
 		Cmd:                     taskdef.Cmd,
 		Metadata:                taskdef.Metadata,
