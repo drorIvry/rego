@@ -110,7 +110,16 @@ func RerunTask(c *gin.Context) {
 // @Param                         definitionId  path string  true  "The task definition id"
 // @Router                        /task/{definitionId}/latest [get]
 func GetLatestExecution(c *gin.Context) {
+	uuidParam := c.Param("definitionId")
+	var definitionId, err = uuid.Parse(uuidParam)
 
+	if err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	latestExecution := dao.GetLatestExecutionByDefinitionId(definitionId)
+	c.IndentedJSON(http.StatusOK, latestExecution)
 }
 
 // UpdateTaskDefinition           godoc
@@ -122,7 +131,6 @@ func GetLatestExecution(c *gin.Context) {
 // @Success                       200
 // @Router                        /task [put]
 func UpdateTaskDefinition(c *gin.Context) {
-
 }
 
 // DeleteTaskDefinition           godoc
@@ -134,5 +142,16 @@ func UpdateTaskDefinition(c *gin.Context) {
 // @Success                       200
 // @Router                        /task/{definitionId} [delete]
 func DeleteTaskDefinition(c *gin.Context) {
+	uuidParam := c.Param("definitionId")
+	var definitionId, err = uuid.Parse(uuidParam)
 
+	if err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+	dao.DeleteTaskDefinitionById(definitionId)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "deleted",
+	})
 }

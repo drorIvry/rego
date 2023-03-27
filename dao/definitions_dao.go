@@ -58,3 +58,18 @@ func GetTaskDefinitionById(definitionId uuid.UUID) models.TaskDefinition {
 
 	return task_def
 }
+
+func DeleteTaskDefinitionById(definitionId uuid.UUID) {
+	initializers.GetTaskDefinitionsTable().Where(
+		"id = ?",
+		definitionId,
+	).Updates(
+		models.TaskDefinition{
+			Deleted: true,
+			Enabled: false,
+		},
+	).Delete(
+		"id = ?",
+		definitionId,
+	)
+}

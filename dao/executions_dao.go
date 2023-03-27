@@ -63,3 +63,9 @@ func GetExecutionsToWatch() []models.TaskExecution {
 	initializers.GetTaskExecutionsTable().Where("status < ?", models.TIMEOUT).Find(&tasks)
 	return tasks
 }
+
+func GetLatestExecutionByDefinitionId(definitionId uuid.UUID) models.TaskExecution {
+	var task models.TaskExecution
+	initializers.GetTaskExecutionsTable().Where("task_definition_id = ?", definitionId).Order("created_at desc").First(&task)
+	return task
+}
