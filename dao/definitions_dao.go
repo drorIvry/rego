@@ -47,16 +47,25 @@ func GetAllTaskDefinitions() []models.TaskDefinition {
 	return tasks
 }
 
-func GetTaskDefinitionById(definitionId uuid.UUID) models.TaskDefinition {
+func GetTaskDefinitionById(definitionId uuid.UUID) (models.TaskDefinition, error) {
 	var task_def models.TaskDefinition
-	initializers.GetTaskDefinitionsTable().Where(
+	result := initializers.GetTaskDefinitionsTable().Where(
 		"id = ?",
 		definitionId,
 	).First(
 		&task_def,
 	)
 
-	return task_def
+	return task_def, result.Error
+}
+
+func UpdateDefinition(taskDefinition models.TaskDefinition) {
+	initializers.GetTaskDefinitionsTable().Where(
+		"id = ?",
+		taskDefinition.ID,
+	).Updates(
+		taskDefinition,
+	)
 }
 
 func DeleteTaskDefinitionById(definitionId uuid.UUID) {

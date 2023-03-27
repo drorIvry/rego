@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"errors"
 	"log"
 	"net/http"
 
@@ -25,7 +24,7 @@ func CreateTaskDefinition(c *gin.Context) {
 
 	if err := c.BindJSON(&newTaskDef); err != nil {
 		log.Println(err)
-		c.AbortWithError(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, c.Error(err))
 		return
 	}
 
@@ -34,7 +33,7 @@ func CreateTaskDefinition(c *gin.Context) {
 	err := dao.CreateTaskDefinition(&newTaskDef)
 
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, c.Error(err))
 		return
 	}
 
@@ -83,14 +82,14 @@ func RerunTask(c *gin.Context) {
 	var definitionId, err = uuid.Parse(uuidParam)
 
 	if err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, c.Error(err))
 		return
 	}
 
-	task := dao.GetTaskDefinitionById(definitionId)
+	task, err := dao.GetTaskDefinitionById(definitionId)
 
 	if task.Deleted {
-		c.AbortWithError(http.StatusInternalServerError, errors.New("Can't rerun deleted task"))
+		c.JSON(http.StatusInternalServerError, c.Error(err))
 		return
 	}
 
@@ -114,7 +113,7 @@ func GetLatestExecution(c *gin.Context) {
 	var definitionId, err = uuid.Parse(uuidParam)
 
 	if err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, c.Error(err))
 		return
 	}
 
@@ -131,6 +130,25 @@ func GetLatestExecution(c *gin.Context) {
 // @Success                       200
 // @Router                        /task [put]
 func UpdateTaskDefinition(c *gin.Context) {
+	var updatedTaskDef models.TaskDefinition
+
+	if err := c.BindJSON(&updatedTaskDef); err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, c.Error(err))
+		return
+	}
+	_, err := dao.GetTaskDefinitionById(updatedTaskDef.ID)
+
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, c.Error(err))
+		return
+	}
+
+	dao.UpdateDefinition(updatedTaskDef)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "updated",
+	})
 }
 
 // DeleteTaskDefinition           godoc
@@ -146,7 +164,7 @@ func DeleteTaskDefinition(c *gin.Context) {
 	var definitionId, err = uuid.Parse(uuidParam)
 
 	if err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, c.Error(err))
 		return
 	}
 	dao.DeleteTaskDefinitionById(definitionId)
