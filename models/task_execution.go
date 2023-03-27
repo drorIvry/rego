@@ -9,15 +9,16 @@ import (
 
 type TaskExecution struct {
 	gorm.Model
-	ID                      uuid.UUID      `json:"id" gorm:"type:uuid` //;default:uuid_generate_v4()"
-	TaskDefinitionId        uuid.UUID      `json:"task_definition_id"`
-	Status                  Status         `json:"status"`
-	Image                   string         `json:"image" binding:"required"`
-	Name                    string         `json:"name"`
-	TtlSecondsAfterFinished int            `json:"ttl_seconds_after_finished"`
-	Namespace               string         `json:"namespace"`
-	Args                    string         `json:"args"`
-	Cmd                     pq.StringArray `json:"cmd" gorm:"type:text[]"`
-	Metadata                datatypes.JSON `json:"metadata"`
-	ExecutionParameters     datatypes.JSON `json:"execution_parameters"`
+	ID                      uuid.UUID      `json:"id,omitempty" gorm:"type:uuid` //;default:uuid_generate_v4()"
+	TaskDefinitionId        uuid.UUID      `json:"task_definition_id,omitempty"`
+	StatusCode              Status         `json:"status_code,omitempty"`
+	TaskStatus              string         `json:"status,omitempty"`
+	Image                   string         `json:"image,omitempty" binding:"required"`
+	Name                    string         `json:"name,omitempty"`
+	TtlSecondsAfterFinished int            `json:"ttl_seconds_after_finished,omitempty"`
+	Namespace               string         `json:"namespace,omitempty"`
+	Args                    string         `json:"args,omitempty"`
+	Cmd                     pq.StringArray `json:"cmd,omitempty" gorm:"type:text[]"`
+	Metadata                datatypes.JSON `json:"metadata,omitempty"`
+	ExecutionParameters     datatypes.JSON `json:"execution_parameters,omitempty"`
 }

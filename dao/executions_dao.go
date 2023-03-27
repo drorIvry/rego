@@ -13,7 +13,7 @@ import (
 func GetTasksToTimeout() []models.TaskExecution {
 	var tasks []models.TaskExecution
 	timeoutTime := time.Now().Add(time.Duration(-config.TASK_TIMEOUT) * time.Second)
-	initializers.GetTaskExecutionsTable().Where("status < 400 AND created_at < ?", timeoutTime).Find(&tasks)
+	initializers.GetTaskExecutionsTable().Where("status_code < 400 AND created_at < ?", timeoutTime).Find(&tasks)
 	return tasks
 }
 
@@ -53,14 +53,15 @@ func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
 		executionId,
 	).Updates(
 		models.TaskExecution{
-			Status: status,
+			StatusCode: status,
+			TaskStatus: models.NumericStatusToStringStatus(status),
 		},
 	)
 }
 
 func GetExecutionsToWatch() []models.TaskExecution {
 	var tasks []models.TaskExecution
-	initializers.GetTaskExecutionsTable().Where("status < ?", models.TIMEOUT).Find(&tasks)
+	initializers.GetTaskExecutionsTable().Where("status_code < ?", models.TIMEOUT).Find(&tasks)
 	return tasks
 }
 

@@ -20,19 +20,45 @@ const (
 	SUCCESS      Status = 500
 )
 
-func CreateExecutionFromDefinition(taskdef TaskDefinition) TaskExecution {
+func NumericStatusToStringStatus(status Status) string {
+	switch status {
+	case READY:
+		return "READY"
+	case JOB_DEPLOYED:
+		return "JOB_DEPLOYED"
+	case PENDING:
+		return "PENDING"
+	case RUNNING:
+		return "RUNNING"
+	case TIMEOUT:
+		return "TIMEOUT"
+	case PROC_ERROR:
+		return "PROC_ERROR"
+	case APP_ERROR:
+		return "APP_ERROR"
+	case ABORTED:
+		return "ABORTED"
+	case SUCCESS:
+		return "SUCCESS"
+	default:
+		return "UNKNOWN"
+	}
+}
+
+func CreateExecutionFromDefinition(taskDef TaskDefinition) TaskExecution {
 	taskEx := TaskExecution{
 		ID:                      uuid.New(),
-		Status:                  READY,
-		TaskDefinitionId:        taskdef.ID,
-		Image:                   taskdef.Image,
-		Name:                    taskdef.Name,
-		Namespace:               taskdef.Namespace,
-		TtlSecondsAfterFinished: taskdef.TtlSecondsAfterFinished,
-		Args:                    taskdef.Args,
-		Cmd:                     taskdef.Cmd,
-		Metadata:                taskdef.Metadata,
-		ExecutionParameters:     taskdef.ExecutionParameters,
+		StatusCode:              READY,
+		TaskStatus:              NumericStatusToStringStatus(READY),
+		TaskDefinitionId:        taskDef.ID,
+		Image:                   taskDef.Image,
+		Name:                    taskDef.Name,
+		Namespace:               taskDef.Namespace,
+		TtlSecondsAfterFinished: taskDef.TtlSecondsAfterFinished,
+		Args:                    taskDef.Args,
+		Cmd:                     taskDef.Cmd,
+		Metadata:                taskDef.Metadata,
+		ExecutionParameters:     taskDef.ExecutionParameters,
 	}
 
 	taskEx.CreatedAt = time.Now()

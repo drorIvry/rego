@@ -40,7 +40,8 @@ func DeployJob(task models.TaskDefinition) {
 	taskEx := models.CreateExecutionFromDefinition(task)
 	jobName := k8s_client.BuildJobName(taskEx)
 
-	taskEx.Status = models.JOB_DEPLOYED
+	taskEx.StatusCode = models.JOB_DEPLOYED
+	taskEx.TaskStatus = models.NumericStatusToStringStatus(models.JOB_DEPLOYED)
 
 	dao.InsertTaskExecution(taskEx)
 
@@ -75,7 +76,7 @@ func updateTaskStatus() {
 		if err != nil {
 			log.Fatal("Error while gettign job status ", err)
 		}
-		if status != tasksExecution.Status {
+		if status != tasksExecution.StatusCode {
 			log.Println("Updating task status ", tasksExecution.ID)
 			dao.UpdateExecutionStatus(tasksExecution.ID, status)
 		}

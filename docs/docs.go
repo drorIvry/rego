@@ -403,6 +403,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
+                    "type": "string"
+                },
+                "status_code": {
                     "$ref": "#/definitions/models.Status"
                 },
                 "task_definition_id": {
