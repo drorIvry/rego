@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
         "clientset",
+        "datatypes",
+        "gorm",
         "tasker"
     ]
 }
