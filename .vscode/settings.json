@@ -5,6 +5,7 @@
         "drorivry",
         "gonic",
         "gorm",
+        "Rego",
         "tasker"
     ]
 }

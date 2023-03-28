@@ -1,4 +1,7 @@
-# Reo
+# Rego
+
+![Alt rego](./rego.png)
+
 
 # TODOS:
 
