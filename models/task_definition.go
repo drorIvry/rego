@@ -23,5 +23,4 @@ type TaskDefinition struct {
 	Args                    string         `json:"args"`
 	Cmd                     pq.StringArray `json:"cmd" gorm:"type:text[]"`
 	Metadata                datatypes.JSON `json:"metadata"`
-	ExecutionParameters     datatypes.JSON `json:"execution_parameters"`
 }

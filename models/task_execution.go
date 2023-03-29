@@ -19,5 +19,4 @@ type TaskExecution struct {
 	Args                    string         `json:"args,omitempty"`
 	Cmd                     pq.StringArray `json:"cmd,omitempty" gorm:"type:text[]"`
 	Metadata                datatypes.JSON `json:"metadata,omitempty"`
-	ExecutionParameters     datatypes.JSON `json:"execution_parameters,omitempty"`
 }

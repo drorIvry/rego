@@ -57,7 +57,6 @@ func CreateExecutionFromDefinition(taskDef TaskDefinition) TaskExecution {
 		Args:                    taskDef.Args,
 		Cmd:                     taskDef.Cmd,
 		Metadata:                taskDef.Metadata,
-		ExecutionParameters:     taskDef.ExecutionParameters,
 	}
 
 	taskEx.CreatedAt = time.Now()
