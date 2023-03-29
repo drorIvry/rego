@@ -40,7 +40,7 @@ It is designed to allow asynchronous workloads to be deployed over Kubernetes wi
 
 ### Getting Rego
 
-With [Go module](https://github.com/golang/go/wiki/Modules) support, simply run
+Clone the repo and run:
 
 ```sh
 go run main.go
