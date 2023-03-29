@@ -11,7 +11,6 @@
 
 > rego /ˈre.ɡoː/
 verb
-conjugation: 3rd conjugation
 Definitions:
 manage, direct
 rule, guide
