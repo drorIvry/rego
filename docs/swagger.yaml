@@ -32,8 +32,6 @@ definitions:
     - SUCCESS
   models.TaskDefinition:
     properties:
-      args:
-        type: string
       cmd:
         items:
           type: string
@@ -50,10 +48,6 @@ definitions:
         type: integer
       execution_interval:
         type: integer
-      execution_parameters:
-        items:
-          type: integer
-        type: array
       id:
         description: ;default:uuid_generate_v4()"
         type: string
@@ -69,8 +63,6 @@ definitions:
         type: string
       next_execution_time:
         type: string
-      ttl_seconds_after_finished:
-        type: integer
       updatedAt:
         type: string
     required:
@@ -78,8 +70,6 @@ definitions:
     type: object
   models.TaskExecution:
     properties:
-      args:
-        type: string
       cmd:
         items:
           type: string
@@ -88,10 +78,6 @@ definitions:
         type: string
       deletedAt:
         $ref: '#/definitions/gorm.DeletedAt'
-      execution_parameters:
-        items:
-          type: integer
-        type: array
       id:
         description: ;default:uuid_generate_v4()"
         type: string
@@ -111,8 +97,6 @@ definitions:
         $ref: '#/definitions/models.Status'
       task_definition_id:
         type: string
-      ttl_seconds_after_finished:
-        type: integer
       updatedAt:
         type: string
     required:
