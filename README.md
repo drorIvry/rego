@@ -37,3 +37,16 @@ With [Go module](https://github.com/golang/go/wiki/Modules) support, simply run
 ```sh
 go get github.com/drorivry/rego
 ```
+
+```sh
+go run main.go
+
+```
+
+### API Swagger
+browse to `http://localhost:4004/swagger/index.htm`
+
+## TODOs
+
+- implement a CLI 
+- docker deployment 
