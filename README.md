@@ -49,4 +49,7 @@ browse to `http://localhost:4004/swagger/index.htm`
 ## TODOs
 
 - implement a CLI 
-- docker deployment 
+- docker deployment
+- support deployment kickoff
+- add workflow options
+- support kubernetes metadata
