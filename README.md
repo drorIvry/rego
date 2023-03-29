@@ -41,10 +41,6 @@ It is designed to allow asynchronous workloads to be deployed over Kubernetes wi
 With [Go module](https://github.com/golang/go/wiki/Modules) support, simply run
 
 ```sh
-go get github.com/drorivry/rego
-```
-
-```sh
 go run main.go
 
 ```
