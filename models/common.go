@@ -54,7 +54,6 @@ func CreateExecutionFromDefinition(taskDef TaskDefinition) TaskExecution {
 		Image:                   taskDef.Image,
 		Name:                    taskDef.Name,
 		Namespace:               taskDef.Namespace,
-		Args:                    taskDef.Args,
 		Cmd:                     taskDef.Cmd,
 		Metadata:                taskDef.Metadata,
 	}
