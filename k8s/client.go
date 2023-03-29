@@ -22,7 +22,12 @@ import (
 var ClientSet *kubernetes.Clientset
 
 func BuildJobName(taskEx models.TaskExecution) string {
-	jobName := taskEx.Name + "-" + taskEx.Image + "-" + taskEx.ID.String()
+	jobName := ""
+	if taskEx.Name != "" {
+		jobName += taskEx.Name + "-"
+	}
+	
+	jobName += taskEx.Image + "-" + taskEx.ID.String()
 	jobName = strings.Replace(jobName, ":", "-", -1)
 	jobName = strings.Replace(jobName, ".", "-", -1)
 	jobName = strings.Replace(jobName, "_", "-", -1)
