@@ -24,6 +24,12 @@ Rego is a
 
 It is designed to allow asynchronous workloads to be deployed over Kubernetes with minimal effort, while also providing a management API that can keep track of progress and run history.
 
+### Use cases
+
+- Run async workloads that need s to be managed (or visible to) a UI
+- integrate non production-grade code (data scientist R code for example) within your production environment in a contained way
+- use to run stuff periodically with run history
+
 ## Getting started
 
 ### Prerequisites
@@ -53,3 +59,4 @@ browse to `http://localhost:4004/swagger/index.htm`
 - support deployment kickoff
 - add workflow options
 - support kubernetes metadata
+- support actual external DBs
