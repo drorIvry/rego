@@ -1,4 +1,4 @@
-module github.com/drorivry/matter
+module github.com/drorivry/rego
 
 go 1.19
 

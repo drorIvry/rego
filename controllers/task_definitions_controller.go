@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/drorivry/matter/dao"
-	"github.com/drorivry/matter/models"
-	"github.com/drorivry/matter/poller"
+	"github.com/drorivry/rego/dao"
+	"github.com/drorivry/rego/models"
+	"github.com/drorivry/rego/poller"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )

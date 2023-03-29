@@ -7,13 +7,15 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/drorivry/matter/dao"
-	"github.com/drorivry/matter/models"
+	"github.com/drorivry/rego/config"
+	"github.com/drorivry/rego/dao"
+	"github.com/drorivry/rego/models"
 	"github.com/google/uuid"
 	batchv1 "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kubernetes "k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	clientcmd "k8s.io/client-go/tools/clientcmd"
 )
 
@@ -28,7 +30,12 @@ func BuildJobName(taskEx models.TaskExecution) string {
 }
 
 func InitK8SClientSet(kubeConfigPath *string) {
-	ClientSet = ConnectToK8s(kubeConfigPath)
+	if config.IN_CLUSTER {
+		ClientSet = ConnectToK8SInCluster()
+
+	} else {
+		ClientSet = ConnectToK8s(kubeConfigPath)
+	}
 }
 
 func LaunchK8sJob(
@@ -111,6 +118,20 @@ func ConnectToK8s(kubeConfigPath *string) *kubernetes.Clientset {
 	}
 
 	return clientset
+}
+
+func ConnectToK8SInCluster() *kubernetes.Clientset {
+	config, err := rest.InClusterConfig()
+	if err != nil {
+		log.Fatalln("Failed to create K8s clientset ", err)
+	}
+	// creates the clientset
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		log.Fatalln("Failed to create K8s clientset ", err)
+	}
+	return clientset
+
 }
 
 func AbortTask(executionId uuid.UUID) error {

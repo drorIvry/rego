@@ -4,8 +4,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/drorivry/matter/initializers"
-	"github.com/drorivry/matter/models"
+	"github.com/drorivry/rego/initializers"
+	"github.com/drorivry/rego/models"
 	"github.com/google/uuid"
 )
 

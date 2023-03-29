@@ -4,11 +4,11 @@ import (
 	"flag"
 	"sync"
 
-	"github.com/drorivry/matter/config"
-	"github.com/drorivry/matter/initializers"
-	k8s_client "github.com/drorivry/matter/k8s"
-	"github.com/drorivry/matter/poller"
-	"github.com/drorivry/matter/tasker"
+	"github.com/drorivry/rego/config"
+	"github.com/drorivry/rego/initializers"
+	k8s_client "github.com/drorivry/rego/k8s"
+	"github.com/drorivry/rego/poller"
+	"github.com/drorivry/rego/tasker"
 	"github.com/gin-gonic/gin"
 )
 

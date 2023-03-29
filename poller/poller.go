@@ -4,11 +4,11 @@ import (
 	"log"
 	"time"
 
-	"github.com/drorivry/matter/dao"
-	"github.com/drorivry/matter/initializers"
-	"github.com/drorivry/matter/models"
+	"github.com/drorivry/rego/dao"
+	"github.com/drorivry/rego/initializers"
+	"github.com/drorivry/rego/models"
 
-	k8s_client "github.com/drorivry/matter/k8s"
+	k8s_client "github.com/drorivry/rego/k8s"
 )
 
 func Run(interval int) {

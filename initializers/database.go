@@ -3,7 +3,7 @@ package initializers
 import (
 	"log"
 
-	"github.com/drorivry/matter/models"
+	"github.com/drorivry/rego/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )

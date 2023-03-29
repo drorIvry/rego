@@ -7,9 +7,9 @@ import (
 
 	"github.com/google/uuid"
 
-	dao "github.com/drorivry/matter/dao"
-	k8s_client "github.com/drorivry/matter/k8s"
-	"github.com/drorivry/matter/models"
+	dao "github.com/drorivry/rego/dao"
+	k8s_client "github.com/drorivry/rego/k8s"
+	"github.com/drorivry/rego/models"
 	"github.com/gin-gonic/gin"
 )
 

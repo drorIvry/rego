@@ -5,12 +5,13 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/drorivry/matter/initializers"
+	"github.com/drorivry/rego/initializers"
 )
 
 var DB_URL string
 var TASK_TIMEOUT int
 var SERVER_PORT string
+var IN_CLUSTER bool
 
 func InitConfig() {
 	initializers.LoadEnvVars()
@@ -24,5 +25,10 @@ func InitConfig() {
 
 	TASK_TIMEOUT = parsedTimeout
 	SERVER_PORT = os.Getenv("SERVER_PORT")
+	IN_CLUSTER, err = strconv.ParseBool(os.Getenv("IN_CLUSTER"))
+	if err != nil {
+		IN_CLUSTER = false
+		log.Fatal("Can't parse IN_CLUSTER, using default")
+	}
 
 }

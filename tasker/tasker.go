@@ -1,8 +1,8 @@
 package tasker
 
 import (
-	"github.com/drorivry/matter/controllers"
-	_ "github.com/drorivry/matter/docs"
+	"github.com/drorivry/rego/controllers"
+	_ "github.com/drorivry/rego/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
