@@ -1,6 +1,6 @@
 # Rego
 
-<img align="right" width="159px" src="./rego.png">
+<img align="right" width="300px" src="./rego.png">
 
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/drorivry/rego)](https://goreportcard.com/report/github.com/drorivry/rego)
