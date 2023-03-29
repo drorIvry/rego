@@ -9,6 +9,22 @@
 [![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/drorivry/rego)](https://www.tickgit.com/browse?repo=github.com/drorivry/rego)
 
 
+> rego /ˈre.ɡoː/
+verb
+conjugation: 3rd conjugation
+Definitions:
+manage, direct
+rule, guide
+
+Rego is a 
+
+- 🔥  blazingly fast
+- 🥇 API first
+- 🌈 lightweight
+- 🕜 Task orchestrator
+
+It is designed to allow asynchronous workloads to be deployed over Kubernetes with minimal effort, while also providing a management API that can keep track of progress and run history.
+
 ## Getting started
 
 ### Prerequisites
@@ -20,5 +36,5 @@
 With [Go module](https://github.com/golang/go/wiki/Modules) support, simply run
 
 ```sh
-go get https://github.com/drorivry/rego
+go get github.com/drorivry/rego
 ```
