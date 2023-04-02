@@ -47,6 +47,57 @@ go run main.go
 
 ```
 
+### Quick Start
+
+With rego you can use the API to create and run k8s jobs with a managed API.
+
+```sh
+curl -X POST -d '{"image": "hello-world"}' localhost:4004/api/v1/task
+```
+
+This will start a job on your k8s cluster that'll run the docker image [hello-world](https://hub.docker.com/_/hello-world/)
+
+the response will look something like 
+
+```js
+{
+  "definition_id": "a36fbd9b-bf8a-4c59-94c1-9938b6707e8f",
+  "message": "created"
+}
+```
+
+we can use the definition ID to see the task's running status
+
+```sh
+curl http://localhost:4004/api/v1/task/a36fbd9b-bf8a-4c59-94c1-9938b6707e8f/latest
+```
+
+which will respond with
+
+```js
+{
+  "ID": 0,
+  "CreatedAt": "2023-04-02T11:53:08.2008054+03:00",
+  "UpdatedAt": "2023-04-02T11:53:16.2032147+03:00",
+  "DeletedAt": null,
+  "id": "7eb53d97-7380-4e0b-82a6-b38fbf9119d2",
+  "task_definition_id": "a36fbd9b-bf8a-4c59-94c1-9938b6707e8f",
+  "status_code": 500,
+  "status": "SUCCESS",
+  "image": "hello-world",
+  "name": "test",
+  "ttl_seconds_after_finished": 10,
+  "namespace": "test",
+  "args": "[\"1111\", \"33333\"]",
+  "metadata": {
+    "ttlSecondsAfterFinished": 1
+  }
+}
+```
+
+which indicates the success.
+
+
 ### API Swagger
 browse to `http://localhost:4004/swagger/index.htm`
 
