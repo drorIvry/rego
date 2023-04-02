@@ -293,9 +293,6 @@ const docTemplate = `{
                 "image"
             ],
             "properties": {
-                "args": {
-                    "type": "string"
-                },
                 "cmd": {
                     "type": "array",
                     "items": {
@@ -320,12 +317,6 @@ const docTemplate = `{
                 "execution_interval": {
                     "type": "integer"
                 },
-                "execution_parameters": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
                 "id": {
                     "description": ";default:uuid_generate_v4()\"",
                     "type": "string"
@@ -348,9 +339,6 @@ const docTemplate = `{
                 "next_execution_time": {
                     "type": "string"
                 },
-                "ttl_seconds_after_finished": {
-                    "type": "integer"
-                },
                 "updatedAt": {
                     "type": "string"
                 }
@@ -362,9 +350,6 @@ const docTemplate = `{
                 "image"
             ],
             "properties": {
-                "args": {
-                    "type": "string"
-                },
                 "cmd": {
                     "type": "array",
                     "items": {
@@ -376,12 +361,6 @@ const docTemplate = `{
                 },
                 "deletedAt": {
                     "$ref": "#/definitions/gorm.DeletedAt"
-                },
-                "execution_parameters": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
                 },
                 "id": {
                     "description": ";default:uuid_generate_v4()\"",
@@ -410,9 +389,6 @@ const docTemplate = `{
                 },
                 "task_definition_id": {
                     "type": "string"
-                },
-                "ttl_seconds_after_finished": {
-                    "type": "integer"
                 },
                 "updatedAt": {
                     "type": "string"

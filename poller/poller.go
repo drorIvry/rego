@@ -74,7 +74,7 @@ func updateTaskStatus() {
 	for _, tasksExecution := range tasksExecutions {
 		status, err := k8s_client.GetJobStatus(tasksExecution.ID)
 		if err != nil {
-			log.Fatal("Error while gettign job status ", err)
+			log.Println("Error while getting job status ", err)
 		}
 		if status != tasksExecution.StatusCode {
 			log.Println("Updating task status ", tasksExecution.ID)

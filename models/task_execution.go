@@ -15,10 +15,7 @@ type TaskExecution struct {
 	TaskStatus              string         `json:"status,omitempty"`
 	Image                   string         `json:"image,omitempty" binding:"required"`
 	Name                    string         `json:"name,omitempty"`
-	TtlSecondsAfterFinished int            `json:"ttl_seconds_after_finished,omitempty"`
 	Namespace               string         `json:"namespace,omitempty"`
-	Args                    string         `json:"args,omitempty"`
 	Cmd                     pq.StringArray `json:"cmd,omitempty" gorm:"type:text[]"`
 	Metadata                datatypes.JSON `json:"metadata,omitempty"`
-	ExecutionParameters     datatypes.JSON `json:"execution_parameters,omitempty"`
 }

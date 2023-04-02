@@ -2,6 +2,7 @@ package k8s_client
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"os"
 	"path/filepath"
@@ -26,7 +27,7 @@ func BuildJobName(taskEx models.TaskExecution) string {
 	if taskEx.Name != "" {
 		jobName += taskEx.Name + "-"
 	}
-	
+
 	jobName += taskEx.Image + "-" + taskEx.ID.String()
 	jobName = strings.Replace(jobName, ":", "-", -1)
 	jobName = strings.Replace(jobName, ".", "-", -1)
@@ -47,10 +48,14 @@ func LaunchK8sJob(
 	jobName *string,
 	taskEx *models.TaskExecution,
 ) {
+	var metadata batchv1.JobSpec
+	metadataErr := json.Unmarshal([]byte(taskEx.Metadata), &metadata)
+	if metadataErr != nil {
+		log.Panic("Error parsing metadata ", metadataErr)
+	}
 	jobs := ClientSet.BatchV1().Jobs(taskEx.Namespace)
-	var backOffLimit int32 = 0
-	var ttlSecondsAfterFinished int32 = int32(taskEx.TtlSecondsAfterFinished)
 	var containers []v1.Container = nil
+
 	if len(taskEx.Cmd) > 0 {
 		containers = []v1.Container{
 			{
@@ -67,6 +72,12 @@ func LaunchK8sJob(
 			},
 		}
 	}
+	metadata.Template = v1.PodTemplateSpec{
+		Spec: v1.PodSpec{
+			Containers:    containers,
+			RestartPolicy: v1.RestartPolicyNever,
+		},
+	}
 
 	// TODO: also add support for config, env, secrets, serviceaccounts
 	jobSpec := &batchv1.Job{
@@ -74,16 +85,7 @@ func LaunchK8sJob(
 			Name:      *jobName,
 			Namespace: taskEx.Namespace,
 		},
-		Spec: batchv1.JobSpec{
-			Template: v1.PodTemplateSpec{
-				Spec: v1.PodSpec{
-					Containers:    containers,
-					RestartPolicy: v1.RestartPolicyNever,
-				},
-			},
-			BackoffLimit:            &backOffLimit,
-			TTLSecondsAfterFinished: &ttlSecondsAfterFinished,
-		},
+		Spec: metadata,
 	}
 
 	_, err := jobs.Create(context.TODO(), jobSpec, metav1.CreateOptions{})
