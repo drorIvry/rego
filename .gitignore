@@ -16,3 +16,4 @@
 *.db
 __debug_bin
 .vscode
+site
