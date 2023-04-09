@@ -7,6 +7,7 @@
 [![GoDoc](https://pkg.go.dev/badge/github.com/drorivry/rego?status.svg)](https://pkg.go.dev/github.com/drorivry/rego?tab=doc)
 [![Release](https://img.shields.io/github/release/drorivry/rego.svg?style=flat-square)](https://github.com/drorivry/rego/releases)
 [![pages-build-deployment](https://github.com/drorIvry/rego/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/drorIvry/rego/actions/workflows/pages/pages-build-deployment)
+[![Build](https://github.com/drorIvry/rego/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/drorIvry/rego/actions/workflows/go.yml)
 
 [![](https://dcbadge.vercel.app/api/server/J6qKw7Zx)](https://discord.gg/J6qKw7Zx)
 
