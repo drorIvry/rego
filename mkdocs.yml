@@ -2,6 +2,13 @@ site_name: REGO
 site_description: TEST TEST TEST
 repo_name: drorivry/rego
 repo_url: https://github.com/drorivry/rego
+nav:
+- REGO: index.md
+- Tutorial: 
+  - User Guide:
+    - tutorials/getting-started.md
+    - tutorials/first-steps.md
+
 markdown_extensions:
 - toc:
     permalink: true
