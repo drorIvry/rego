@@ -19,7 +19,7 @@ require (
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
-	github.com/emicklei/go-restful/v3 v3.9.0 // indirect
+  github.com/emicklei/go-restful/v3 v3.9.0 // indirect
 	github.com/go-openapi/spec v0.20.8 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	golang.org/x/tools v0.7.0 // indirect
