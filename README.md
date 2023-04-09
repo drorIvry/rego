@@ -6,7 +6,6 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/drorivry/rego)](https://goreportcard.com/report/github.com/drorivry/rego)
 [![GoDoc](https://pkg.go.dev/badge/github.com/drorivry/rego?status.svg)](https://pkg.go.dev/github.com/drorivry/rego?tab=doc)
 [![Release](https://img.shields.io/github/release/drorivry/rego.svg?style=flat-square)](https://github.com/drorivry/rego/releases)
-[![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/drorivry/rego)](https://www.tickgit.com/browse?repo=github.com/drorivry/rego)
 
 
 [![](https://dcbadge.vercel.app/api/server/8qQcEP8e)](https://discord.gg/8qQcEP8e)
@@ -100,6 +99,19 @@ which indicates the success.
 
 ### API Swagger
 browse to `http://localhost:4004/swagger/index.htm`
+
+## Contributing
+We welcome contributions from the community! If you'd like to contribute to the project, please follow these guidelines:
+
+- Fork the repository
+- Create a new branch: git checkout -b new-feature
+- Make your changes and commit them: git commit -m "Add new feature"
+- Push your changes to your fork: git push origin new-feature
+- Create a pull request to the main repository
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](https://github.com//go-weather-app/blob/main/LICENSE) file for details.
 
 ## TODOs
 
