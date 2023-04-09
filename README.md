@@ -8,7 +8,7 @@
 [![Release](https://img.shields.io/github/release/drorivry/rego.svg?style=flat-square)](https://github.com/drorivry/rego/releases)
 
 
-[![](https://dcbadge.vercel.app/api/server/8qQcEP8e)](https://discord.gg/J6qKw7Zx)
+[![](https://dcbadge.vercel.app/api/server/J6qKw7Zx)](https://discord.gg/J6qKw7Zx)
 
 > rego /ˈre.ɡoː/
 verb
