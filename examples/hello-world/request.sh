@@ -1,1 +1,0 @@
-curl -X POST -d '{"image": "hello-world"}' localhost:4004/api/v1/task
