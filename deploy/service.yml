@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rego
+  labels:
+    app: rego
+spec:
+  type: ClusterIP
+  ports:
+  - port: 4004
+    protocol: TCP
+    targetPort: 4004
+  selector:
+    app: rego

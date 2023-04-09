@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rego
+  labels:
+    app: rego
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rego
+  template:
+    metadata:
+      labels:
+        app: rego
+    spec:
+      serviceAccount: rego-account
+      containers:
+      - name: rego
+        image: drorivry4/rego
+        ports:
+          - containerPort: 4004
