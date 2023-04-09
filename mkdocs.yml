@@ -1,0 +1,49 @@
+site_name: REGO
+site_description: TEST TEST TEST
+repo_name: drorivry/rego
+repo_url: https://github.com/drorivry/rego
+markdown_extensions:
+- toc:
+    permalink: true
+extra:
+  analytics:
+    provider: google
+    property: G-YNEVN69SC3
+  social:
+  - icon: fontawesome/brands/github-alt
+    link: https://github.com/drorivry/rego
+  - icon: fontawesome/brands/discord
+    link: https://discord.gg/J6qKw7Zx
+  - icon: fontawesome/brands/twitter
+    link: https://twitter.com/rego
+  - icon: fontawesome/brands/linkedin
+    link: https://www.linkedin.com/in/dror-ivry-b335a4173/
+  - icon: fontawesome/brands/dev
+    link: https://dev.to/drorivry
+  - icon: fontawesome/brands/medium
+    link: https://medium.com/@drorivry
+edit_uri: ''
+plugins:
+- search
+- markdownextradata:
+    data: data
+theme:
+  name: material
+  logo: rego.png
+  favicon: rego.png
+  palette:
+     # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+      primary: cyan
+      accent: deep orange
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+      primary: cyan
+      accent: deep orange
