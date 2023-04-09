@@ -2,7 +2,7 @@ package tasker
 
 import (
 	"github.com/drorivry/rego/controllers"
-	_ "github.com/drorivry/rego/docs"
+	_ "github.com/drorivry/rego/swagger-docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
