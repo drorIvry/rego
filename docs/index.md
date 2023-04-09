@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-    <em>rego /ˈre.ɡoː/ verb Definitions: manage, direct rule, guide</em>
+    <em>rego /ˈre.ɡoː/ verb. Definitions: manage, direct rule, guide</em>
 </p>
 
 <p align="center">
@@ -30,13 +30,13 @@ Rego is a
 It is designed to allow asynchronous workloads to be deployed over Kubernetes with minimal effort, while also providing a management API that can keep track of progress and run history.
 
 
-Star us on [github](https://www.github.com/drorivry/rego) .
+Star us on [github](https://www.github.com/drorivry/rego).
 
 ## Use cases
 
-- Run async workloads that need s to be managed (or visible to) a UI
-- integrate non production-grade code (data scientist R code for example) within your production environment in a contained way
-- use to run stuff periodically with run history
+- Run async workloads that needs to be managed (or visible to) a UI
+- Integrate non production-grade code (data scientist's R code for example) within your production environment in a contained way
+- Use to run stuff periodically with run history
 
 
 ## Requirements
@@ -44,9 +44,10 @@ Star us on [github](https://www.github.com/drorivry/rego) .
 
 - **[Go](https://go.dev/)**: any one of the **three latest major** [releases](https://go.dev/doc/devel/release) (we test it with these).
 
-
+- **[Kubernetes](https://kubernetes.io/)**: tested on v1.24+
 
 ## Installation
+
 
 
 ## Quick Start

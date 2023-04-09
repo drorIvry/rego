@@ -21,6 +21,7 @@ COPY models ./models
 COPY poller ./poller
 COPY tasker ./tasker
 COPY LICENSE ./LICENSE
+COPY swagger-docs ./swagger-docs
 
 RUN swag init --parseDependency --parseInternal
 

@@ -29,8 +29,8 @@ It is designed to allow asynchronous workloads to be deployed over Kubernetes wi
 ### Use cases
 
 - Run async workloads that need s to be managed (or visible to) a UI
-- integrate non production-grade code (data scientist R code for example) within your production environment in a contained way
-- use to run stuff periodically with run history
+- Integrate non production-grade code (data scientist's R code for example) within your production environment in a contained way
+- Use to run stuff periodically with run history
 
 ## Getting started
 
