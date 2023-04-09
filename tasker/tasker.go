@@ -9,21 +9,8 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func ErrorHandler(c *gin.Context) {
-	c.Next()
-
-	// for _, err := range c.Errors {
-	//     log.Fatal("Error", err)
-	// }
-
-	// c.JSON(http.StatusInternalServerError, "Internal Server Error")
-}
-
 func GetServer() *gin.Engine {
 	r := gin.Default()
-
-	r.Use(ErrorHandler)
-
 	r.GET("/ping", controllers.Ping)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
