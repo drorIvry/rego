@@ -48,7 +48,17 @@ Star us on [github](https://www.github.com/drorivry/rego).
 
 ## Installation
 
+### Run Kubernetes
 
+```sh
+kubectl apply -f https://raw.githubusercontent.com/drorIvry/rego/main/deploy/deployment.yml
+```
+
+### Run on local machine
+
+```sh
+curl -L  https://raw.githubusercontent.com/drorIvry/rego/main/local-deploy/rego.sh | sh
+```
 
 ## Quick Start
 

@@ -20,3 +20,74 @@ spec:
         image: drorivry4/rego
         ports:
           - containerPort: 4004
+
+--- 
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rego
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rego
+            port:
+              number: 4004
+--- 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rego
+  labels:
+    app: rego
+spec:
+  type: ClusterIP
+  ports:
+  - port: 4004
+    protocol: TCP
+    targetPort: 4004
+  selector:
+    app: rego
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: rego-manager
+rules:
+- apiGroups: ["*"]
+  resources: ["jobs", "pods", "configmaps", "secrets"]
+  verbs: ["*"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+ name: role-rego
+ namespace: default
+subjects:
+- kind: ServiceAccount
+  name: rego-account
+  namespace: default
+roleRef:
+ kind: Role
+ name: rego-manager
+ apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rego-account
+  namespace: default
