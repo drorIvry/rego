@@ -302,8 +302,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#run-kubernetes" class="md-nav__link">
-    Run Kubernetes
+  <a href="#kubernetes" class="md-nav__link">
+    Kubernetes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helm" class="md-nav__link">
+    Helm
   </a>
   
 </li>
@@ -495,8 +502,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#run-kubernetes" class="md-nav__link">
-    Run Kubernetes
+  <a href="#kubernetes" class="md-nav__link">
+    Kubernetes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helm" class="md-nav__link">
+    Helm
   </a>
   
 </li>
@@ -593,13 +607,51 @@
 </li>
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<h3 id="run-kubernetes">Run Kubernetes<a class="headerlink" href="#run-kubernetes" title="Permanent link">&para;</a></h3>
+<h3 id="kubernetes">Kubernetes<a class="headerlink" href="#kubernetes" title="Permanent link">&para;</a></h3>
 <pre><code class="language-sh">kubectl apply -f https://raw.githubusercontent.com/drorIvry/rego/main/deploy/deployment.yml
+</code></pre>
+<h3 id="helm">Helm<a class="headerlink" href="#helm" title="Permanent link">&para;</a></h3>
+<pre><code class="language-sh">helm repo add rego https://drorivry.github.io/rego-charts/
+helm install --generate-name rego/rego
 </code></pre>
 <h3 id="run-on-local-machine">Run on local machine<a class="headerlink" href="#run-on-local-machine" title="Permanent link">&para;</a></h3>
 <pre><code class="language-sh">curl -L  https://raw.githubusercontent.com/drorIvry/rego/main/local-deploy/rego.sh | sh
 </code></pre>
 <h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
+<p>With rego you can use the API to create and run k8s jobs with a managed API.</p>
+<pre><code class="language-sh">curl -X POST -d '{&quot;image&quot;: &quot;hello-world&quot;}' localhost:4004/api/v1/task
+</code></pre>
+<p>This will start a job on your k8s cluster that'll run the docker image <a href="https://hub.docker.com/_/hello-world/">hello-world</a></p>
+<p>the response will look something like </p>
+<pre><code class="language-js">{
+  &quot;definition_id&quot;: &quot;a36fbd9b-bf8a-4c59-94c1-9938b6707e8f&quot;,
+  &quot;message&quot;: &quot;created&quot;
+}
+</code></pre>
+<p>we can use the definition ID to see the task's running status</p>
+<pre><code class="language-sh">curl http://localhost:4004/api/v1/task/a36fbd9b-bf8a-4c59-94c1-9938b6707e8f/latest
+</code></pre>
+<p>which will respond with</p>
+<pre><code class="language-js">{
+  &quot;ID&quot;: 0,
+  &quot;CreatedAt&quot;: &quot;2023-04-02T11:53:08.2008054+03:00&quot;,
+  &quot;UpdatedAt&quot;: &quot;2023-04-02T11:53:16.2032147+03:00&quot;,
+  &quot;DeletedAt&quot;: null,
+  &quot;id&quot;: &quot;7eb53d97-7380-4e0b-82a6-b38fbf9119d2&quot;,
+  &quot;task_definition_id&quot;: &quot;a36fbd9b-bf8a-4c59-94c1-9938b6707e8f&quot;,
+  &quot;status_code&quot;: 500,
+  &quot;status&quot;: &quot;SUCCESS&quot;,
+  &quot;image&quot;: &quot;hello-world&quot;,
+  &quot;name&quot;: &quot;test&quot;,
+  &quot;ttl_seconds_after_finished&quot;: 10,
+  &quot;namespace&quot;: &quot;test&quot;,
+  &quot;args&quot;: &quot;[\&quot;1111\&quot;, \&quot;33333\&quot;]&quot;,
+  &quot;metadata&quot;: {
+    &quot;ttlSecondsAfterFinished&quot;: 1
+  }
+}
+</code></pre>
+<p>which indicates the success.</p>
 <h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h2>
 <p>We welcome contributions from the community! If you'd like to contribute to the project, please follow these guidelines:</p>
 <ul>
