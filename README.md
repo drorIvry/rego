@@ -26,19 +26,29 @@ Rego is a
 
 It is designed to allow asynchronous workloads to be deployed over Kubernetes with minimal effort, while also providing a management API that can keep track of progress and run history.
 
+please refer the [docs](https://drorivry.github.io/rego/)
+
 ### Use cases
 
 - Run async workloads that need s to be managed (or visible to) a UI
 - Integrate non production-grade code (data scientist's R code for example) within your production environment in a contained way
 - Use to run stuff periodically with run history
 
-## Getting started
 
-### Prerequisites
+
+## Installation
+
+### Run Kubernetes
+
+```sh
+kubectl apply -f https://raw.githubusercontent.com/drorIvry/rego/main/deploy/deployment.yml
+```
+
+### Local run
+
+#### Prerequisites
 
 - **[Go](https://go.dev/)**: any one of the **three latest major** [releases](https://go.dev/doc/devel/release) (we test it with these).
-
-### Getting Rego
 
 Clone the repo and run:
 
