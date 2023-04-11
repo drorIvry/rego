@@ -1,5 +1,5 @@
 site_name: REGO
-site_description: TEST TEST TEST
+site_description: rego run this docker for me
 repo_name: drorivry/rego
 repo_url: https://github.com/drorivry/rego
 nav:
