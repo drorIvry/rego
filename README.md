@@ -36,16 +36,27 @@ please refer the [docs](https://drorivry.github.io/rego/)
 
 
 
+
 ## Installation
 
-### Run Kubernetes
+### Kubernetes
 
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/drorIvry/rego/main/deploy/deployment.yml
 ```
 
-### Local run
+### Helm
 
+```sh
+helm repo add rego https://drorivry.github.io/rego-charts/
+helm install --generate-name rego/rego
+```
+
+### Run on local machine
+
+```sh
+curl -L  https://raw.githubusercontent.com/drorIvry/rego/main/local-deploy/rego.sh | sh
+```
 #### Prerequisites
 
 - **[Go](https://go.dev/)**: any one of the **three latest major** [releases](https://go.dev/doc/devel/release) (we test it with these).
