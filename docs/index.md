@@ -17,6 +17,7 @@
 [![Release](https://img.shields.io/github/release/drorivry/rego.svg?style=flat-square)](https://github.com/drorivry/rego/releases)
 [![pages-build-deployment](https://github.com/drorIvry/rego/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/drorIvry/rego/actions/workflows/pages/pages-build-deployment)
 [![Build](https://github.com/drorIvry/rego/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/drorIvry/rego/actions/workflows/go.yml)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/rego)](https://artifacthub.io/packages/search?repo=rego)
 
 [![](https://dcbadge.vercel.app/api/server/J6qKw7Zx)](https://discord.gg/J6qKw7Zx)
 
