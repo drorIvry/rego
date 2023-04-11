@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rego.fullname" . }}
+  labels:
+    app: rego
+  {{- include "rego.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.rego.replicas }}
+  selector:
+    matchLabels:
+      app: rego
+    {{- include "rego.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: rego
+      {{- include "rego.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.rego.rego.image.repository }}:{{ .Values.rego.rego.image.tag |
+          default .Chart.AppVersion }}
+        name: rego
+        ports:
+        - containerPort: 4004
+        resources: {}
+      serviceAccount: rego-account
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "rego.fullname" . }}
+  labels:
+    app: rego
+  {{- include "rego.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: rego
+  {{- include "rego.selectorLabels" . | nindent 4 }}
+  ports:
+  - port: {{ .Values.rego.port }}
+    protocol: {{ .Values.rego.protocol }}
+    targetPort: {{ .Values.rego.targetPort }}
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "rego.fullname" . }}-manager
+  labels:
+  {{- include "rego.labels" . | nindent 4 }}
+rules:
+- apiGroups: ["*"]
+  resources: ["jobs", "pods", "configmaps", "secrets"]
+  verbs: ["*"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "rego.fullname" . }}-ole-rego
+  labels:
+  {{- include "rego.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: '{{ include "rego.fullname" . }}-manager'
+subjects:
+- kind: ServiceAccount
+  name: '{{ include "rego.fullname" . }}-account'
+  namespace: '{{ .Release.Namespace }}'
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "rego.fullname" . }}-account
+  labels:
+  {{- include "rego.labels" . | nindent 4 }}

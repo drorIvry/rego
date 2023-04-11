@@ -1,0 +1,17 @@
+rego:
+  fullname: rego
+  selectorLabels:
+    matchLabels:
+      app: rego
+  labels:
+    app: rego
+  port: 4004
+  protocol: TCP
+  targetPort: 4004
+  rego:
+    image:
+      repository: drorivry4/rego
+      tag: latest
+  replicas: 1
+  type: ClusterIP
+kubernetesClusterDomain: cluster.local
