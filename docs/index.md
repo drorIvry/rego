@@ -62,12 +62,6 @@ helm repo add rego https://drorivry.github.io/rego-charts/
 helm install --generate-name rego/rego
 ```
 
-### Run on local machine
-
-```sh
-curl -L  https://raw.githubusercontent.com/drorIvry/rego/main/local-deploy/rego.sh | sh
-```
-
 ## Quick Start
 
 With rego you can use the API to create and run k8s jobs with a managed API.
