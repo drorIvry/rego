@@ -24,7 +24,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/v1/execution/{executionId}/abort": {
-            "get": {
+            "post": {
                 "description": "Kill a running k8s job and update its task execution",
                 "produces": [
                     "application/json"

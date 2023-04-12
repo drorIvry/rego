@@ -115,7 +115,7 @@ info:
   version: "1.0"
 paths:
   /api/v1/execution/{executionId}/abort:
-    get:
+    post:
       description: Kill a running k8s job and update its task execution
       parameters:
       - description: The task execution id
