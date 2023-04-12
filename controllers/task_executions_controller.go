@@ -20,7 +20,7 @@ import (
 // @Produce                       json
 // @Param                         executionId  path string  true  "The task execution id"
 // @Success                       200
-// @Router                        /execution/{executionId}/abort [get]
+// @Router                        /api/v1/execution/{executionId}/abort [get]
 func AbortTaskExecution(c *gin.Context) {
 	var executionIdUnparsed = strings.TrimSpace(c.Param("executionId"))
 

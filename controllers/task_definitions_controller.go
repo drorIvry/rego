@@ -18,7 +18,7 @@ import (
 // @Produce                       application/json
 // @Param                         newTaskDef  body models.TaskDefinition  true  "Task definition JSON"
 // @Success                       200
-// @Router                        /task [post]
+// @Router                        /api/v1/task [post]
 func CreateTaskDefinition(c *gin.Context) {
 	var newTaskDef models.TaskDefinition
 
@@ -51,7 +51,7 @@ func CreateTaskDefinition(c *gin.Context) {
 // @Tags                          definition
 // @Produce                       json
 // @Success                       200 {object} []models.TaskDefinition
-// @Router                        /task [get]
+// @Router                        /api/v1/task [get]
 func GetAllTaskDefinitions(c *gin.Context) {
 	tasks := dao.GetAllTaskDefinitions()
 	c.IndentedJSON(http.StatusOK, tasks)
@@ -63,7 +63,7 @@ func GetAllTaskDefinitions(c *gin.Context) {
 // @Tags                          definition
 // @Produce                       json
 // @Success                       200 {object} []models.TaskDefinition
-// @Router                        /task/pending [get]
+// @Router                        /api/v1/task/pending [get]
 func GetAllPendingTaskDefinitions(c *gin.Context) {
 	tasks := dao.GetPendingTasks()
 	c.IndentedJSON(http.StatusOK, tasks)
@@ -76,7 +76,7 @@ func GetAllPendingTaskDefinitions(c *gin.Context) {
 // @Produce                       json
 // @Param                         definitionId  path string  true  "The task definition id"
 // @Success                       200
-// @Router                        /task/{definitionId}/rerun [get]
+// @Router                        /api/v1/task/{definitionId}/rerun [post]
 func RerunTask(c *gin.Context) {
 	uuidParam := c.Param("definitionId")
 	var definitionId, err = uuid.Parse(uuidParam)
@@ -107,7 +107,7 @@ func RerunTask(c *gin.Context) {
 // @Produce                       json
 // @Success                       200 {object} []models.TaskExecution
 // @Param                         definitionId  path string  true  "The task definition id"
-// @Router                        /task/{definitionId}/latest [get]
+// @Router                        /api/v1/task/{definitionId}/latest [get]
 func GetLatestExecution(c *gin.Context) {
 	uuidParam := c.Param("definitionId")
 	var definitionId, err = uuid.Parse(uuidParam)
@@ -128,7 +128,7 @@ func GetLatestExecution(c *gin.Context) {
 // @Produce                       application/json
 // @Param                         newTaskDef  body models.TaskDefinition  true  "Task definition JSON"
 // @Success                       200
-// @Router                        /task [put]
+// @Router                        /api/v1/task [put]
 func UpdateTaskDefinition(c *gin.Context) {
 	var updatedTaskDef models.TaskDefinition
 
@@ -158,7 +158,7 @@ func UpdateTaskDefinition(c *gin.Context) {
 // @Produce                       application/json
 // @Param                         definitionId  path string  true  "The task definition id"
 // @Success                       200
-// @Router                        /task/{definitionId} [delete]
+// @Router                        /api/v1/task/{definitionId} [delete]
 func DeleteTaskDefinition(c *gin.Context) {
 	uuidParam := c.Param("definitionId")
 	var definitionId, err = uuid.Parse(uuidParam)

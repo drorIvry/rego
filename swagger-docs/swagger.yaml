@@ -114,7 +114,7 @@ info:
   title: Matter
   version: "1.0"
 paths:
-  /execution/{executionId}/abort:
+  /api/v1/execution/{executionId}/abort:
     get:
       description: Kill a running k8s job and update its task execution
       parameters:
@@ -131,18 +131,7 @@ paths:
       summary: Abort a running task and kill the pod
       tags:
       - execution
-  /ping:
-    get:
-      description: Used for health check
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: Health check route
-      tags:
-      - Health
-  /task:
+  /api/v1/task:
     get:
       description: Filter to get the task definitions you need
       produces:
@@ -193,7 +182,7 @@ paths:
       summary: Update a task definition
       tags:
       - definition
-  /task/{definitionId}:
+  /api/v1/task/{definitionId}:
     delete:
       description: Mark a task definition as deleted (it is not actually deleted from
         the db)
@@ -211,7 +200,7 @@ paths:
       summary: Delete a task definition
       tags:
       - definition
-  /task/{definitionId}/latest:
+  /api/v1/task/{definitionId}/latest:
     get:
       description: Filter to get the task definitions you need
       parameters:
@@ -232,8 +221,8 @@ paths:
       summary: Get the latest execution of a given definitions
       tags:
       - definition
-  /task/{definitionId}/rerun:
-    get:
+  /api/v1/task/{definitionId}/rerun:
+    post:
       description: Rerun a task definition previously created
       parameters:
       - description: The task definition id
@@ -249,7 +238,7 @@ paths:
       summary: Rerun a task definition
       tags:
       - definition
-  /task/pending:
+  /api/v1/task/pending:
     get:
       description: Filter to get the task pending tasks
       produces:
@@ -264,4 +253,15 @@ paths:
       summary: Get all of the pending task definitions
       tags:
       - definition
+  /ping:
+    get:
+      description: Used for health check
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Health check route
+      tags:
+      - Health
 swagger: "2.0"

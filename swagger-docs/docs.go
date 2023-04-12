@@ -23,7 +23,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/execution/{executionId}/abort": {
+        "/api/v1/execution/{executionId}/abort": {
             "get": {
                 "description": "Kill a running k8s job and update its task execution",
                 "produces": [
@@ -49,24 +49,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ping": {
-            "get": {
-                "description": "Used for health check",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Health"
-                ],
-                "summary": "Health check route",
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/task": {
+        "/api/v1/task": {
             "get": {
                 "description": "Filter to get the task definitions you need",
                 "produces": [
@@ -141,7 +124,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/task/pending": {
+        "/api/v1/task/pending": {
             "get": {
                 "description": "Filter to get the task pending tasks",
                 "produces": [
@@ -164,7 +147,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/task/{definitionId}": {
+        "/api/v1/task/{definitionId}": {
             "delete": {
                 "description": "Mark a task definition as deleted (it is not actually deleted from the db)",
                 "produces": [
@@ -190,7 +173,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/task/{definitionId}/latest": {
+        "/api/v1/task/{definitionId}/latest": {
             "get": {
                 "description": "Filter to get the task definitions you need",
                 "produces": [
@@ -222,8 +205,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/task/{definitionId}/rerun": {
-            "get": {
+        "/api/v1/task/{definitionId}/rerun": {
+            "post": {
                 "description": "Rerun a task definition previously created",
                 "produces": [
                     "application/json"
@@ -241,6 +224,23 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/ping": {
+            "get": {
+                "description": "Used for health check",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Health check route",
                 "responses": {
                     "200": {
                         "description": "OK"
