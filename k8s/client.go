@@ -49,9 +49,12 @@ func LaunchK8sJob(
 	taskEx *models.TaskExecution,
 ) {
 	var metadata batchv1.JobSpec
-	metadataErr := json.Unmarshal([]byte(taskEx.Metadata), &metadata)
-	if metadataErr != nil {
-		log.Panic("Error parsing metadata ", metadataErr)
+	if taskEx.Metadata != nil {
+
+		metadataErr := json.Unmarshal([]byte(taskEx.Metadata), &metadata)
+		if metadataErr != nil {
+			log.Fatal("Error parsing metadata ", metadataErr)
+		}
 	}
 	jobs := ClientSet.BatchV1().Jobs(taskEx.Namespace)
 	var containers []v1.Container = nil
