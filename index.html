@@ -315,6 +315,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#installing-the-rego-cli-recommended" class="md-nav__link">
+    Installing the rego CLI (Recommended)
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -324,6 +331,26 @@
   <a href="#quick-start" class="md-nav__link">
     Quick Start
   </a>
+  
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-the-cli" class="md-nav__link">
+    Using the CLI
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-api" class="md-nav__link">
+    Using the API
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -508,6 +535,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#installing-the-rego-cli-recommended" class="md-nav__link">
+    Installing the rego CLI (Recommended)
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -517,6 +551,26 @@
   <a href="#quick-start" class="md-nav__link">
     Quick Start
   </a>
+  
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-the-cli" class="md-nav__link">
+    Using the CLI
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-api" class="md-nav__link">
+    Using the API
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -601,7 +655,37 @@
 <pre><code class="language-sh">helm repo add rego https://drorivry.github.io/rego-charts/
 helm install --generate-name rego/rego
 </code></pre>
+<h3 id="installing-the-rego-cli-recommended">Installing the rego CLI (Recommended)<a class="headerlink" href="#installing-the-rego-cli-recommended" title="Permanent link">&para;</a></h3>
+<pre><code class="language-sh">curl -L https://raw.githubusercontent.com/drorIvry/rego-cli/main/install.sh | sh
+</code></pre>
 <h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
+<h3 id="using-the-cli">Using the CLI<a class="headerlink" href="#using-the-cli" title="Permanent link">&para;</a></h3>
+<p>rego comes with a pre-built CLI to use rego</p>
+<p>after installing the cli you can use the <code>rego</code> command to operate rego</p>
+<p>test the connection </p>
+<pre><code class="language-sh">rego ping
+</code></pre>
+<p>deploy an image:</p>
+<pre><code class="language-sh">rego run -i hello-world
+</code></pre>
+<p>a more complex deployment</p>
+<pre><code class="language-sh">rego run -d &quot;$(cat &lt;&lt; EOF 
+{
+  &quot;image&quot;: &quot;hello-world&quot;,
+  &quot;name&quot;: &quot;test&quot;,
+  &quot;args&quot;: &quot;[\&quot;1111\&quot;, \&quot;33333\&quot;]&quot;,
+  &quot;namespace&quot;: &quot;default&quot;,
+  &quot;execution_interval&quot;: 0,
+  &quot;ttl_seconds_after_finished&quot;: 10,
+  &quot;metadata&quot;: {
+    &quot;ttlSecondsAfterFinished&quot;: 10,
+    &quot;completions&quot;: 10,
+    &quot;parallelism&quot;: 10
+  }
+}
+EOF)&quot;
+</code></pre>
+<h3 id="using-the-api">Using the API<a class="headerlink" href="#using-the-api" title="Permanent link">&para;</a></h3>
 <p>With rego you can use the API to create and run k8s jobs with a managed API.</p>
 <pre><code class="language-sh">curl -X POST -d '{&quot;image&quot;: &quot;hello-world&quot;}' localhost:4004/api/v1/task
 </code></pre>
