@@ -82,6 +82,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#installation" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -335,9 +340,99 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          First steps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         First steps
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes" class="md-nav__link">
+    Kubernetes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helm" class="md-nav__link">
+    Helm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-source-code" class="md-nav__link">
+    From source code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installing-the-rego-cli-recommended" class="md-nav__link">
+    Installing the rego CLI (Recommended)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    Core concepts
+  </a>
+  
+    <nav class="md-nav" aria-label="Core concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-definitions" class="md-nav__link">
+    Task Definitions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-execution" class="md-nav__link">
+    Task Execution
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -375,6 +470,82 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes" class="md-nav__link">
+    Kubernetes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helm" class="md-nav__link">
+    Helm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-source-code" class="md-nav__link">
+    From source code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installing-the-rego-cli-recommended" class="md-nav__link">
+    Installing the rego CLI (Recommended)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    Core concepts
+  </a>
+  
+    <nav class="md-nav" aria-label="Core concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-definitions" class="md-nav__link">
+    Task Definitions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-execution" class="md-nav__link">
+    Task Execution
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -390,7 +561,108 @@
 
   <h1>First steps</h1>
 
-
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<h3 id="kubernetes">Kubernetes<a class="headerlink" href="#kubernetes" title="Permanent link">&para;</a></h3>
+<pre><code class="language-sh">kubectl apply -f https://raw.githubusercontent.com/drorIvry/rego/main/deploy/deployment.yml
+</code></pre>
+<h3 id="helm">Helm<a class="headerlink" href="#helm" title="Permanent link">&para;</a></h3>
+<pre><code class="language-sh">helm repo add rego https://drorivry.github.io/rego-charts/
+helm install --generate-name rego/rego
+</code></pre>
+<h3 id="from-source-code">From source code<a class="headerlink" href="#from-source-code" title="Permanent link">&para;</a></h3>
+<ol>
+<li>clone the <a href="https://drorivry.github.io/rego">repo</a> </li>
+<li>build using go
+    <code>sh
+    go build ./</code></li>
+<li>add execution permissions
+    <code>sh
+    sudo chmod +x rego</code></li>
+<li>create a <code>.env</code> file with the following
+   <code>sh
+   PORT=4004
+    DB_URL=rego.db
+    TASK_TIMEOUT=300
+    IN_CLUSTER=false</code></li>
+</ol>
+<h3 id="installing-the-rego-cli-recommended">Installing the rego CLI (Recommended)<a class="headerlink" href="#installing-the-rego-cli-recommended" title="Permanent link">&para;</a></h3>
+<pre><code class="language-sh">curl -L https://raw.githubusercontent.com/drorIvry/rego-cli/main/install.sh | sh
+</code></pre>
+<h2 id="core-concepts">Core concepts<a class="headerlink" href="#core-concepts" title="Permanent link">&para;</a></h2>
+<h3 id="task-definitions">Task Definitions<a class="headerlink" href="#task-definitions" title="Permanent link">&para;</a></h3>
+<p>a task definition is the logical representation of a task, it is not the actual run of a specific task but the configuration of the task.</p>
+<p>A task definition can be periodic or a one time. it can contain metadata and more, 
+here is  an example of a task definition</p>
+<pre><code class="language-go">type TaskDefinition struct {
+    gorm.Model
+    ID                      uuid.UUID      `json:&quot;id&quot; gorm:&quot;type:uuid` //;default:uuid_generate_v4()&quot;
+    Image                   string         `json:&quot;image&quot; binding:&quot;required&quot;`
+    Name                    string         `json:&quot;name&quot;`
+    Namespace               string         `json:&quot;namespace&quot;`
+    ExecutionInterval       int            `json:&quot;execution_interval&quot;`
+    ExecutionsCounter       int            `json:&quot;execution_counter&quot;`
+    NextExecutionTime       time.Time      `json:&quot;next_execution_time&quot;`
+    Enabled                 bool           `json:&quot;enabled&quot;`
+    Deleted                 bool           `json:&quot;deleted&quot;`
+    Cmd                     pq.StringArray `json:&quot;cmd&quot; gorm:&quot;type:text[]&quot;`
+    Metadata                datatypes.JSON `json:&quot;metadata&quot;`
+}
+</code></pre>
+<ul>
+<li><code>image</code> is the docker image to run, it can be public image off of docker.io or any private registry as long as it is accessible to your k8s custer</li>
+<li><code>execution_interval</code> - is a marker that if set tells rego to rerun the task every X seconds</li>
+<li><code>execution_counter</code> - how many times did the task run</li>
+<li><code>metadata</code> - this field serves 2 purposes</li>
+<li>an open field for users to store task definition specific metadata for example: 
+        lets say I want to store the client_id of the client that the task is related to.</li>
+<li>A way to configure the k8s job spec with <code>batchv1.JobSpec</code> like:</li>
+</ul>
+<pre><code class="language-go">type JobSpec struct {
+    Parallelism *int32 `json:&quot;parallelism,omitempty&quot; protobuf:&quot;varint,1,opt,name=parallelism&quot;`
+    Completions *int32 `json:&quot;completions,omitempty&quot; protobuf:&quot;varint,2,opt,name=completions&quot;`
+    ActiveDeadlineSeconds *int64 `json:&quot;activeDeadlineSeconds,omitempty&quot; protobuf:&quot;varint,3,opt,name=activeDeadlineSeconds&quot;`
+    PodFailurePolicy *PodFailurePolicy `json:&quot;podFailurePolicy,omitempty&quot; protobuf:&quot;bytes,11,opt,name=podFailurePolicy&quot;`
+    BackoffLimit *int32 `json:&quot;backoffLimit,omitempty&quot; protobuf:&quot;varint,7,opt,name=backoffLimit&quot;`
+    Selector *metav1.LabelSelector `json:&quot;selector,omitempty&quot; protobuf:&quot;bytes,4,opt,name=selector&quot;`
+    ManualSelector *bool `json:&quot;manualSelector,omitempty&quot; protobuf:&quot;varint,5,opt,name=manualSelector&quot;`
+    Template corev1.PodTemplateSpec `json:&quot;template&quot; protobuf:&quot;bytes,6,opt,name=template&quot;`
+    TTLSecondsAfterFinished *int32 `json:&quot;ttlSecondsAfterFinished,omitempty&quot; protobuf:&quot;varint,8,opt,name=ttlSecondsAfterFinished&quot;`
+    CompletionMode *CompletionMode `json:&quot;completionMode,omitempty&quot; protobuf:&quot;bytes,9,opt,name=completionMode,casttype=CompletionMode&quot;`
+    Suspend *bool `json:&quot;suspend,omitempty&quot; protobuf:&quot;varint,10,opt,name=suspend&quot;`
+}
+</code></pre>
+<h3 id="task-execution">Task Execution<a class="headerlink" href="#task-execution" title="Permanent link">&para;</a></h3>
+<p>Task execution is the  object representing a specific task run. 
+You can think of it like the log in the run record.</p>
+<pre><code class="language-go">type TaskExecution struct {
+    gorm.Model
+    ID                      uuid.UUID      `json:&quot;id,omitempty&quot; gorm:&quot;type:uuid`
+    TaskDefinitionId        uuid.UUID      `json:&quot;task_definition_id,omitempty&quot;`
+    StatusCode              Status         `json:&quot;status_code,omitempty&quot;`
+    TaskStatus              string         `json:&quot;status,omitempty&quot;`
+    Image                   string         `json:&quot;image,omitempty&quot; binding:&quot;required&quot;`
+    Name                    string         `json:&quot;name,omitempty&quot;`
+    Namespace               string         `json:&quot;namespace,omitempty&quot;`
+    Cmd                     pq.StringArray `json:&quot;cmd,omitempty&quot; gorm:&quot;type:text[]&quot;`
+    Metadata                datatypes.JSON `json:&quot;metadata,omitempty&quot;`
+}
+</code></pre>
+<p>many of the fields are shared with the task definition but here are some specific ones.</p>
+<ul>
+<li><code>status_code</code> -  enumeration of task state. </li>
+<li><code>go
+  const (
+    READY        Status = 100
+    JOB_DEPLOYED Status = 200
+    PENDING      Status = 250
+    RUNNING      Status = 300
+    TIMEOUT      Status = 400
+    PROC_ERROR   Status = 410
+    APP_ERROR    Status = 420
+    ABORTED      Status = 430
+    SUCCESS      Status = 500
+)</code></li>
+</ul>
 
 
   
