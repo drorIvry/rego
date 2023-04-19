@@ -10,6 +10,7 @@
 [![Build](https://github.com/drorIvry/rego/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/drorIvry/rego/actions/workflows/go.yml)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/rego)](https://artifacthub.io/packages/search?repo=rego)
 
+
 [![](https://dcbadge.vercel.app/api/server/J6qKw7Zx)](https://discord.gg/J6qKw7Zx)
 
 
@@ -37,8 +38,6 @@ please refer the [docs](https://drorivry.github.io/rego/)
 - Use to run stuff periodically with run history
 
 
-
-
 ## Installation
 
 ### Kubernetes
@@ -52,6 +51,11 @@ kubectl apply -f https://raw.githubusercontent.com/drorIvry/rego/main/deploy/dep
 ```sh
 helm repo add rego https://drorivry.github.io/rego-charts/
 helm install --generate-name rego/rego
+```
+
+### CLI Installation (Recommended)
+```sh
+curl -L https://raw.githubusercontent.com/drorIvry/rego-cli/main/install.sh | sh
 ```
 
 ### Run on local machine
