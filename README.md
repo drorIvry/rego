@@ -10,6 +10,7 @@
 [![Build](https://github.com/drorIvry/rego/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/drorIvry/rego/actions/workflows/go.yml)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/rego)](https://artifacthub.io/packages/search?repo=rego)
 
+
 [![](https://dcbadge.vercel.app/api/server/J6qKw7Zx)](https://discord.gg/J6qKw7Zx)
 
 
@@ -37,8 +38,6 @@ please refer the [docs](https://drorivry.github.io/rego/)
 - Use to run stuff periodically with run history
 
 
-
-
 ## Installation
 
 ### Kubernetes
@@ -52,6 +51,11 @@ kubectl apply -f https://raw.githubusercontent.com/drorIvry/rego/main/deploy/dep
 ```sh
 helm repo add rego https://drorivry.github.io/rego-charts/
 helm install --generate-name rego/rego
+```
+
+### CLI Installation (Recommended)
+```sh
+curl -L https://raw.githubusercontent.com/drorIvry/rego-cli/main/install.sh | sh
 ```
 
 ### Run on local machine
@@ -70,7 +74,42 @@ go run main.go
 
 ```
 
-### Quick Start
+### Using the CLI
+
+rego comes with a pre-built CLI to use rego
+
+after installing the cli you can use the `rego` command to operate rego
+
+test the connection 
+```sh
+rego ping
+```
+
+deploy an image:
+```sh
+rego run -i hello-world
+```
+
+a more complex deployment
+```sh
+rego run -d "$(cat << EOF 
+{
+  "image": "hello-world",
+  "name": "test",
+  "args": "[\"1111\", \"33333\"]",
+  "namespace": "default",
+  "execution_interval": 0,
+  "ttl_seconds_after_finished": 10,
+  "metadata": {
+    "ttlSecondsAfterFinished": 10,
+    "completions": 10,
+    "parallelism": 10
+  }
+}
+EOF)"
+```
+
+### Using the API
 
 With rego you can use the API to create and run k8s jobs with a managed API.
 
