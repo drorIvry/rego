@@ -87,7 +87,7 @@ rego run -i hello-world
 
 a more complex deployment
 ```sh
-rego run -d $(echo << EOF 
+rego run -d "$(cat << EOF 
 {
   "image": "hello-world",
   "name": "test",
@@ -101,8 +101,7 @@ rego run -d $(echo << EOF
     "parallelism": 10
   }
 }
-EOF
-)
+EOF)"
 ```
 
 ### Using the API
