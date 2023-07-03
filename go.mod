@@ -11,7 +11,7 @@ require (
 	github.com/swaggo/swag v1.8.12
 	gorm.io/datatypes v1.1.1
 	gorm.io/driver/sqlite v1.4.4
-	gorm.io/gorm v1.24.6
+	gorm.io/gorm v1.25.2
 	k8s.io/api v0.27.1
 	k8s.io/apimachinery v0.27.1
 	k8s.io/client-go v0.27.1
