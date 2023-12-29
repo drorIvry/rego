@@ -11,12 +11,19 @@ import (
 
 func GetPendingTasks() []models.TaskDefinition {
 	var tasks []models.TaskDefinition
-	initializers.GetTaskDefinitionsTable().Where("enabled = true AND next_execution_time < ?", time.Now()).Find(&tasks)
+	initializers.GetTaskDefinitionsTable().Where(
+		"enabled = ?",
+		true,
+	).Where(
+		"next_execution_time < ?",
+		time.Now(),
+	).Find(&tasks)
 	return tasks
 }
 
 func initDefaultFields(taskDef *models.TaskDefinition) {
-	taskDef.CreatedAt = time.Now()
+	taskDef.CreationTime = time.Now()
+	taskDef.LastModified = time.Now()
 	taskDef.Deleted = false
 	taskDef.Enabled = true
 	taskDef.ExecutionsCounter = 0
@@ -60,6 +67,7 @@ func GetTaskDefinitionById(definitionId uuid.UUID) (models.TaskDefinition, error
 }
 
 func UpdateDefinition(taskDefinition models.TaskDefinition) {
+	taskDefinition.LastModified = time.Now()
 	initializers.GetTaskDefinitionsTable().Where(
 		"id = ?",
 		taskDefinition.ID,
@@ -74,8 +82,9 @@ func DeleteTaskDefinitionById(definitionId uuid.UUID) {
 		definitionId,
 	).Updates(
 		models.TaskDefinition{
-			Deleted: true,
-			Enabled: false,
+			Deleted:      true,
+			Enabled:      false,
+			LastModified: time.Now(),
 		},
 	).Delete(
 		"id = ?",

@@ -11,21 +11,37 @@ import (
 	k8s_client "github.com/drorivry/rego/k8s"
 )
 
-func Run(interval int) {
-	ticker := time.NewTicker(time.Duration(interval) * time.Second)
-	quit := make(chan struct{})
+type Poller struct {
+	interval int
+	quit     chan struct{}
+}
 
+func NewPoller(interval int) *Poller {
+	p := Poller{
+		interval: interval,
+		quit:     make(chan struct{}),
+	}
+
+	return &p
+}
+
+func (p *Poller) Run() {
+	ticker := time.NewTicker(time.Duration(p.interval) * time.Second)
 	for {
 		select {
 		case <-ticker.C:
 			go deployReadyTasks()
 			go timeoutTasks()
 			go updateTaskStatus()
-		case <-quit:
+		case <-p.quit:
 			ticker.Stop()
 			return
 		}
 	}
+}
+
+func (p *Poller) Shutdown() {
+	close(p.quit)
 }
 
 func deployReadyTasks() {
