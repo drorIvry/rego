@@ -65,7 +65,6 @@ func GetTaskDefinitionById(definitionId uuid.UUID) (models.TaskDefinition, error
 }
 
 func UpdateDefinition(taskDefinition models.TaskDefinition) {
-	taskDefinition.LastModified = time.Now()
 	initializers.GetTaskDefinitionsTable().Where(
 		"id = ?",
 		taskDefinition.ID,
@@ -80,9 +79,8 @@ func DeleteTaskDefinitionById(definitionId uuid.UUID) {
 		definitionId,
 	).Updates(
 		models.TaskDefinition{
-			Deleted:      true,
-			Enabled:      false,
-			LastModified: time.Now(),
+			Deleted: true,
+			Enabled: false,
 		},
 	).Delete(
 		"id = ?",
