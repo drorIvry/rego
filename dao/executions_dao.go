@@ -51,9 +51,8 @@ func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
 		executionId,
 	).Updates(
 		models.TaskExecution{
-			StatusCode:   status,
-			TaskStatus:   models.NumericStatusToStringStatus(status),
-			LastModified: time.Now(),
+			StatusCode: status,
+			TaskStatus: models.NumericStatusToStringStatus(status),
 		},
 	)
 }

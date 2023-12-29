@@ -12,8 +12,6 @@ import (
 type TaskDefinition struct {
 	gorm.Model
 	ID                uuid.UUID      `json:"id" gorm:"type:uuid` //;default:uuid_generate_v4()"
-	CreationTime      time.Time      `json:"created_at"`
-	LastModified      time.Time      `json:"last_modified"`
 	Image             string         `json:"image" binding:"required"`
 	Name              string         `json:"name"`
 	Namespace         string         `json:"namespace"`

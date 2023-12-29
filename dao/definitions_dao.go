@@ -22,8 +22,6 @@ func GetPendingTasks() []models.TaskDefinition {
 }
 
 func initDefaultFields(taskDef *models.TaskDefinition) {
-	taskDef.CreationTime = time.Now()
-	taskDef.LastModified = time.Now()
 	taskDef.Deleted = false
 	taskDef.Enabled = true
 	taskDef.ExecutionsCounter = 0
