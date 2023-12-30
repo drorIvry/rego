@@ -55,7 +55,7 @@ func init() {
 // @BasePath	/api/v1
 func main() {
 	kubeConfigPath := flag.String("kubeConfigPath", "", "The path to the kubeconfig")
-	serverPort := flag.Int("port", 8080, "Port for the api server")
+	serverPort := flag.Int("port", 3000, "Port for the api server")
 	pollInterval := flag.Int("interval", 1, "The polling interval")
 	k8s_client.InitK8SClientSet(kubeConfigPath)
 	//todo replace that with cobra
