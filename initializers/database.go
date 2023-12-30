@@ -18,6 +18,10 @@ func GetTaskExecutionsTable() *gorm.DB {
 	return DB.Table("task_executions")
 }
 
+func GetExecutionsStatusHistoryTable() *gorm.DB {
+	return DB.Table("executions_status_history")
+}
+
 func InitDBConnection(dbName string) {
 	log.Println("initializing DB")
 	var err error
