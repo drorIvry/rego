@@ -45,7 +45,6 @@ func GetExecutionById(executionId uuid.UUID) *models.TaskExecution {
 }
 
 func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
-
 	initializers.GetTaskExecutionsTable().Where(
 		"id = ?",
 		executionId,

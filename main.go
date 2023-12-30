@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -28,7 +29,10 @@ func runPoller(p *poller.Poller, wg *sync.WaitGroup) {
 
 func handleInterrupt(c chan os.Signal, server *http.Server, p *poller.Poller) {
 	<-c
+	log.Println("Received Ctrl+C")
+	log.Println("Shutting down api server")
 	server.Shutdown(context.Background())
+	log.Println("Shutting down poller")
 	p.Shutdown()
 }
 
