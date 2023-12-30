@@ -68,6 +68,9 @@ func UpdateDefinition(taskDefinition models.TaskDefinition) {
 	initializers.GetTaskDefinitionsTable().Where(
 		"id = ?",
 		taskDefinition.ID,
+	).Where(
+		"deleted = ?", // Can't update deleted definitions
+		false,
 	).Updates(
 		taskDefinition,
 	)
