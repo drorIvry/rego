@@ -29,5 +29,4 @@ func InitDBConnection(dbName string) {
 	// Migrate the schema
 	DB.AutoMigrate(&models.TaskDefinition{})
 	DB.AutoMigrate(&models.TaskExecution{})
-
 }
