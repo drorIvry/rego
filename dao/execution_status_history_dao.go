@@ -19,3 +19,11 @@ func GetExecutionStatusHistory(executionId uuid.UUID) []models.ExecutionStatusHi
 	)
 	return statusHistory
 }
+
+func InsertExecutionStatusUpdate(executionId uuid.UUID, status models.Status) {
+	model := models.ExecutionStatusHistory{
+		ExecutionID: executionId,
+		Status:      status,
+	}
+	initializers.GetExecutionsStatusHistoryTable().Create(&model)
+}

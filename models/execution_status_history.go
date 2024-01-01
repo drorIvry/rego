@@ -8,4 +8,5 @@ import (
 type ExecutionStatusHistory struct {
 	gorm.Model
 	ExecutionID uuid.UUID `json:"execution_id,omitempty" gorm:"type:uuid`
+	Status      Status    `json:"status" gorm:"type:text`
 }
