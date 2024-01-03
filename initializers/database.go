@@ -11,19 +11,19 @@ import (
 var DB *gorm.DB
 
 func GetTaskDefinitionsTable() *gorm.DB {
-	return DB.Table("task_definitions")
+	return DB.Table(models.TASK_DEFINITIONS_TABLE_NAME)
 }
 
 func GetTaskExecutionsTable() *gorm.DB {
-	return DB.Table("task_executions")
+	return DB.Table(models.TASK_EXECUTIONS_TABLE_NAME)
 }
 
 func GetExecutionsStatusHistoryTable() *gorm.DB {
-	return DB.Table("executions_status_history")
+	return DB.Table(models.EXECUTION_STATUS_HISTORY_TABLE_NAME)
 }
 
 func InitDBConnection(dbName string) {
-	log.Println("initializing DB")
+	log.Println("initializing DB " + dbName)
 	var err error
 	DB, err = gorm.Open(sqlite.Open(dbName), &gorm.Config{})
 	if err != nil {
@@ -33,4 +33,5 @@ func InitDBConnection(dbName string) {
 	// Migrate the schema
 	DB.AutoMigrate(&models.TaskDefinition{})
 	DB.AutoMigrate(&models.TaskExecution{})
+	DB.AutoMigrate(&models.ExecutionStatusHistory{})
 }
