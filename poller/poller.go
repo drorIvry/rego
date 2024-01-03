@@ -1,8 +1,9 @@
 package poller
 
 import (
-	"log"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/drorivry/rego/dao"
 	"github.com/drorivry/rego/initializers"
@@ -47,7 +48,7 @@ func (p *Poller) Shutdown() {
 func deployReadyTasks() {
 	tasks := dao.GetPendingTasks()
 	for _, task := range tasks {
-		log.Println("deploying task ", task.ID)
+		log.Info().Str("defintion_id", task.ID.String()).Msg("deploying task")
 		DeployJob(task)
 	}
 }
@@ -78,23 +79,39 @@ func DeployJob(task models.TaskDefinition) {
 func timeoutTasks() {
 	tasksExecutions := dao.GetTasksToTimeout()
 
-	for _, tasksExecution := range tasksExecutions {
-		log.Println("timing out task ", tasksExecution.ID)
-		k8s_client.AbortTask(tasksExecution.ID)
-		dao.UpdateExecutionStatus(tasksExecution.ID, models.TIMEOUT)
+	for _, taskExecution := range tasksExecutions {
+		log.Warn().Str(
+			"execution_id",
+			taskExecution.ID.String(),
+		).Msg("timing out task")
+		k8s_client.AbortTask(taskExecution.ID)
+		dao.UpdateExecutionStatus(taskExecution.ID, models.TIMEOUT)
 	}
 }
 
 func updateTaskStatus() {
-	tasksExecutions := dao.GetExecutionsToWatch()
-	for _, tasksExecution := range tasksExecutions {
-		status, err := k8s_client.GetJobStatus(tasksExecution.ID)
+	taskExecutions := dao.GetExecutionsToWatch()
+	for _, taskExecution := range taskExecutions {
+		status, err := k8s_client.GetJobStatus(taskExecution.ID)
 		if err != nil {
-			log.Println("Error while getting job status ", err)
+			log.Error().Err(
+				err,
+			).Str(
+				"execution_id",
+				taskExecution.ID.String(),
+			).Msg(
+				"Error while getting job status",
+			)
 		}
-		if status != tasksExecution.StatusCode {
-			log.Println("Updating task status ", tasksExecution.ID)
-			dao.UpdateExecutionStatus(tasksExecution.ID, status)
+		if status != taskExecution.StatusCode {
+			log.Info().Str(
+				"execution_id",
+				taskExecution.ID.String(),
+			).Str(
+				"status",
+				status.String(),
+			).Msg("Updating task status")
+			dao.UpdateExecutionStatus(taskExecution.ID, status)
 		}
 	}
 }

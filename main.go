@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"flag"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/drorivry/rego/config"
 	"github.com/drorivry/rego/initializers"
@@ -29,10 +30,10 @@ func runPoller(p *poller.Poller, wg *sync.WaitGroup) {
 
 func handleInterrupt(c chan os.Signal, server *http.Server, p *poller.Poller) {
 	<-c
-	log.Println("Received Ctrl+C")
-	log.Println("Shutting down api server")
+	log.Info().Msg("Received Ctrl+C")
+	log.Info().Msg("Shutting down api server")
 	server.Shutdown(context.Background())
-	log.Println("Shutting down poller")
+	log.Info().Msg("Shutting down poller")
 	p.Shutdown()
 }
 

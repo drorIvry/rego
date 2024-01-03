@@ -1,9 +1,10 @@
 package config
 
 import (
-	"log"
 	"os"
 	"strconv"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/drorivry/rego/initializers"
 )
@@ -20,7 +21,7 @@ func InitConfig() {
 
 	if err != nil {
 		TASK_TIMEOUT = 300
-		log.Fatal("Can't parse tasktimeout, using default")
+		log.Error().Err(err).Msg("Can't parse tasktimeout, using default")
 	}
 
 	TASK_TIMEOUT = parsedTimeout
@@ -28,7 +29,7 @@ func InitConfig() {
 	IN_CLUSTER, err = strconv.ParseBool(os.Getenv("IN_CLUSTER"))
 	if err != nil {
 		IN_CLUSTER = false
-		log.Fatal("Can't parse IN_CLUSTER, using default")
+		log.Error().Err(err).Msg("Can't parse IN_CLUSTER, using default")
 	}
 
 }

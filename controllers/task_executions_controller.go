@@ -1,9 +1,10 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/google/uuid"
 
@@ -24,7 +25,7 @@ import (
 func AbortTaskExecution(c *gin.Context) {
 	var executionIdUnparsed = strings.TrimSpace(c.Param("executionId"))
 
-	log.Println("Aborting task", executionIdUnparsed)
+	log.Info().Str("execution_id", executionIdUnparsed).Msg("Aborting task")
 
 	var executionId, err = uuid.Parse(executionIdUnparsed)
 

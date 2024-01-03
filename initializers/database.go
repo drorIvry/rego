@@ -1,7 +1,7 @@
 package initializers
 
 import (
-	"log"
+	"github.com/rs/zerolog/log"
 
 	"github.com/drorivry/rego/models"
 	"gorm.io/driver/sqlite"
@@ -19,11 +19,11 @@ func GetTaskExecutionsTable() *gorm.DB {
 }
 
 func InitDBConnection(dbName string) {
-	log.Println("initializing DB")
+	log.Info().Msg("initializing DB")
 	var err error
 	DB, err = gorm.Open(sqlite.Open(dbName), &gorm.Config{})
 	if err != nil {
-		log.Fatal("failed to connect database")
+		log.Error().Err(err).Msg("failed to connect database")
 	}
 
 	// Migrate the schema
