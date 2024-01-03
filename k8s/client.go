@@ -38,7 +38,6 @@ func BuildJobName(taskEx models.TaskExecution) string {
 func InitK8SClientSet(kubeConfigPath *string) {
 	if config.IN_CLUSTER {
 		ClientSet = ConnectToK8SInCluster()
-
 	} else {
 		ClientSet = ConnectToK8s(kubeConfigPath)
 	}

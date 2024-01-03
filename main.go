@@ -37,8 +37,9 @@ func handleInterrupt(c chan os.Signal, server *http.Server, p *poller.Poller) {
 }
 
 func init() {
+	initializers.LoadEnvVars()
 	config.InitConfig()
-	initializers.InitDBConnection(config.DB_URL)
+	initializers.InitDBConnection()
 }
 
 //	@title			Rego
