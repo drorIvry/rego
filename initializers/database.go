@@ -21,7 +21,6 @@ func GetTaskExecutionsTable() *gorm.DB {
 }
 
 func InitDBConnection() {
-	var DB *gorm.DB
 	var err error
 	log.Println("initializing DB")
 
@@ -38,7 +37,7 @@ func InitDBConnection() {
 		return
 	}
 
-	migrateTables(DB)
+	migrateTables()
 }
 
 func connectSqlite() (*gorm.DB, error) {
@@ -55,7 +54,7 @@ func connectPostgres() (*gorm.DB, error) {
 	)
 }
 
-func migrateTables(DB *gorm.DB) {
+func migrateTables() {
 	DB.AutoMigrate(&models.TaskDefinition{})
 	DB.AutoMigrate(&models.TaskExecution{})
 }

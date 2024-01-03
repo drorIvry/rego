@@ -10,6 +10,7 @@ require (
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.8.12
 	gorm.io/datatypes v1.1.1
+	gorm.io/driver/postgres v1.5.4
 	gorm.io/driver/sqlite v1.4.4
 	gorm.io/gorm v1.25.5
 	k8s.io/api v0.27.1
@@ -26,7 +27,6 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgx/v5 v5.4.3 // indirect
 	golang.org/x/tools v0.7.0 // indirect
-	gorm.io/driver/postgres v1.5.4 // indirect
 )
 
 require (
