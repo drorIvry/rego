@@ -2,7 +2,8 @@ package initializers
 
 import (
 	"fmt"
-	"log"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/drorivry/rego/config"
 	"github.com/drorivry/rego/models"
@@ -27,18 +28,24 @@ func GetExecutionsStatusHistoryTable() *gorm.DB {
 
 func InitDBConnection() {
 	var err error
-	log.Println("initializing DB")
+	log.Info().Msg("initializing DB")
 
 	if config.DB_DRIVER == "sqlite" {
 		DB, err = connectSqlite()
 	} else if config.DB_DRIVER == "postgresql" || config.DB_DRIVER == "postgres" {
 		DB, err = connectPostgres()
 	} else {
-		log.Fatal("DB Driver type is not supported " + config.DB_DRIVER)
+		log.Error().Err(err).Str(
+			"driver",
+			config.DB_DRIVER,
+		).Msg("DB Driver type is not supported")
 	}
 
 	if err != nil {
-		log.Fatal("Error connecting to database")
+		log.Error().Err(err).Str(
+			"driver",
+			config.DB_DRIVER,
+		).Msg("Error connecting to database")
 		return
 	}
 

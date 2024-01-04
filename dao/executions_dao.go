@@ -1,8 +1,9 @@
 package dao
 
 import (
-	"log"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/drorivry/rego/config"
 	"github.com/drorivry/rego/initializers"
@@ -26,7 +27,7 @@ func GetTasksToTimeout() []models.TaskExecution {
 func InsertTaskExecution(taskEx models.TaskExecution) error {
 	result := initializers.GetTaskExecutionsTable().Create(&taskEx)
 	if result.Error != nil {
-		log.Panic("Error saving to database", result.Error)
+		log.Error().Err(result.Error).Msg("Error saving to database")
 		return result.Error
 	}
 	return nil
@@ -66,13 +67,14 @@ func GetExecutionsToWatch() []models.TaskExecution {
 	return tasks
 }
 
-func GetLatestExecutionByDefinitionId(definitionId uuid.UUID) models.TaskExecution {
+func GetLatestExecutionByDefinitionId(definitionId uuid.UUID) (models.TaskExecution, error) {
 	var task models.TaskExecution
-	initializers.GetTaskExecutionsTable().Where(
+	result := initializers.GetTaskExecutionsTable().Where(
 		"task_definition_id = ?",
 		definitionId,
 	).Order(
 		"created_at desc",
 	).First(&task)
-	return task
+
+	return task, result.Error
 }

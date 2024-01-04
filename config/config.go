@@ -1,9 +1,10 @@
 package config
 
 import (
-	"log"
 	"os"
 	"strconv"
+
+	"github.com/rs/zerolog/log"
 )
 
 var DB_DRIVER string
@@ -33,24 +34,24 @@ func InitConfig() {
 	DB_POSTGRES_PORT, err = strconv.Atoi(os.Getenv("DB_POSTGRES_PORT"))
 	if err != nil {
 		DB_POSTGRES_PORT = 5432
-		log.Println("Can't parse DB_POSTGRES_PORT, using default")
+		log.Error().Err(err).Msg("Can't parse DB_POSTGRES_PORT, using default")
 	}
 
 	TASK_TIMEOUT, err = strconv.Atoi(os.Getenv("TASK_TIMEOUT"))
 	if err != nil {
 		TASK_TIMEOUT = 300
-		log.Println("Can't parse TASK_TIMEOUT, using default")
+		log.Error().Err(err).Msg("Can't parse TASK_TIMEOUT, using default")
 	}
 
 	SERVER_PORT, err = strconv.Atoi(os.Getenv("SERVER_PORT"))
 	if err != nil {
 		SERVER_PORT = 4004
-		log.Println("Can't parse SERVER_PORT, using default")
+		log.Error().Err(err).Msg("Can't parse SERVER_PORT, using default")
 	}
 
 	IN_CLUSTER, err = strconv.ParseBool(os.Getenv("IN_CLUSTER"))
 	if err != nil {
 		IN_CLUSTER = false
-		log.Println("Can't parse IN_CLUSTER, using default")
+		log.Error().Err(err).Msg("Can't parse IN_CLUSTER, using default")
 	}
 }

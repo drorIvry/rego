@@ -20,6 +20,30 @@ const (
 	SUCCESS      Status = 500
 )
 
+func (s *Status) String() string {
+	if *s == READY {
+		return "READY"
+	} else if *s == JOB_DEPLOYED {
+		return "JOB_DEPLOYED"
+	} else if *s == PENDING {
+		return "PENDING"
+	} else if *s == RUNNING {
+		return "RUNNING"
+	} else if *s == TIMEOUT {
+		return "TIMEOUT"
+	} else if *s == PROC_ERROR {
+		return "PROC_ERROR"
+	} else if *s == APP_ERROR {
+		return "APP_ERROR"
+	} else if *s == ABORTED {
+		return "ABORTED"
+	} else if *s == SUCCESS {
+		return "SUCCESS"
+	} else {
+		return "UNKNOWN"
+	}
+}
+
 func NumericStatusToStringStatus(status Status) string {
 	switch status {
 	case READY:
@@ -47,15 +71,15 @@ func NumericStatusToStringStatus(status Status) string {
 
 func CreateExecutionFromDefinition(taskDef TaskDefinition) TaskExecution {
 	taskEx := TaskExecution{
-		ID:                      uuid.New(),
-		StatusCode:              READY,
-		TaskStatus:              NumericStatusToStringStatus(READY),
-		TaskDefinitionId:        taskDef.ID,
-		Image:                   taskDef.Image,
-		Name:                    taskDef.Name,
-		Namespace:               taskDef.Namespace,
-		Cmd:                     taskDef.Cmd,
-		Metadata:                taskDef.Metadata,
+		ID:               uuid.New(),
+		StatusCode:       READY,
+		TaskStatus:       NumericStatusToStringStatus(READY),
+		TaskDefinitionId: taskDef.ID,
+		Image:            taskDef.Image,
+		Name:             taskDef.Name,
+		Namespace:        taskDef.Namespace,
+		Cmd:              taskDef.Cmd,
+		Metadata:         taskDef.Metadata,
 	}
 
 	taskEx.CreatedAt = time.Now()

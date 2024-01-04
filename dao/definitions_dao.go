@@ -1,8 +1,9 @@
 package dao
 
 import (
-	"log"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/drorivry/rego/initializers"
 	"github.com/drorivry/rego/models"
@@ -40,7 +41,7 @@ func CreateTaskDefinition(taskDef *models.TaskDefinition) error {
 
 	result := initializers.GetTaskDefinitionsTable().Create(taskDef)
 	if result.Error != nil {
-		log.Panic("Error saving to database", result.Error)
+		log.Error().Err(result.Error).Msg("Error saving to database")
 		return result.Error
 	}
 	return nil
