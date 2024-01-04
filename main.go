@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"strconv"
 	"sync"
 	"syscall"
 
@@ -67,7 +66,10 @@ func main() {
 
 	wg.Add(1)
 	server := tasker.GetServer(config.SERVER_PORT)
-	log.Println("Starting server on port " + strconv.Itoa(config.SERVER_PORT))
+	log.Info().Int(
+		"server_port",
+		config.SERVER_PORT,
+	).Msg("Starting server on port")
 	go runServer(server, &wg)
 
 	wg.Add(1)
