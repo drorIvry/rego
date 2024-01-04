@@ -17,3 +17,6 @@
 __debug_bin
 .vscode
 site
+
+# Build
+rego

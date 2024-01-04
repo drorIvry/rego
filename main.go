@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"sync"
 	"syscall"
 
@@ -55,7 +56,6 @@ func init() {
 // @BasePath	/api/v1
 func main() {
 	kubeConfigPath := flag.String("kubeConfigPath", "", "The path to the kubeconfig")
-	serverPort := flag.Int("port", 3000, "Port for the api server")
 	pollInterval := flag.Int("interval", 1, "The polling interval")
 	k8s_client.InitK8SClientSet(kubeConfigPath)
 	//todo replace that with cobra
@@ -64,7 +64,8 @@ func main() {
 	var wg sync.WaitGroup
 
 	wg.Add(1)
-	server := tasker.GetServer(*serverPort)
+	server := tasker.GetServer(config.SERVER_PORT)
+	log.Println("Starting server on port " + strconv.Itoa(config.SERVER_PORT))
 	go runServer(server, &wg)
 
 	wg.Add(1)

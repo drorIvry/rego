@@ -7,6 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
+const TASK_EXECUTIONS_TABLE_NAME string = "task_executions"
+
 type TaskExecution struct {
 	gorm.Model
 	ID               uuid.UUID      `json:"id,omitempty" gorm:"type:uuid` //;default:uuid_generate_v4()"
@@ -18,4 +20,8 @@ type TaskExecution struct {
 	Namespace        string         `json:"namespace,omitempty"`
 	Cmd              pq.StringArray `json:"cmd,omitempty" gorm:"type:text[]"`
 	Metadata         datatypes.JSON `json:"metadata,omitempty"`
+}
+
+func (TaskExecution) TableName() string {
+	return TASK_EXECUTIONS_TABLE_NAME
 }
