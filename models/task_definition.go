@@ -9,6 +9,8 @@ import (
 	"gorm.io/gorm"
 )
 
+const TASK_DEFINITIONS_TABLE_NAME string = "task_definitions"
+
 type TaskDefinition struct {
 	gorm.Model
 	ID                uuid.UUID      `json:"id" gorm:"type:uuid` //;default:uuid_generate_v4()"
@@ -22,4 +24,8 @@ type TaskDefinition struct {
 	Deleted           bool           `json:"deleted"`
 	Cmd               pq.StringArray `json:"cmd" gorm:"type:text[]"`
 	Metadata          datatypes.JSON `json:"metadata"`
+}
+
+func (TaskDefinition) TableName() string {
+	return TASK_DEFINITIONS_TABLE_NAME
 }

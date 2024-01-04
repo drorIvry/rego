@@ -54,6 +54,7 @@ func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
 			TaskStatus: models.NumericStatusToStringStatus(status),
 		},
 	)
+	InsertExecutionStatusUpdate(executionId, status)
 }
 
 func GetExecutionsToWatch() []models.TaskExecution {

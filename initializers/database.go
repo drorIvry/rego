@@ -13,11 +13,15 @@ import (
 var DB *gorm.DB
 
 func GetTaskDefinitionsTable() *gorm.DB {
-	return DB.Table("task_definitions")
+	return DB.Table(models.TASK_DEFINITIONS_TABLE_NAME)
 }
 
 func GetTaskExecutionsTable() *gorm.DB {
-	return DB.Table("task_executions")
+	return DB.Table(models.TASK_EXECUTIONS_TABLE_NAME)
+}
+
+func GetExecutionsStatusHistoryTable() *gorm.DB {
+	return DB.Table(models.EXECUTION_STATUS_HISTORY_TABLE_NAME)
 }
 
 func InitDBConnection() {
@@ -57,4 +61,5 @@ func connectPostgres() (*gorm.DB, error) {
 func migrateTables() {
 	DB.AutoMigrate(&models.TaskDefinition{})
 	DB.AutoMigrate(&models.TaskExecution{})
+	DB.AutoMigrate(&models.ExecutionStatusHistory{})
 }
