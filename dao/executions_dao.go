@@ -16,7 +16,7 @@ func GetTasksToTimeout() []models.TaskExecution {
 	timeoutTime := time.Now().Add(time.Duration(-config.TASK_TIMEOUT) * time.Second)
 	initializers.GetTaskExecutionsTable().Where(
 		"status_code < ?",
-		400,
+		models.TIMEOUT,
 	).Where(
 		"created_at < ?",
 		timeoutTime,
@@ -30,6 +30,11 @@ func InsertTaskExecution(taskEx models.TaskExecution) error {
 		log.Error().Err(result.Error).Msg("Error saving to database")
 		return result.Error
 	}
+
+	InsertExecutionStatusUpdate(
+		taskEx.ID,
+		models.PENDING,
+	)
 	return nil
 }
 
