@@ -34,7 +34,7 @@ func InitConfig() {
 	DB_POSTGRES_PORT, err = strconv.Atoi(os.Getenv("DB_POSTGRES_PORT"))
 	if err != nil {
 		DB_POSTGRES_PORT = 5432
-		log.Println("Can't parse DB_POSTGRES_PORT, using default")
+		log.Error().Err(err).Msg("Can't parse DB_POSTGRES_PORT, using default")
 	}
 
 	TASK_TIMEOUT, err = strconv.Atoi(os.Getenv("TASK_TIMEOUT"))
