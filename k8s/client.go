@@ -3,10 +3,11 @@ package k8s_client
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/drorivry/rego/config"
 	"github.com/drorivry/rego/dao"
@@ -38,7 +39,6 @@ func BuildJobName(taskEx models.TaskExecution) string {
 func InitK8SClientSet(kubeConfigPath *string) {
 	if config.IN_CLUSTER {
 		ClientSet = ConnectToK8SInCluster()
-
 	} else {
 		ClientSet = ConnectToK8s(kubeConfigPath)
 	}
@@ -50,10 +50,10 @@ func LaunchK8sJob(
 ) {
 	var metadata batchv1.JobSpec
 	if taskEx.Metadata != nil {
-
 		metadataErr := json.Unmarshal([]byte(taskEx.Metadata), &metadata)
 		if metadataErr != nil {
-			log.Fatal("Error parsing metadata ", metadataErr)
+			log.Error().Err(metadataErr).Msg("Error parsing metadata")
+			return
 		}
 	}
 	jobs := ClientSet.BatchV1().Jobs(taskEx.Namespace)
@@ -93,12 +93,12 @@ func LaunchK8sJob(
 
 	_, err := jobs.Create(context.TODO(), jobSpec, metav1.CreateOptions{})
 	if err != nil {
-		log.Fatalln("Failed to create K8s job. ", err)
+		log.Error().Err(err).Msg("Failed to create K8s job")
 		return
 	}
 
 	//print job details
-	log.Println("Created K8s job successfully")
+	log.Info().Str("execution_id", taskEx.ID.String()).Msg("Created K8s job successfully")
 }
 
 func ConnectToK8s(kubeConfigPath *string) *kubernetes.Clientset {
@@ -116,15 +116,14 @@ func ConnectToK8s(kubeConfigPath *string) *kubernetes.Clientset {
 
 	config, err := clientcmd.BuildConfigFromFlags("", configPath)
 	if err != nil {
-		log.Fatalln(
-			"failed to create K8s config ",
-			err,
-		)
+		log.Error().Err(err).Msg("failed to create K8s config")
+		return nil
 	}
 
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		log.Fatalln("Failed to create K8s clientset ", err)
+		log.Error().Err(err).Msg("Failed to create K8s clientset")
+		return nil
 	}
 
 	return clientset
@@ -133,12 +132,12 @@ func ConnectToK8s(kubeConfigPath *string) *kubernetes.Clientset {
 func ConnectToK8SInCluster() *kubernetes.Clientset {
 	config, err := rest.InClusterConfig()
 	if err != nil {
-		log.Fatalln("Failed to create K8s clientset ", err)
+		log.Error().Err(err).Msg("Failed to get K8s config")
 	}
 	// creates the clientset
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		log.Fatalln("Failed to create K8s clientset ", err)
+		log.Error().Err(err).Msg("Failed to create K8s clientset")
 	}
 	return clientset
 
@@ -147,7 +146,7 @@ func ConnectToK8SInCluster() *kubernetes.Clientset {
 func AbortTask(executionId uuid.UUID) error {
 	execution, err := dao.GetExecutionById(executionId)
 	if err != nil {
-		log.Println("Execution id wasn't found!", err)
+		log.Error().Err(err).Msg("Execution id wasn't found")
 		return err
 	}
 	jobName := BuildJobName(*execution)
@@ -160,7 +159,7 @@ func AbortTask(executionId uuid.UUID) error {
 	jobs := ClientSet.BatchV1().Jobs(execution.Namespace)
 	err = jobs.Delete(context.TODO(), jobName, deleteOptions)
 	if err != nil {
-		log.Panic("Could not delete job ", jobName)
+		log.Error().Err(err).Str("job_name", jobName).Msg("Could not delete job")
 		return err
 	}
 	return nil

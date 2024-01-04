@@ -1,8 +1,10 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
+
+	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 
 	"github.com/drorivry/rego/dao"
 	"github.com/drorivry/rego/models"
@@ -23,7 +25,7 @@ func CreateTaskDefinition(c *gin.Context) {
 	var newTaskDef models.TaskDefinition
 
 	if err := c.BindJSON(&newTaskDef); err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Could not parse task definition")
 		c.JSON(http.StatusBadRequest, c.Error(err))
 		return
 	}
@@ -33,9 +35,12 @@ func CreateTaskDefinition(c *gin.Context) {
 	err := dao.CreateTaskDefinition(&newTaskDef)
 
 	if err != nil {
+		log.Error().Err(err).Msg("Error creating task definition")
 		c.JSON(http.StatusInternalServerError, c.Error(err))
 		return
 	}
+
+	log.Info().Str("definition_id", newTaskDef.ID.String()).Msg("Created task definition")
 
 	c.JSON(
 		http.StatusOK, gin.H{
@@ -117,7 +122,21 @@ func GetLatestExecution(c *gin.Context) {
 		return
 	}
 
-	latestExecution := dao.GetLatestExecutionByDefinitionId(definitionId)
+	latestExecution, err := dao.GetLatestExecutionByDefinitionId(definitionId)
+
+	if err == gorm.ErrRecordNotFound {
+		log.Warn().Str(
+			"definition_id",
+			definitionId.String(),
+		).Msg("Task definition was not found")
+		c.JSON(http.StatusNotFound, c.Error(err))
+		return
+	} else if err != nil {
+		log.Error().Err(err).Msg("Error communicating with the database")
+		c.JSON(http.StatusInternalServerError, c.Error(err))
+		return
+	}
+
 	c.IndentedJSON(http.StatusOK, latestExecution)
 }
 
@@ -133,14 +152,21 @@ func UpdateTaskDefinition(c *gin.Context) {
 	var updatedTaskDef models.TaskDefinition
 
 	if err := c.BindJSON(&updatedTaskDef); err != nil {
-		log.Println(err)
+		log.Error().Err(err).Msg("Could not parse updatedTaskDef")
 		c.JSON(http.StatusBadRequest, c.Error(err))
 		return
 	}
 	_, err := dao.GetTaskDefinitionById(updatedTaskDef.ID)
 
-	if err != nil {
-		log.Println(err)
+	if err == gorm.ErrRecordNotFound {
+		log.Warn().Str(
+			"definition_id",
+			updatedTaskDef.ID.String(),
+		).Msg("Task definition was not found")
+		c.JSON(http.StatusNotFound, c.Error(err))
+		return
+	} else if err != nil {
+		log.Error().Err(err).Msg("Error communicating with the database")
 		c.JSON(http.StatusInternalServerError, c.Error(err))
 		return
 	}

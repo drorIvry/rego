@@ -1,7 +1,7 @@
 package initializers
 
 import (
-	"log"
+	"github.com/rs/zerolog/log"
 
 	"github.com/joho/godotenv"
 )
@@ -9,6 +9,6 @@ import (
 func LoadEnvVars() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Error().Err(err).Msg("Error loading .env file")
 	}
 }
