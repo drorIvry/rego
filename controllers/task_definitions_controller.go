@@ -69,7 +69,7 @@ func GetAllPendingTaskDefinitions(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, tasks)
 }
 
-// AbortTaskExecution             godoc
+// RerunTask                      godoc
 // @Summary      				  Rerun a task definition
 // @Description                   Rerun a task definition previously created
 // @Tags                          definition

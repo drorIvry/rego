@@ -80,7 +80,11 @@ func timeoutTasks() {
 
 	for _, tasksExecution := range tasksExecutions {
 		log.Println("timing out task ", tasksExecution.ID)
-		k8s_client.AbortTask(tasksExecution.ID)
+		err := k8s_client.AbortTask(tasksExecution.ID)
+		if err != nil {
+			log.Println("Could not abort task")
+			continue
+		}
 		dao.UpdateExecutionStatus(tasksExecution.ID, models.TIMEOUT)
 	}
 }

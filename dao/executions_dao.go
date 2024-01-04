@@ -32,16 +32,16 @@ func InsertTaskExecution(taskEx models.TaskExecution) error {
 	return nil
 }
 
-func GetExecutionById(executionId uuid.UUID) *models.TaskExecution {
+func GetExecutionById(executionId uuid.UUID) (*models.TaskExecution, error) {
 	var execution models.TaskExecution
-	initializers.GetTaskExecutionsTable().Where(
+	result := initializers.GetTaskExecutionsTable().Where(
 		"id = ?",
 		executionId,
 	).First(
 		&execution,
 	)
 
-	return &execution
+	return &execution, result.Error
 }
 
 func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
