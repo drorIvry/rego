@@ -1,6 +1,7 @@
 package initializers
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/drorivry/rego/config"
@@ -52,8 +53,18 @@ func connectSqlite() (*gorm.DB, error) {
 }
 
 func connectPostgres() (*gorm.DB, error) {
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%d %s",
+		config.DB_POSTGRES_HOST,
+		config.DB_POSTGRES_USERNAME,
+		config.DB_POSTGRES_PASSWORD,
+		config.DB_POSTGRES_DB_NAME,
+		config.DB_POSTGRES_PORT,
+		config.DB_POSTGRES_DSN_EXTRA,
+	)
+
 	return gorm.Open(
-		postgres.Open(config.DB_POSTGRES_DSN),
+		postgres.Open(dsn),
 		&gorm.Config{},
 	)
 }
