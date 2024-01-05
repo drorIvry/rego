@@ -11,6 +11,7 @@ import (
 var DB_DRIVER string
 var DB_SQLITE_URL string
 
+var DB_POSTGRES_DSN string
 var DB_POSTGRES_HOST string
 var DB_POSTGRES_PORT int
 var DB_POSTGRES_USERNAME string
@@ -18,6 +19,7 @@ var DB_POSTGRES_PASSWORD string
 var DB_POSTGRES_DB_NAME string
 var DB_POSTGRES_DSN_EXTRA string
 
+var DB_MYSQL_DSN string
 var DB_MYSQL_USERNAME string
 var DB_MYSQL_PASSWORD string
 var DB_MYSQL_HOST string
@@ -31,6 +33,7 @@ var IN_CLUSTER bool
 
 func initPostgresConfig() {
 	var err error
+	DB_POSTGRES_DSN = os.Getenv("DB_POSTGRES_DSN")
 	DB_POSTGRES_HOST = os.Getenv("DB_POSTGRES_HOST")
 	DB_POSTGRES_USERNAME = os.Getenv("DB_POSTGRES_USERNAME")
 	DB_POSTGRES_PASSWORD = os.Getenv("DB_POSTGRES_PASSWORD")
@@ -45,6 +48,7 @@ func initPostgresConfig() {
 
 func initMySqlConfig() {
 	var err error
+	DB_MYSQL_DSN = os.Getenv("DB_MYSQL_DSN")
 	DB_MYSQL_USERNAME = os.Getenv("DB_MYSQL_USERNAME")
 	DB_MYSQL_PASSWORD = os.Getenv("DB_MYSQL_PASSWORD")
 	DB_MYSQL_HOST = os.Getenv("DB_MYSQL_HOST")
@@ -65,7 +69,7 @@ func InitConfig() {
 	var err error
 	DB_DRIVER = strings.ToLower(os.Getenv("DB_DRIVER"))
 
-	if DB_DRIVER == "postgres" {
+	if DB_DRIVER == "postgres" || DB_DRIVER == "postgresql" {
 		initPostgresConfig()
 	} else if DB_DRIVER == "mysql" {
 		initMySqlConfig()
