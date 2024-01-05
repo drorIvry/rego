@@ -33,7 +33,7 @@ func InsertTaskExecution(taskEx models.TaskExecution) error {
 
 	InsertExecutionStatusUpdate(
 		taskEx.ID,
-		models.PENDING,
+		taskEx.StatusCode,
 	)
 	return nil
 }
