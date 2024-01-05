@@ -16,7 +16,7 @@ func GetTasksToTimeout() []models.TaskExecution {
 	timeoutTime := time.Now().Add(time.Duration(-config.TASK_TIMEOUT) * time.Second)
 	initializers.GetTaskExecutionsTable().Where(
 		"status_code < ?",
-		400,
+		models.TIMEOUT,
 	).Where(
 		"created_at < ?",
 		timeoutTime,
@@ -30,23 +30,28 @@ func InsertTaskExecution(taskEx models.TaskExecution) error {
 		log.Error().Err(result.Error).Msg("Error saving to database")
 		return result.Error
 	}
+
+	InsertExecutionStatusUpdate(
+		taskEx.ID,
+		taskEx.StatusCode,
+	)
 	return nil
 }
 
-func GetExecutionById(executionId uuid.UUID) *models.TaskExecution {
+func GetExecutionById(executionId uuid.UUID) (*models.TaskExecution, error) {
 	var execution models.TaskExecution
-	initializers.GetTaskExecutionsTable().Where(
+	result := initializers.GetTaskExecutionsTable().Where(
 		"id = ?",
 		executionId,
 	).First(
 		&execution,
 	)
 
-	return &execution
+	return &execution, result.Error
 }
 
 func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
-	initializers.GetTaskExecutionsTable().Where(
+	result := initializers.GetTaskExecutionsTable().Where(
 		"id = ?",
 		executionId,
 	).Updates(
@@ -55,6 +60,19 @@ func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
 			TaskStatus: models.NumericStatusToStringStatus(status),
 		},
 	)
+
+	if result.Error != nil {
+		log.Error().Err(
+			result.Error,
+		).Str(
+			"execution_id",
+			executionId.String(),
+		).Msg(
+			"Couldn't update execution status",
+		)
+		return
+	}
+
 	InsertExecutionStatusUpdate(executionId, status)
 }
 

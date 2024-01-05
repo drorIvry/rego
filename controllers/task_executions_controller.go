@@ -37,7 +37,7 @@ func AbortTaskExecution(c *gin.Context) {
 	err = k8s_client.AbortTask(executionId)
 
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
+		c.AbortWithError(http.StatusNotFound, err)
 		return
 	}
 
