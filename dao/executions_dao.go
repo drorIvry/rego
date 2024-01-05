@@ -51,7 +51,7 @@ func GetExecutionById(executionId uuid.UUID) (*models.TaskExecution, error) {
 }
 
 func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
-	initializers.GetTaskExecutionsTable().Where(
+	result := initializers.GetTaskExecutionsTable().Where(
 		"id = ?",
 		executionId,
 	).Updates(
@@ -60,6 +60,19 @@ func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
 			TaskStatus: models.NumericStatusToStringStatus(status),
 		},
 	)
+
+	if result.Error != nil {
+		log.Error().Err(
+			result.Error,
+		).Str(
+			"execution_id",
+			executionId.String(),
+		).Msg(
+			"Couldn't update execution status",
+		)
+		return
+	}
+
 	InsertExecutionStatusUpdate(executionId, status)
 }
 
