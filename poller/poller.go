@@ -77,14 +77,19 @@ func DeployJob(task models.TaskDefinition) {
 }
 
 func timeoutTasks() {
-	tasksExecutions := dao.GetTasksToTimeout()
+	taskExecutions := dao.GetTasksToTimeout()
 
-	for _, taskExecution := range tasksExecutions {
-		log.Warn().Str(
+	for _, taskExecution := range taskExecutions {
+		log.Info().Str(
 			"execution_id",
 			taskExecution.ID.String(),
 		).Msg("timing out task")
-		k8s_client.AbortTask(taskExecution.ID)
+
+		err := k8s_client.AbortTask(taskExecution.ID)
+		if err != nil {
+			log.Error().Err(err).Msg("Could not abort task")
+			continue
+		}
 		dao.UpdateExecutionStatus(taskExecution.ID, models.TIMEOUT)
 	}
 }
