@@ -144,7 +144,11 @@ func ConnectToK8SInCluster() *kubernetes.Clientset {
 }
 
 func AbortTask(executionId uuid.UUID) error {
-	execution := dao.GetExecutionById(executionId)
+	execution, err := dao.GetExecutionById(executionId)
+	if err != nil {
+		log.Error().Err(err).Msg("Execution id wasn't found")
+		return err
+	}
 	jobName := BuildJobName(*execution)
 	deleteOptions := metav1.DeleteOptions{}
 	var zero int64 = 0
@@ -153,7 +157,7 @@ func AbortTask(executionId uuid.UUID) error {
 	deleteOptions.PropagationPolicy = &bg
 
 	jobs := ClientSet.BatchV1().Jobs(execution.Namespace)
-	err := jobs.Delete(context.TODO(), jobName, deleteOptions)
+	err = jobs.Delete(context.TODO(), jobName, deleteOptions)
 	if err != nil {
 		log.Error().Err(err).Str("job_name", jobName).Msg("Could not delete job")
 		return err
@@ -162,7 +166,11 @@ func AbortTask(executionId uuid.UUID) error {
 }
 
 func GetJobStatus(executionId uuid.UUID) (models.Status, error) {
-	execution := dao.GetExecutionById(executionId)
+	execution, err := dao.GetExecutionById(executionId)
+	if err != nil {
+		return models.PENDING, err
+	}
+
 	jobName := BuildJobName(*execution)
 	job, err := ClientSet.BatchV1().Jobs(
 		execution.Namespace,
