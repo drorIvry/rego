@@ -16,6 +16,9 @@ func GetPendingTasks() []models.TaskDefinition {
 		"enabled = ?",
 		true,
 	).Where(
+		"deleted = ?",
+		false,
+	).Where(
 		"next_execution_time < ?",
 		time.Now(),
 	).Find(&tasks)
@@ -62,11 +65,22 @@ func GetTaskDefinitionById(definitionId uuid.UUID) (models.TaskDefinition, error
 		&task_def,
 	)
 
+	if result.Error != nil {
+		log.Error().Err(
+			result.Error,
+		).Str(
+			"definition_id",
+			definitionId.String(),
+		).Msg(
+			"Couldn't get task definition",
+		)
+	}
+
 	return task_def, result.Error
 }
 
 func UpdateDefinition(taskDefinition models.TaskDefinition) {
-	initializers.GetTaskDefinitionsTable().Where(
+	result := initializers.GetTaskDefinitionsTable().Where(
 		"id = ?",
 		taskDefinition.ID,
 	).Where(
@@ -75,10 +89,21 @@ func UpdateDefinition(taskDefinition models.TaskDefinition) {
 	).Updates(
 		taskDefinition,
 	)
+
+	if result.Error != nil {
+		log.Error().Err(
+			result.Error,
+		).Str(
+			"definition_id",
+			taskDefinition.ID.String(),
+		).Msg(
+			"Couldn't update task definition",
+		)
+	}
 }
 
 func DeleteTaskDefinitionById(definitionId uuid.UUID) {
-	initializers.GetTaskDefinitionsTable().Where(
+	result := initializers.GetTaskDefinitionsTable().Where(
 		"id = ?",
 		definitionId,
 	).Updates(
@@ -90,4 +115,15 @@ func DeleteTaskDefinitionById(definitionId uuid.UUID) {
 		"id = ?",
 		definitionId,
 	)
+
+	if result.Error != nil {
+		log.Error().Err(
+			result.Error,
+		).Str(
+			"definition_id",
+			definitionId.String(),
+		).Msg(
+			"Couldn't update task definition",
+		)
+	}
 }

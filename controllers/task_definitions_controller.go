@@ -74,7 +74,7 @@ func GetAllPendingTaskDefinitions(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, tasks)
 }
 
-// AbortTaskExecution             godoc
+// RerunTask                      godoc
 // @Summary      				  Rerun a task definition
 // @Description                   Rerun a task definition previously created
 // @Tags                          definition
@@ -92,6 +92,19 @@ func RerunTask(c *gin.Context) {
 	}
 
 	task, err := dao.GetTaskDefinitionById(definitionId)
+
+	if err == gorm.ErrRecordNotFound {
+		log.Warn().Str(
+			"definition_id",
+			definitionId.String(),
+		).Msg("Task definition was not found")
+		c.JSON(http.StatusNotFound, c.Error(err))
+		return
+	} else if err != nil {
+		log.Error().Err(err).Msg("Error communicating with the database")
+		c.JSON(http.StatusInternalServerError, c.Error(err))
+		return
+	}
 
 	if task.Deleted {
 		c.JSON(http.StatusInternalServerError, c.Error(err))

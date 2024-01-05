@@ -23,7 +23,7 @@ func GetExecutionStatusHistory(executionId uuid.UUID) []models.ExecutionStatusHi
 func InsertExecutionStatusUpdate(executionId uuid.UUID, status models.Status) {
 	model := models.ExecutionStatusHistory{
 		ExecutionID: executionId,
-		Status:      status,
+		StatusCode:  status,
 	}
 	initializers.GetExecutionsStatusHistoryTable().Create(&model)
 }
