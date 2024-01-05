@@ -34,6 +34,8 @@ func InitDBConnection() {
 		DB, err = connectSqlite()
 	} else if config.DB_DRIVER == "postgresql" || config.DB_DRIVER == "postgres" {
 		DB, err = connectPostgres()
+	} else if config.DB_DRIVER == "mysql" {
+		DB, err = connectMysql()
 	} else {
 		log.Error().Err(err).Str(
 			"driver",
@@ -69,6 +71,28 @@ func connectPostgres() (*gorm.DB, error) {
 		config.DB_POSTGRES_PORT,
 		config.DB_POSTGRES_DSN_EXTRA,
 	)
+
+	return gorm.Open(
+		postgres.Open(dsn),
+		&gorm.Config{},
+	)
+}
+
+func connectMysql() (*gorm.DB, error) {
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:%d)/%s",
+		config.DB_MYSQL_USERNAME,
+		config.DB_MYSQL_PASSWORD,
+		config.DB_MYSQL_HOST,
+		config.DB_MYSQL_PORT,
+		config.DB_MYSQL_DB_NAME,
+	)
+	if config.DB_MYSQL_DSN_EXTRA != "" {
+		dsn += fmt.Sprintf(
+			"?%s",
+			config.DB_MYSQL_DSN_EXTRA,
+		)
+	}
 
 	return gorm.Open(
 		postgres.Open(dsn),

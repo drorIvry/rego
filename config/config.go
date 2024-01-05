@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/rs/zerolog/log"
 )
@@ -17,15 +18,19 @@ var DB_POSTGRES_PASSWORD string
 var DB_POSTGRES_DB_NAME string
 var DB_POSTGRES_DSN_EXTRA string
 
+var DB_MYSQL_USERNAME string
+var DB_MYSQL_PASSWORD string
+var DB_MYSQL_HOST string
+var DB_MYSQL_PORT int
+var DB_MYSQL_DB_NAME string
+var DB_MYSQL_DSN_EXTRA string
+
 var TASK_TIMEOUT int
 var SERVER_PORT int
 var IN_CLUSTER bool
 
-func InitConfig() {
+func initPostgresConfig() {
 	var err error
-	DB_DRIVER = os.Getenv("DB_DRIVER")
-	DB_SQLITE_URL = os.Getenv("DB_SQLITE_URL")
-
 	DB_POSTGRES_HOST = os.Getenv("DB_POSTGRES_HOST")
 	DB_POSTGRES_USERNAME = os.Getenv("DB_POSTGRES_USERNAME")
 	DB_POSTGRES_PASSWORD = os.Getenv("DB_POSTGRES_PASSWORD")
@@ -35,6 +40,40 @@ func InitConfig() {
 	if err != nil {
 		DB_POSTGRES_PORT = 5432
 		log.Error().Err(err).Msg("Can't parse DB_POSTGRES_PORT, using default")
+	}
+}
+
+func initMySqlConfig() {
+	var err error
+	DB_MYSQL_USERNAME = os.Getenv("DB_MYSQL_USERNAME")
+	DB_MYSQL_PASSWORD = os.Getenv("DB_MYSQL_PASSWORD")
+	DB_MYSQL_HOST = os.Getenv("DB_MYSQL_HOST")
+	DB_MYSQL_DB_NAME = os.Getenv("DB_MYSQL_DB_NAME")
+	DB_MYSQL_DSN_EXTRA = os.Getenv("DB_MYSQL_DSN_EXTRA")
+	DB_MYSQL_PORT, err = strconv.Atoi(os.Getenv("DB_MYSQL_PORT"))
+	if err != nil {
+		DB_POSTGRES_PORT = 3306
+		log.Error().Err(err).Msg("Can't parse DB_MYSQL_PORT, using default")
+	}
+}
+
+func initSqliteConfig() {
+	DB_SQLITE_URL = os.Getenv("DB_SQLITE_URL")
+}
+
+func InitConfig() {
+	var err error
+	DB_DRIVER = strings.ToLower(os.Getenv("DB_DRIVER"))
+
+	if DB_DRIVER == "postgres" {
+		initPostgresConfig()
+	} else if DB_DRIVER == "mysql" {
+		initMySqlConfig()
+	} else if DB_DRIVER == "sqlite" {
+		initSqliteConfig()
+	} else {
+		log.Error().Msg("Not supported db driver")
+		os.Exit(1)
 	}
 
 	TASK_TIMEOUT, err = strconv.Atoi(os.Getenv("TASK_TIMEOUT"))
