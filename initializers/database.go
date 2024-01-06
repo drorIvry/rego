@@ -112,8 +112,29 @@ func connectMysql() (*gorm.DB, error) {
 	)
 }
 
+func migrateTable(model any, table_name string) {
+	err := DB.AutoMigrate(model)
+	if err != nil {
+		log.Error().Err(err).Str(
+			"table_name",
+			table_name,
+		).Msg(
+			"Could not AutoMigrate table",
+		)
+	}
+}
+
 func migrateTables() {
-	DB.AutoMigrate(&models.TaskDefinition{})
-	DB.AutoMigrate(&models.TaskExecution{})
-	DB.AutoMigrate(&models.ExecutionStatusHistory{})
+	migrateTable(
+		&models.TaskDefinition{},
+		models.TASK_DEFINITIONS_TABLE_NAME,
+	)
+	migrateTable(
+		&models.TaskExecution{},
+		models.TASK_EXECUTIONS_TABLE_NAME,
+	)
+	migrateTable(
+		&models.ExecutionStatusHistory{},
+		models.EXECUTION_STATUS_HISTORY_TABLE_NAME,
+	)
 }

@@ -6,7 +6,6 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/drorivry/rego/dao"
-	"github.com/drorivry/rego/initializers"
 	"github.com/drorivry/rego/models"
 
 	k8s_client "github.com/drorivry/rego/k8s"
@@ -49,18 +48,17 @@ func deployReadyTasks() {
 	tasks := dao.GetPendingTasks()
 	for _, task := range tasks {
 		log.Info().Str("defintion_id", task.ID.String()).Msg("deploying task")
-		DeployJob(task)
+		DeployJob(&task)
 	}
 }
 
-func DeployJob(task models.TaskDefinition) {
+func DeployJob(task *models.TaskDefinition) {
 	taskEx := models.CreateExecutionFromDefinition(task)
-	jobName := k8s_client.BuildJobName(taskEx)
+	jobName := k8s_client.BuildJobName(&taskEx)
 
 	taskEx.StatusCode = models.JOB_DEPLOYED
-	taskEx.TaskStatus = models.NumericStatusToStringStatus(models.JOB_DEPLOYED)
 
-	dao.InsertTaskExecution(taskEx)
+	dao.InsertTaskExecution(&taskEx)
 
 	task.ExecutionsCounter++
 
@@ -70,9 +68,8 @@ func DeployJob(task models.TaskDefinition) {
 	} else {
 		task.Enabled = false
 	}
-
-	initializers.GetTaskDefinitionsTable().Save(&task)
-	initializers.GetTaskExecutionsTable().Save(&taskEx)
+	dao.UpdateDefinition(task)
+	dao.UpdateExecutionStatus(taskEx.ID, models.JOB_DEPLOYED)
 	k8s_client.LaunchK8sJob(&jobName, &taskEx)
 }
 
@@ -114,7 +111,7 @@ func updateTaskStatus() {
 				taskExecution.ID.String(),
 			).Str(
 				"status",
-				status.String(),
+				models.NumericStatusToStringStatus(status),
 			).Msg("Updating task status")
 			dao.UpdateExecutionStatus(taskExecution.ID, status)
 		}

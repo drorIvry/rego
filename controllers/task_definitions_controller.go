@@ -111,7 +111,7 @@ func RerunTask(c *gin.Context) {
 		return
 	}
 
-	poller.DeployJob(task)
+	poller.DeployJob(&task)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "updated",
@@ -184,7 +184,7 @@ func UpdateTaskDefinition(c *gin.Context) {
 		return
 	}
 
-	dao.UpdateDefinition(updatedTaskDef)
+	dao.UpdateDefinition(&updatedTaskDef)
 	c.JSON(http.StatusOK, gin.H{
 		"message": "updated",
 	})

@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/google/uuid"
-	"github.com/lib/pq"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
@@ -18,7 +17,7 @@ type TaskExecution struct {
 	Image            string         `json:"image,omitempty" binding:"required"`
 	Name             string         `json:"name,omitempty"`
 	Namespace        string         `json:"namespace,omitempty"`
-	Cmd              pq.StringArray `json:"cmd,omitempty" gorm:"type:text[]"`
+	Cmd              StringArray    `json:"cmd" gorm:"type:json"`
 	Metadata         datatypes.JSON `json:"metadata,omitempty"`
 }
 

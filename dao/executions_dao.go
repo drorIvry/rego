@@ -24,7 +24,7 @@ func GetTasksToTimeout() []models.TaskExecution {
 	return executions
 }
 
-func InsertTaskExecution(taskEx models.TaskExecution) error {
+func InsertTaskExecution(taskEx *models.TaskExecution) error {
 	result := initializers.GetTaskExecutionsTable().Create(&taskEx)
 	if result.Error != nil {
 		log.Error().Err(result.Error).Msg("Error saving to database")

@@ -29,14 +29,15 @@ func initDefaultFields(taskDef *models.TaskDefinition) {
 	taskDef.Deleted = false
 	taskDef.Enabled = true
 	taskDef.ExecutionsCounter = 0
+	taskDef.NextExecutionTime = time.Now()
 
 	if taskDef.Namespace == "" {
 		taskDef.Namespace = "default"
 	}
 
-	if taskDef.ExecutionInterval > 0 {
-		taskDef.NextExecutionTime = time.Now().Add(time.Duration(taskDef.ExecutionInterval) * time.Second)
-	}
+	// if taskDef.ExecutionInterval > 0 {
+	// 	taskDef.NextExecutionTime = time.Now().Add(time.Duration(taskDef.ExecutionInterval) * time.Second)
+	// }
 }
 
 func CreateTaskDefinition(taskDef *models.TaskDefinition) error {
@@ -79,14 +80,14 @@ func GetTaskDefinitionById(definitionId uuid.UUID) (models.TaskDefinition, error
 	return task_def, result.Error
 }
 
-func UpdateDefinition(taskDefinition models.TaskDefinition) {
+func UpdateDefinition(taskDefinition *models.TaskDefinition) {
 	result := initializers.GetTaskDefinitionsTable().Where(
 		"id = ?",
 		taskDefinition.ID,
 	).Where(
 		"deleted = ?", // Can't update deleted definitions
 		false,
-	).Updates(
+	).Save(
 		taskDefinition,
 	)
 
@@ -103,7 +104,9 @@ func UpdateDefinition(taskDefinition models.TaskDefinition) {
 }
 
 func DeleteTaskDefinitionById(definitionId uuid.UUID) {
-	result := initializers.GetTaskDefinitionsTable().Where(
+	result := initializers.GetTaskDefinitionsTable().Select(
+		"*", // Selecting to update all even 0 value columns
+	).Where(
 		"id = ?",
 		definitionId,
 	).Updates(
