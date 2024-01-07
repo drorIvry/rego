@@ -42,6 +42,7 @@ func InitDBConnection() {
 			"driver",
 			config.DB_DRIVER,
 		).Msg("DB Driver type is not supported")
+		os.Exit(1)
 	}
 
 	if err != nil {
