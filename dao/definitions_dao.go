@@ -34,10 +34,6 @@ func initDefaultFields(taskDef *models.TaskDefinition) {
 	if taskDef.Namespace == "" {
 		taskDef.Namespace = "default"
 	}
-
-	// if taskDef.ExecutionInterval > 0 {
-	// 	taskDef.NextExecutionTime = time.Now().Add(time.Duration(taskDef.ExecutionInterval) * time.Second)
-	// }
 }
 
 func CreateTaskDefinition(taskDef *models.TaskDefinition) error {
