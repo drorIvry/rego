@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/lib/pq"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
@@ -22,7 +21,7 @@ type TaskDefinition struct {
 	NextExecutionTime time.Time      `json:"next_execution_time"`
 	Enabled           bool           `json:"enabled"`
 	Deleted           bool           `json:"deleted"`
-	Cmd               pq.StringArray `json:"cmd" gorm:"type:text[]"`
+	Cmd               StringArray    `json:"cmd" gorm:"type:json"`
 	Metadata          datatypes.JSON `json:"metadata"`
 }
 

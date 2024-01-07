@@ -23,7 +23,7 @@ import (
 
 var ClientSet *kubernetes.Clientset
 
-func BuildJobName(taskEx models.TaskExecution) string {
+func BuildJobName(taskEx *models.TaskExecution) string {
 	jobName := ""
 	if taskEx.Name != "" {
 		jobName += taskEx.Name + "-"
@@ -149,7 +149,7 @@ func AbortTask(executionId uuid.UUID) error {
 		log.Error().Err(err).Msg("Execution id wasn't found")
 		return err
 	}
-	jobName := BuildJobName(*execution)
+	jobName := BuildJobName(execution)
 	deleteOptions := metav1.DeleteOptions{}
 	var zero int64 = 0
 	bg := metav1.DeletePropagationBackground
@@ -171,7 +171,7 @@ func GetJobStatus(executionId uuid.UUID) (models.Status, error) {
 		return models.PENDING, err
 	}
 
-	jobName := BuildJobName(*execution)
+	jobName := BuildJobName(execution)
 	job, err := ClientSet.BatchV1().Jobs(
 		execution.Namespace,
 	).Get(

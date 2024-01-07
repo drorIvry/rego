@@ -1,12 +1,13 @@
 package initializers
 
 import (
-	"fmt"
+	"os"
 
 	"github.com/rs/zerolog/log"
 
 	"github.com/drorivry/rego/config"
 	"github.com/drorivry/rego/models"
+	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -34,11 +35,14 @@ func InitDBConnection() {
 		DB, err = connectSqlite()
 	} else if config.DB_DRIVER == "postgresql" || config.DB_DRIVER == "postgres" {
 		DB, err = connectPostgres()
+	} else if config.DB_DRIVER == "mysql" {
+		DB, err = connectMysql()
 	} else {
 		log.Error().Err(err).Str(
 			"driver",
 			config.DB_DRIVER,
 		).Msg("DB Driver type is not supported")
+		os.Exit(1)
 	}
 
 	if err != nil {
@@ -46,7 +50,7 @@ func InitDBConnection() {
 			"driver",
 			config.DB_DRIVER,
 		).Msg("Error connecting to database")
-		return
+		os.Exit(1)
 	}
 
 	migrateTables()
@@ -54,30 +58,48 @@ func InitDBConnection() {
 
 func connectSqlite() (*gorm.DB, error) {
 	return gorm.Open(
-		sqlite.Open(config.DB_SQLITE_URL),
+		sqlite.Open(config.DB_URL),
 		&gorm.Config{},
 	)
 }
 
 func connectPostgres() (*gorm.DB, error) {
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%d %s",
-		config.DB_POSTGRES_HOST,
-		config.DB_POSTGRES_USERNAME,
-		config.DB_POSTGRES_PASSWORD,
-		config.DB_POSTGRES_DB_NAME,
-		config.DB_POSTGRES_PORT,
-		config.DB_POSTGRES_DSN_EXTRA,
-	)
-
 	return gorm.Open(
-		postgres.Open(dsn),
+		postgres.Open(config.DB_URL),
 		&gorm.Config{},
 	)
 }
 
+func connectMysql() (*gorm.DB, error) {
+	return gorm.Open(
+		mysql.Open(config.DB_URL),
+		&gorm.Config{},
+	)
+}
+
+func migrateTable(model any, table_name string) {
+	err := DB.AutoMigrate(model)
+	if err != nil {
+		log.Error().Err(err).Str(
+			"table_name",
+			table_name,
+		).Msg(
+			"Could not AutoMigrate table",
+		)
+	}
+}
+
 func migrateTables() {
-	DB.AutoMigrate(&models.TaskDefinition{})
-	DB.AutoMigrate(&models.TaskExecution{})
-	DB.AutoMigrate(&models.ExecutionStatusHistory{})
+	migrateTable(
+		&models.TaskDefinition{},
+		models.TASK_DEFINITIONS_TABLE_NAME,
+	)
+	migrateTable(
+		&models.TaskExecution{},
+		models.TASK_EXECUTIONS_TABLE_NAME,
+	)
+	migrateTable(
+		&models.ExecutionStatusHistory{},
+		models.EXECUTION_STATUS_HISTORY_TABLE_NAME,
+	)
 }
