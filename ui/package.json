@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "db:push": "drizzle-kit push:mysql",
-    "db:pull": "drizzle-kit introspect:mysql",
+    "db:push": "drizzle-kit push:pg",
+    "db:pull": "drizzle-kit introspect:pg",
     "db:studio": "drizzle-kit studio",
     "dev": "next dev",
     "lint": "next lint",
@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.6",
+    "@neondatabase/serverless": "^0.7.0",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@planetscale/database": "^1.11.0",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@tanstack/react-query": "^4.36.1",
@@ -41,7 +43,7 @@
     "drizzle-kit": "^0.20.9",
     "eslint": "^8.54.0",
     "eslint-config-next": "^14.0.4",
-    "mysql2": "^3.6.1",
+    "mysql2": "^3.6.5",
     "postcss": "^8.4.31",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",

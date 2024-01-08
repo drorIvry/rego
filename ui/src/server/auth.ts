@@ -11,6 +11,7 @@ import GitHubProvider from "next-auth/providers/github";
 
 import { db } from "~/server/db";
 import { mysqlTable } from "~/server/db/schema";
+import { sqlDrizzleAdapter } from "./db/auth-adapter";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -48,15 +49,15 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
-  adapter: DrizzleAdapter(db, mysqlTable) as Adapter,
+  adapter: sqlDrizzleAdapter(db) as Adapter,
   providers: [
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID ?? "",
-      clientSecret: process.env.DISCORD_CLIENT_SECRET ?? ""
+      clientSecret: process.env.DISCORD_CLIENT_SECRET ?? "",
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_ID ?? "",
-      clientSecret: process.env.GITHUB_SECRET ?? ""
+      clientSecret: process.env.GITHUB_SECRET ?? "",
     }),
     EmailProvider({
       server: {

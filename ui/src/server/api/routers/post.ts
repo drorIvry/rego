@@ -29,9 +29,11 @@ export const postRouter = createTRPCRouter({
     }),
 
   getLatest: publicProcedure.query(({ ctx }) => {
-    return ctx.db.query.posts.findFirst({
-      orderBy: (posts, { desc }) => [desc(posts.createdAt)],
-    });
+    return ctx.db
+      .select()
+      .from(posts)
+      .orderBy(posts.createdAt,)
+      .limit(1);
   }),
 
   getSecretMessage: protectedProcedure.query(() => {
