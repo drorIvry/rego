@@ -1,4 +1,3 @@
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import {
   getServerSession,
   type DefaultSession,
@@ -10,8 +9,8 @@ import DiscordProvider from "next-auth/providers/discord";
 import GitHubProvider from "next-auth/providers/github";
 
 import { db } from "~/server/db";
-import { mysqlTable } from "~/server/db/schema";
 import { sqlDrizzleAdapter } from "./db/auth-adapter";
+import type { NeonDatabase } from "drizzle-orm/neon-serverless";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -49,7 +48,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
-  adapter: sqlDrizzleAdapter(db) as Adapter,
+  adapter: sqlDrizzleAdapter(db as unknown as NeonDatabase) as Adapter,
   providers: [
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID ?? "",
