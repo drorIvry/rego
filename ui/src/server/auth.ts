@@ -6,6 +6,8 @@ import {
 } from "next-auth";
 import type { Adapter } from "next-auth/adapters";
 import EmailProvider from "next-auth/providers/email";
+import DiscordProvider from "next-auth/providers/discord";
+import GitHubProvider from "next-auth/providers/github";
 
 import { db } from "~/server/db";
 import { mysqlTable } from "~/server/db/schema";
@@ -48,6 +50,14 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: DrizzleAdapter(db, mysqlTable) as Adapter,
   providers: [
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID ?? "",
+      clientSecret: process.env.DISCORD_CLIENT_SECRET ?? ""
+    }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID ?? "",
+      clientSecret: process.env.GITHUB_SECRET ?? ""
+    }),
     EmailProvider({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
