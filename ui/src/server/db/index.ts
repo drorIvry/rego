@@ -1,12 +1,14 @@
-import { Client } from "@planetscale/database";
-import { drizzle } from "drizzle-orm/planetscale-serverless";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 
 import { env } from "~/env";
 import * as schema from "./schema";
 
-export const db = drizzle(
-  new Client({
-    url: env.DATABASE_URL,
-  }).connection(),
-  { schema }
-);
+// See https://neon.tech/docs/serverless/serverless-driver
+// for more information
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const sql = neon(env.DATABASE_URL);
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export const db = drizzle(sql, schema);
