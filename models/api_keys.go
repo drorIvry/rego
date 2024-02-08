@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-const API_KEYS_TABLE_NAME string = "execution_status_history"
+const API_KEYS_TABLE_NAME string = "api_keys"
 
 type ApiKeys struct {
 	gorm.Model
