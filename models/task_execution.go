@@ -11,6 +11,7 @@ const TASK_EXECUTIONS_TABLE_NAME string = "task_executions"
 type TaskExecution struct {
 	gorm.Model
 	ID               uuid.UUID      `json:"id,omitempty" gorm:"type:uuid` //;default:uuid_generate_v4()"
+	OrganizationId   string         `json:"organization_id,omitempty"`
 	TaskDefinitionId uuid.UUID      `json:"task_definition_id,omitempty"`
 	StatusCode       Status         `json:"status_code,omitempty"`
 	TaskStatus       string         `json:"status,omitempty"`
