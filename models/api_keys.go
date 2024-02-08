@@ -11,6 +11,7 @@ type ApiKeys struct {
 	gorm.Model
 	ID uuid.UUID `json:"id,omitempty" gorm:"type:uuid`
 	ApiKey string `json:"api_key,omitempty"`
+	ApiKeyHint string `json:"api_key_hint,omitempty"`
 	OrganizationId string `json:"organization_id,omitempty"`
 	TaskStatus  string    `json:"status,omitempty"`
 }
