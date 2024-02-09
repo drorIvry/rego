@@ -18,6 +18,8 @@ __debug_bin*
 .vscode
 site
 
+.env
+
 # Build
 rego
 
