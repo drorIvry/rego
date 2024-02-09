@@ -2,6 +2,8 @@ package dao
 
 import (
 	"crypto/sha256"
+	"encoding/hex"
+	"errors"
 
 	"github.com/rs/zerolog/log"
 
@@ -10,7 +12,7 @@ import (
 )
 
 func CreateApiKey(apiKey *models.ApiKeys) error {
-	result := initializers.GetTaskDefinitionsTable().Create(apiKey)
+	result := initializers.GetApiKeysTable().Create(apiKey)
 	if result.Error != nil {
 		log.Error().Err(result.Error).Msg("Error saving to database")
 		return result.Error
@@ -23,15 +25,15 @@ func AuthApiKey(apiKey string) (models.ApiKeys, error) {
 
 	h := sha256.New()
     h.Write([]byte(apiKey))
-    hashedKey := string(h.Sum(nil))
+	hashedKey := hex.EncodeToString(h.Sum(nil))
 
-	result := initializers.GetTaskDefinitionsTable().Where(
+	result := initializers.GetApiKeysTable().Where(
 		"api_key = ?",
 		hashedKey,
-	).Find(&api_key)
-	if result.Error != nil {
+	).First(&api_key)
+	if result.Error != nil || result.RowsAffected == 0 {
 		log.Error().Err(result.Error).Msg("Error querying database")
-		return api_key, result.Error
+		return api_key, errors.New("Invalid token")
 	}
 	return api_key, nil
 }

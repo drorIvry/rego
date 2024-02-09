@@ -34,6 +34,7 @@ func InsertTaskExecution(taskEx *models.TaskExecution) error {
 	InsertExecutionStatusUpdate(
 		taskEx.ID,
 		taskEx.StatusCode,
+		taskEx.OrganizationId,
 	)
 	return nil
 }
@@ -50,10 +51,13 @@ func GetExecutionById(executionId uuid.UUID) (*models.TaskExecution, error) {
 	return &execution, result.Error
 }
 
-func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
+func UpdateExecutionStatus(executionId uuid.UUID, status models.Status, OrganizationId string) {
 	result := initializers.GetTaskExecutionsTable().Where(
 		"id = ?",
 		executionId,
+	).Where(
+		"organization_id = ?",
+		OrganizationId,
 	).Updates(
 		models.TaskExecution{
 			StatusCode: status,
@@ -73,7 +77,7 @@ func UpdateExecutionStatus(executionId uuid.UUID, status models.Status) {
 		return
 	}
 
-	InsertExecutionStatusUpdate(executionId, status)
+	InsertExecutionStatusUpdate(executionId, status, OrganizationId)
 }
 
 func GetExecutionsToWatch() []models.TaskExecution {
@@ -85,11 +89,14 @@ func GetExecutionsToWatch() []models.TaskExecution {
 	return tasks
 }
 
-func GetLatestExecutionByDefinitionId(definitionId uuid.UUID) (models.TaskExecution, error) {
+func GetLatestExecutionByDefinitionId(definitionId uuid.UUID, OrganizationId string) (models.TaskExecution, error) {
 	var task models.TaskExecution
 	result := initializers.GetTaskExecutionsTable().Where(
 		"task_definition_id = ?",
 		definitionId,
+	).Where(
+		"organization_id = ?",
+		OrganizationId,
 	).Order(
 		"created_at desc",
 	).First(&task)

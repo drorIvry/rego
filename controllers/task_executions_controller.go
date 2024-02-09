@@ -23,6 +23,13 @@ import (
 // @Success                       200
 // @Router                        /api/v1/execution/{executionId}/abort [post]
 func AbortTaskExecution(c *gin.Context) {
+	apiKey, authErr := AuthRequest(c)
+
+	if authErr != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	var executionIdUnparsed = strings.TrimSpace(c.Param("executionId"))
 
 	log.Info().Str("execution_id", executionIdUnparsed).Msg("Aborting task")
@@ -41,7 +48,7 @@ func AbortTaskExecution(c *gin.Context) {
 		return
 	}
 
-	dao.UpdateExecutionStatus(executionId, models.ABORTED)
+	dao.UpdateExecutionStatus(executionId, models.ABORTED, apiKey.OrganizationId)
 
 	c.JSON(
 		http.StatusOK,

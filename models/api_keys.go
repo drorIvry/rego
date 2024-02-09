@@ -13,7 +13,6 @@ type ApiKeys struct {
 	ApiKey string `json:"api_key,omitempty"`
 	ApiKeyHint string `json:"api_key_hint,omitempty"`
 	OrganizationId string `json:"organization_id,omitempty"`
-	TaskStatus  string    `json:"status,omitempty"`
 }
 
 func (ApiKeys) TableName() string {
