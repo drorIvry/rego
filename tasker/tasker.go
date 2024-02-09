@@ -16,6 +16,7 @@ import (
 
 func GetServer(port int) *http.Server {
 	r := gin.Default()
+	r.GET("/", controllers.Health)
 	r.GET("/ping", controllers.Ping)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

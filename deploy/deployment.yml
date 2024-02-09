@@ -16,59 +16,96 @@ spec:
     spec:
       serviceAccount: rego-account
       containers:
-      - name: rego
-        image: drorivry4/rego:latest
-        ports:
-          - containerPort: 4004
-          
---- 
-
+        - name: rego
+          image: drorivry4/rego:latest
+          ports:
+            - containerPort: 4004
+          env:
+            - name: DB_DRIVER
+              value: "mysql"
+            - name: IN_CLUSTER
+              value: "true"
+            - name: TASK_TIMEOUT
+              value: "300"
+            - name: SERVER_PORT
+              value: "4004"
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-url
+                  key: db-url
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+            requests:
+              cpu: "0.1"
+              memory: "256Mi"
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: rego
+  name: rego-service
   labels:
     app: rego
 spec:
   type: ClusterIP
   ports:
-  - port: 4004
-    protocol: TCP
-    targetPort: 4004
+    - port: 80
+      protocol: TCP
+      targetPort: 4004
   selector:
     app: rego
 
 ---
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   namespace: default
   name: rego-manager
 rules:
-- apiGroups: ["*"]
-  resources: ["jobs", "pods", "configmaps", "secrets"]
-  verbs: ["*"]
+  - apiGroups: ["*"]
+    resources: ["jobs", "pods", "configmaps", "secrets"]
+    verbs: ["*"]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
- name: role-rego
- namespace: default
-subjects:
-- kind: ServiceAccount
-  name: rego-account
+  name: role-rego
   namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: rego-account
+    namespace: default
 roleRef:
- kind: Role
- name: rego-manager
- apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: rego-manager
+  apiGroup: rbac.authorization.k8s.io
 
 ---
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: rego-account
   namespace: default
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rego-ingress
+  annotations:
+    kubernetes.io/ingress.class: gce
+spec:
+  ingressClassName: gce
+  rules:
+    - http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: rego-service
+                port:
+                  number: 80

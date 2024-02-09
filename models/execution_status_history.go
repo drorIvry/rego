@@ -9,7 +9,7 @@ const EXECUTION_STATUS_HISTORY_TABLE_NAME string = "rego_execution_status_histor
 
 type ExecutionStatusHistory struct {
 	gorm.Model
-	ExecutionID    uuid.UUID `json:"execution_id,omitempty" gorm:"type:uuid"`
+	ExecutionID    uuid.UUID `json:"execution_id,omitempty"`
 	OrganizationId string    `json:"organization_id,omitempty"`
 	TaskStatus     string    `json:"status,omitempty"`
 }
