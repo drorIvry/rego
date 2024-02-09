@@ -1,4 +1,4 @@
-INSERT INTO api_keys (
+INSERT INTO rego_api_keys (
     id,
     created_at,
     updated_at,

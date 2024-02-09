@@ -22,7 +22,7 @@ type TaskDefinition struct {
 	NextExecutionTime time.Time      `json:"next_execution_time"`
 	Enabled           bool           `json:"enabled"`
 	Deleted           bool           `json:"deleted"`
-	Cmd               StringArray    `json:"cmd" gorm:"type:json"`
+	Cmd               StringArray    `json:"cmd"`
 	Metadata          datatypes.JSON `json:"metadata"`
 }
 

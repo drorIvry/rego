@@ -18,7 +18,7 @@ type TaskExecution struct {
 	Image            string         `json:"image,omitempty" binding:"required"`
 	Name             string         `json:"name,omitempty"`
 	Namespace        string         `json:"namespace,omitempty"`
-	Cmd              StringArray    `json:"cmd" gorm:"type:json"`
+	Cmd              StringArray    `json:"cmd"`
 	Metadata         datatypes.JSON `json:"metadata,omitempty"`
 }
 
