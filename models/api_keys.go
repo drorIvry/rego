@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-const API_KEYS_TABLE_NAME string = "api_keys"
+const API_KEYS_TABLE_NAME string = "rego_api_keys"
 
 type ApiKeys struct {
 	gorm.Model

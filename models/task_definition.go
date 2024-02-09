@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-const TASK_DEFINITIONS_TABLE_NAME string = "task_definitions"
+const TASK_DEFINITIONS_TABLE_NAME string = "rego_task_definitions"
 
 type TaskDefinition struct {
 	gorm.Model

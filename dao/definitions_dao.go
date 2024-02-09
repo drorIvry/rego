@@ -135,14 +135,8 @@ func DeleteTaskDefinitionById(definitionId uuid.UUID, OrganizationId string) {
 	).Where(
 		"organization_id = ?",
 		OrganizationId,
-	).Updates(
-		models.TaskDefinition{
-			Deleted: true,
-			Enabled: false,
-		},
 	).Delete(
-		"id = ?",
-		definitionId,
+		&models.TaskDefinition{},
 	)
 
 	if result.Error != nil {

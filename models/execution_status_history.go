@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-const EXECUTION_STATUS_HISTORY_TABLE_NAME string = "execution_status_history"
+const EXECUTION_STATUS_HISTORY_TABLE_NAME string = "rego_execution_status_history"
 
 type ExecutionStatusHistory struct {
 	gorm.Model

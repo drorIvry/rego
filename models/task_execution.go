@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-const TASK_EXECUTIONS_TABLE_NAME string = "task_executions"
+const TASK_EXECUTIONS_TABLE_NAME string = "rego_task_executions"
 
 type TaskExecution struct {
 	gorm.Model
