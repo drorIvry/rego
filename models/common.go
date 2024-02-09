@@ -51,6 +51,7 @@ func CreateExecutionFromDefinition(taskDef *TaskDefinition) TaskExecution {
 		StatusCode:       READY,
 		TaskStatus:       NumericStatusToStringStatus(READY),
 		TaskDefinitionId: taskDef.ID,
+		OrganizationId:   taskDef.OrganizationId,
 		Image:            taskDef.Image,
 		Name:             taskDef.Name,
 		Namespace:        taskDef.Namespace,

@@ -45,7 +45,7 @@ func (p *Poller) Shutdown() {
 }
 
 func deployReadyTasks() {
-	tasks := dao.GetPendingTasks()
+	tasks := dao.InternalGetPendingTasks()
 	for _, task := range tasks {
 		log.Info().Str("defintion_id", task.ID.String()).Msg("deploying task")
 		DeployJob(&task)
@@ -69,7 +69,7 @@ func DeployJob(task *models.TaskDefinition) {
 		task.Enabled = false
 	}
 	dao.UpdateDefinition(task)
-	dao.UpdateExecutionStatus(taskEx.ID, models.JOB_DEPLOYED)
+	dao.UpdateExecutionStatus(taskEx.ID, models.JOB_DEPLOYED, task.OrganizationId)
 	k8s_client.LaunchK8sJob(&jobName, &taskEx)
 }
 
@@ -87,7 +87,7 @@ func timeoutTasks() {
 			log.Error().Err(err).Msg("Could not abort task")
 			continue
 		}
-		dao.UpdateExecutionStatus(taskExecution.ID, models.TIMEOUT)
+		dao.UpdateExecutionStatus(taskExecution.ID, models.TIMEOUT, taskExecution.OrganizationId)
 	}
 }
 
@@ -113,7 +113,7 @@ func updateTaskStatus() {
 				"status",
 				models.NumericStatusToStringStatus(status),
 			).Msg("Updating task status")
-			dao.UpdateExecutionStatus(taskExecution.ID, status)
+			dao.UpdateExecutionStatus(taskExecution.ID, status, taskExecution.OrganizationId)
 		}
 	}
 }

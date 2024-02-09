@@ -22,6 +22,13 @@ import (
 // @Success                       200
 // @Router                        /api/v1/task [post]
 func CreateTaskDefinition(c *gin.Context) {
+	apiKey, authErr := AuthRequest(c)
+
+	if authErr != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	var newTaskDef models.TaskDefinition
 
 	if err := c.BindJSON(&newTaskDef); err != nil {
@@ -31,6 +38,7 @@ func CreateTaskDefinition(c *gin.Context) {
 	}
 
 	newTaskDef.ID = uuid.New()
+	newTaskDef.OrganizationId = apiKey.OrganizationId
 
 	err := dao.CreateTaskDefinition(&newTaskDef)
 
@@ -58,7 +66,14 @@ func CreateTaskDefinition(c *gin.Context) {
 // @Success                       200 {object} []models.TaskDefinition
 // @Router                        /api/v1/task [get]
 func GetAllTaskDefinitions(c *gin.Context) {
-	tasks := dao.GetAllTaskDefinitions()
+	apiKey, authErr := AuthRequest(c)
+
+	if authErr != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	tasks := dao.GetAllTaskDefinitions(apiKey.OrganizationId)
 	c.IndentedJSON(http.StatusOK, tasks)
 }
 
@@ -70,7 +85,13 @@ func GetAllTaskDefinitions(c *gin.Context) {
 // @Success                       200 {object} []models.TaskDefinition
 // @Router                        /api/v1/task/pending [get]
 func GetAllPendingTaskDefinitions(c *gin.Context) {
-	tasks := dao.GetPendingTasks()
+	apiKey, authErr := AuthRequest(c)
+
+	if authErr != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+	tasks := dao.GetPendingTasks(apiKey.OrganizationId)
 	c.IndentedJSON(http.StatusOK, tasks)
 }
 
@@ -83,6 +104,13 @@ func GetAllPendingTaskDefinitions(c *gin.Context) {
 // @Success                       200
 // @Router                        /api/v1/task/{definitionId}/rerun [post]
 func RerunTask(c *gin.Context) {
+	apiKey, authErr := AuthRequest(c)
+
+	if authErr != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	uuidParam := c.Param("definitionId")
 	var definitionId, err = uuid.Parse(uuidParam)
 
@@ -91,7 +119,7 @@ func RerunTask(c *gin.Context) {
 		return
 	}
 
-	task, err := dao.GetTaskDefinitionById(definitionId)
+	task, err := dao.GetTaskDefinitionById(definitionId, apiKey.OrganizationId)
 
 	if err == gorm.ErrRecordNotFound {
 		log.Warn().Str(
@@ -127,6 +155,13 @@ func RerunTask(c *gin.Context) {
 // @Param                         definitionId  path string  true  "The task definition id"
 // @Router                        /api/v1/task/{definitionId}/latest [get]
 func GetLatestExecution(c *gin.Context) {
+	apiKey, authErr := AuthRequest(c)
+
+	if authErr != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	uuidParam := c.Param("definitionId")
 	var definitionId, err = uuid.Parse(uuidParam)
 
@@ -135,7 +170,7 @@ func GetLatestExecution(c *gin.Context) {
 		return
 	}
 
-	latestExecution, err := dao.GetLatestExecutionByDefinitionId(definitionId)
+	latestExecution, err := dao.GetLatestExecutionByDefinitionId(definitionId, apiKey.OrganizationId)
 
 	if err == gorm.ErrRecordNotFound {
 		log.Warn().Str(
@@ -162,6 +197,13 @@ func GetLatestExecution(c *gin.Context) {
 // @Success                       200
 // @Router                        /api/v1/task [put]
 func UpdateTaskDefinition(c *gin.Context) {
+	apiKey, authErr := AuthRequest(c)
+
+	if authErr != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	var updatedTaskDef models.TaskDefinition
 
 	if err := c.BindJSON(&updatedTaskDef); err != nil {
@@ -169,7 +211,9 @@ func UpdateTaskDefinition(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, c.Error(err))
 		return
 	}
-	_, err := dao.GetTaskDefinitionById(updatedTaskDef.ID)
+
+	updatedTaskDef.OrganizationId = apiKey.OrganizationId
+	_, err := dao.GetTaskDefinitionById(updatedTaskDef.ID, apiKey.OrganizationId)
 
 	if err == gorm.ErrRecordNotFound {
 		log.Warn().Str(
@@ -199,6 +243,13 @@ func UpdateTaskDefinition(c *gin.Context) {
 // @Success                       200
 // @Router                        /api/v1/task/{definitionId} [delete]
 func DeleteTaskDefinition(c *gin.Context) {
+	apiKey, authErr := AuthRequest(c)
+
+	if authErr != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	uuidParam := c.Param("definitionId")
 	var definitionId, err = uuid.Parse(uuidParam)
 
@@ -206,7 +257,7 @@ func DeleteTaskDefinition(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, c.Error(err))
 		return
 	}
-	dao.DeleteTaskDefinitionById(definitionId)
+	dao.DeleteTaskDefinitionById(definitionId, apiKey.OrganizationId)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "deleted",

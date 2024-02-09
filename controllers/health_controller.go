@@ -14,6 +14,13 @@ import (
 // @Success                       200
 // @Router                        /ping [get]
 func Ping(c *gin.Context) {
+	_, authErr := AuthRequest(c)
+
+	if authErr != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
 	})

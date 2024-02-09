@@ -27,6 +27,9 @@ func GetExecutionsStatusHistoryTable() *gorm.DB {
 	return DB.Table(models.EXECUTION_STATUS_HISTORY_TABLE_NAME)
 }
 
+func GetApiKeysTable() *gorm.DB {
+	return DB.Table(models.API_KEYS_TABLE_NAME)
+}
 func InitDBConnection() {
 	var err error
 	log.Info().Msg("initializing DB")
@@ -101,5 +104,9 @@ func migrateTables() {
 	migrateTable(
 		&models.ExecutionStatusHistory{},
 		models.EXECUTION_STATUS_HISTORY_TABLE_NAME,
+	)
+	migrateTable(
+		&models.ApiKeys{},
+		models.API_KEYS_TABLE_NAME,
 	)
 }

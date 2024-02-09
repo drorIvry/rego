@@ -10,7 +10,25 @@ import (
 	"github.com/google/uuid"
 )
 
-func GetPendingTasks() []models.TaskDefinition {
+func GetPendingTasks(OrganizationId string) []models.TaskDefinition {
+	var tasks []models.TaskDefinition
+	initializers.GetTaskDefinitionsTable().Where(
+		"enabled = ?",
+		true,
+	).Where(
+		"organization_id = ?",
+		OrganizationId,
+	).Where(
+		"deleted = ?",
+		false,
+	).Where(
+		"next_execution_time < ?",
+		time.Now(),
+	).Find(&tasks)
+	return tasks
+}
+
+func InternalGetPendingTasks() []models.TaskDefinition {
 	var tasks []models.TaskDefinition
 	initializers.GetTaskDefinitionsTable().Where(
 		"enabled = ?",
@@ -47,17 +65,23 @@ func CreateTaskDefinition(taskDef *models.TaskDefinition) error {
 	return nil
 }
 
-func GetAllTaskDefinitions() []models.TaskDefinition {
+func GetAllTaskDefinitions(OrganizationId string) []models.TaskDefinition {
 	var tasks []models.TaskDefinition
-	initializers.GetTaskDefinitionsTable().Find(&tasks)
+	initializers.GetTaskDefinitionsTable().Where(
+		"organization_id = ?",
+		OrganizationId,
+	).Find(&tasks)
 	return tasks
 }
 
-func GetTaskDefinitionById(definitionId uuid.UUID) (models.TaskDefinition, error) {
+func GetTaskDefinitionById(definitionId uuid.UUID, OrganizationId string) (models.TaskDefinition, error) {
 	var task_def models.TaskDefinition
 	result := initializers.GetTaskDefinitionsTable().Where(
 		"id = ?",
 		definitionId,
+	).Where(
+		"organization_id = ?",
+		OrganizationId,
 	).First(
 		&task_def,
 	)
@@ -81,6 +105,9 @@ func UpdateDefinition(taskDefinition *models.TaskDefinition) {
 		"id = ?",
 		taskDefinition.ID,
 	).Where(
+		"organization_id = ?",
+		taskDefinition.OrganizationId,
+	).Where(
 		"deleted = ?", // Can't update deleted definitions
 		false,
 	).Save(
@@ -99,20 +126,17 @@ func UpdateDefinition(taskDefinition *models.TaskDefinition) {
 	}
 }
 
-func DeleteTaskDefinitionById(definitionId uuid.UUID) {
+func DeleteTaskDefinitionById(definitionId uuid.UUID, OrganizationId string) {
 	result := initializers.GetTaskDefinitionsTable().Select(
 		"*", // Selecting to update all even 0 value columns
 	).Where(
 		"id = ?",
 		definitionId,
-	).Updates(
-		models.TaskDefinition{
-			Deleted: true,
-			Enabled: false,
-		},
+	).Where(
+		"organization_id = ?",
+		OrganizationId,
 	).Delete(
-		"id = ?",
-		definitionId,
+		&models.TaskDefinition{},
 	)
 
 	if result.Error != nil {

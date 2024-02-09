@@ -4,7 +4,6 @@
 *.dll
 *.so
 *.dylib
-
 # Test binary, built with `go test -c`
 *.test
 
@@ -15,8 +14,11 @@
 # vendor/
 *.db
 __debug_bin
+__debug_bin*
 .vscode
 site
+
+.env
 
 # Build
 rego
