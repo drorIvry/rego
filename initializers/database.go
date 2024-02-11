@@ -77,7 +77,7 @@ func connectPostgres() (*gorm.DB, error) {
 func connectMysql() (*gorm.DB, error) {
 	return gorm.Open(
 		mysql.Open(config.DB_URL),
-		&gorm.Config{},
+		&gorm.Config{Logger: logger.Default.LogMode(logger.Silent)},
 	)
 }
 

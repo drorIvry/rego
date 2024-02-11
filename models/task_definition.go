@@ -17,6 +17,7 @@ type TaskDefinition struct {
 	Image             string         `json:"image" binding:"required"`
 	Name              string         `json:"name"`
 	Namespace         string         `json:"namespace"`
+	LatestStatus      string         `json:"latest_status"`
 	ExecutionInterval int            `json:"execution_interval"`
 	ExecutionsCounter int            `json:"execution_counter"`
 	NextExecutionTime time.Time      `json:"next_execution_time"`
