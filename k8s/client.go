@@ -181,7 +181,9 @@ func GetJobStatus(executionId uuid.UUID) (models.Status, error) {
 	)
 
 	if err != nil {
-		return models.PROC_ERROR, err
+		if !strings.Contains(err.Error(), "not found") {
+			return models.PROC_ERROR, err
+		}
 	}
 
 	if job.Status.Active == 0 && job.Status.Succeeded == 0 && job.Status.Failed == 0 {
