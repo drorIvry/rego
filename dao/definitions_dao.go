@@ -150,3 +150,29 @@ func DeleteTaskDefinitionById(definitionId uuid.UUID, OrganizationId string) {
 		)
 	}
 }
+
+func UpdateDefinitionStatus(definitionId uuid.UUID, status models.Status, OrganizationId string) {
+	result := initializers.GetTaskDefinitionsTable().Where(
+		"id = ?",
+		definitionId,
+	).Where(
+		"organization_id = ?",
+		OrganizationId,
+	).Updates(
+		models.TaskDefinition{
+			LatestStatus: models.NumericStatusToStringStatus(status),
+		},
+	)
+
+	if result.Error != nil {
+		log.Error().Err(
+			result.Error,
+		).Str(
+			"definition_id",
+			definitionId.String(),
+		).Msg(
+			"Couldn't update definition status",
+		)
+		return
+	}
+}

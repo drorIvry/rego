@@ -77,6 +77,7 @@ func UpdateExecutionStatus(executionId uuid.UUID, status models.Status, Organiza
 		return
 	}
 
+	
 	InsertExecutionStatusUpdate(executionId, status, OrganizationId)
 }
 

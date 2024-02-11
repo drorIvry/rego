@@ -114,6 +114,7 @@ func updateTaskStatus() {
 				models.NumericStatusToStringStatus(status),
 			).Msg("Updating task status")
 			dao.UpdateExecutionStatus(taskExecution.ID, status, taskExecution.OrganizationId)
+			dao.UpdateDefinitionStatus(taskExecution.TaskDefinitionId, status, taskExecution.OrganizationId)
 		}
 	}
 }
