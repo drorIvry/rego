@@ -14,9 +14,9 @@ require (
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.2
 	gorm.io/datatypes v1.2.0
-	gorm.io/driver/postgres v1.5.4
+	gorm.io/driver/postgres v1.5.6
 	gorm.io/driver/sqlite v1.5.4
-	gorm.io/gorm v1.25.6
+	gorm.io/gorm v1.25.7-0.20240204074919-46816ad31dde
 	k8s.io/api v0.29.1
 	k8s.io/apimachinery v0.29.1
 	k8s.io/client-go v0.29.1
