@@ -4,6 +4,10 @@ WORKDIR /app
 
 COPY go.mod ./
 COPY go.sum ./
+
+RUN go install github.com/swaggo/swag/cmd/swag@latest
+RUN go mod download
+
 COPY *.go ./
 COPY config ./config
 COPY controllers ./controllers
@@ -13,22 +17,20 @@ COPY k8s ./k8s
 COPY models ./models
 COPY poller ./poller
 COPY tasker ./tasker
+COPY swagger-docs ./swagger-docs
 
-RUN go mod download
+RUN swag init --parseDependency --parseInternal
+
 RUN CGO_ENABLED=1 go build -o rego
 
 
-FROM golang:1.22
+FROM debian:stable-slim
 
 ARG PORT=4004
 
 WORKDIR /app
 
 COPY --from=builder /app/rego ./rego
-
-RUN go install github.com/swaggo/swag/cmd/swag@latest
-COPY swagger-docs ./swagger-docs
-RUN swag init --parseDependency --parseInternal
 
 EXPOSE ${PORT}
 
