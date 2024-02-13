@@ -161,7 +161,7 @@ which indicates the success.
 
 
 ### API Swagger
-browse to `http://localhost:4004/swagger/index.htm`
+browse to `http://localhost:4004/swagger/index.html`
 
 ## Contributing
 We welcome contributions from the community! If you'd like to contribute to the project, please follow these guidelines:
