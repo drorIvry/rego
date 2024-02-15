@@ -111,7 +111,7 @@ info:
   license:
     name: MIT
     url: https://opensource.org/license/mit/
-  title: Matter
+  title: Rego
   version: "1.0"
 paths:
   /api/v1/execution/{executionId}/abort:
