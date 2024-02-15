@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "Schedualing workloads made easy.",
-        "title": "Matter",
+        "title": "Rego",
         "contact": {
             "name": "XXXX",
             "email": "XXX@gmail.com"
