@@ -12,7 +12,7 @@ require (
 	github.com/rs/zerolog v1.31.0
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0
-	github.com/swaggo/swag v1.16.2
+	github.com/swaggo/swag v1.16.3
 	gorm.io/datatypes v1.2.0
 	gorm.io/driver/postgres v1.5.6
 	gorm.io/driver/sqlite v1.5.4
