@@ -77,7 +77,6 @@ func UpdateExecutionStatus(executionId uuid.UUID, status models.Status, Organiza
 		return
 	}
 
-	
 	InsertExecutionStatusUpdate(executionId, status, OrganizationId)
 }
 
@@ -103,4 +102,38 @@ func GetLatestExecutionByDefinitionId(definitionId uuid.UUID, OrganizationId str
 	).First(&task)
 
 	return task, result.Error
+}
+
+func GetExecutionsHistory(definitionId uuid.UUID, organizationId string, offset int, limit int) ([]models.TaskExecution, error) {
+	var executions []models.TaskExecution
+
+	result := initializers.GetTaskExecutionsTable().Where(
+		"task_definition_id = ?",
+		definitionId,
+	).Where(
+		"organization_id = ?",
+		organizationId,
+	).Order(
+		"created_at desc",
+	).Offset(
+		offset,
+	).Limit(
+		limit,
+	).Find(&executions)
+
+	if result.Error != nil {
+		log.Error().Err(
+			result.Error,
+		).Str(
+			"definition_id",
+			definitionId.String(),
+		).Str(
+			"organization_id",
+			organizationId,
+		).Msg(
+			"Error fetching executions history from db",
+		)
+	}
+
+	return executions, result.Error
 }
