@@ -24,7 +24,7 @@ func AuthApiKey(apiKey string) (models.ApiKeys, error) {
 	var api_key models.ApiKeys
 
 	h := sha256.New()
-    h.Write([]byte(apiKey))
+	h.Write([]byte(apiKey))
 	hashedKey := hex.EncodeToString(h.Sum(nil))
 
 	result := initializers.GetApiKeysTable().Where(
@@ -37,4 +37,3 @@ func AuthApiKey(apiKey string) (models.ApiKeys, error) {
 	}
 	return api_key, nil
 }
-gst
