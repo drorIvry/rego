@@ -263,3 +263,40 @@ func DeleteTaskDefinition(c *gin.Context) {
 		"message": "deleted",
 	})
 }
+
+// GetTaskHistory                 godoc
+// @Summary      				  Returns a history of the executions for the given task definition.
+// @Description                   Returns a history of the executions for the given task definition.
+// @Tags                          definition
+// @Produce                       application/json
+// @Param                         definitionId  path  string  true  "The task definition id"
+// @Param                         offset  query int  false  "Offset of the history"
+// @Param                         limit   query int  false  "Limit the number of the results"
+// @Success                       200
+// @Router                        /api/v1/task/{definitionId}/history [get]
+func GetTaskHistory(c *gin.Context) {
+	// var err error
+	apiKey, authErr := AuthRequest(c)
+
+	if authErr != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	uuidParam := c.Param("definitionId")
+	definitionId, err := uuid.Parse(uuidParam)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, c.Error(err))
+		return
+	}
+
+	offset := ParseIntQueryParameter(c, "offset", 0)
+	limit := ParseIntQueryParameter(c, "limit", 10)
+
+	executions, err := dao.GetExecutionsHistory(definitionId, apiKey.OrganizationId, offset, limit)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+
+	c.IndentedJSON(http.StatusOK, executions)
+}
