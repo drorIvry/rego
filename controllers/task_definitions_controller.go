@@ -291,7 +291,7 @@ func GetTaskHistory(c *gin.Context) {
 	}
 
 	offset := ParseIntQueryParameter(c, "offset", 0)
-	limit := ParseIntQueryParameter(c, "limit", 0)
+	limit := ParseIntQueryParameter(c, "limit", 10)
 
 	executions, err := dao.GetExecutionsHistory(definitionId, apiKey.OrganizationId, offset, limit)
 	if err != nil {
