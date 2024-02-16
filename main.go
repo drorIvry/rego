@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"flag"
 	"net/http"
 	"os"
@@ -12,8 +14,10 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/drorivry/rego/config"
+	"github.com/drorivry/rego/dao"
 	"github.com/drorivry/rego/initializers"
 	k8s_client "github.com/drorivry/rego/k8s"
+	"github.com/drorivry/rego/models"
 	"github.com/drorivry/rego/poller"
 	"github.com/drorivry/rego/tasker"
 )
@@ -37,10 +41,30 @@ func handleInterrupt(c chan os.Signal, server *http.Server, p *poller.Poller) {
 	p.Shutdown()
 }
 
+func initApiKey() {
+	h := sha256.New()
+	h.Write([]byte("delete_me"))
+	hashedKey := hex.EncodeToString(h.Sum(nil))
+
+	if dao.CountApiKeys() == 0 {
+		log.Info().Msg("Creating initial api key")
+		dao.CreateApiKey(
+			&models.ApiKeys{
+				ApiKey:         hashedKey,
+				ApiKeyHint:     "Delete Me",
+				OrganizationId: "delete_me",
+			},
+		)
+	}
+
+}
+
 func init() {
 	initializers.LoadEnvVars()
 	config.InitConfig()
 	initializers.InitDBConnection()
+
+	initApiKey()
 }
 
 //	@title			Rego

@@ -37,3 +37,10 @@ func AuthApiKey(apiKey string) (models.ApiKeys, error) {
 	}
 	return api_key, nil
 }
+
+func CountApiKeys() int64 {
+	var count int64
+	initializers.GetApiKeysTable().Count(&count)
+
+	return count
+}
