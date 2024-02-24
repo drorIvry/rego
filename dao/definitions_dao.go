@@ -65,12 +65,20 @@ func CreateTaskDefinition(taskDef *models.TaskDefinition) error {
 	return nil
 }
 
-func GetAllTaskDefinitions(OrganizationId string) []models.TaskDefinition {
+func GetAllTaskDefinitions(OrganizationId string, offset int, limit int) []models.TaskDefinition {
 	var tasks []models.TaskDefinition
 	initializers.GetTaskDefinitionsTable().Where(
 		"organization_id = ?",
 		OrganizationId,
-	).Find(&tasks)
+	).Order(
+		"created_at desc",
+	).Offset(
+		offset,
+	).Limit(
+		limit,
+	).Find(
+		&tasks,
+	)
 	return tasks
 }
 

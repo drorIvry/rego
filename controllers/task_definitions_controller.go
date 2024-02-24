@@ -73,7 +73,10 @@ func GetAllTaskDefinitions(c *gin.Context) {
 		return
 	}
 
-	tasks := dao.GetAllTaskDefinitions(apiKey.OrganizationId)
+	offset := ParseIntQueryParameter(c, "offset", 0)
+	limit := ParseIntQueryParameter(c, "limit", 10)
+
+	tasks := dao.GetAllTaskDefinitions(apiKey.OrganizationId, offset, limit)
 	c.IndentedJSON(http.StatusOK, tasks)
 }
 
