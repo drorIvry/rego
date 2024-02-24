@@ -2,16 +2,20 @@ import { TaskStatus } from "./taskStatus";
 
 export type TaskDefinition = {
   id: string;
-  OrganizationId: string;
-  Image: string;
-  Name: string;
-  Namespace: string;
-  LatestStatus: TaskStatus;
-  ExecutionInterval: number;
-  ExecutionsCounter: number;
-  NextExecutionTime: Date;
-  Enabled: boolean;
-  Deleted: boolean;
-  Cmd: string[];
-  Metadata: any;
+  organization_id: string;
+  image: string;
+  name: string;
+  namespace: string;
+  latest_status: TaskStatus;
+  execution_interval: number;
+  execution_counter: number;
+  next_execution_time: Date;
+  enabled: boolean;
+  deleted: boolean;
+  cmd: string[];
+  metadata: any;
+
+  CreatedAt: Date;
+  UpdatedAt: Date;
+  DeletedAt: Date;
 };

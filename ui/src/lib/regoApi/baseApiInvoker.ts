@@ -1,6 +1,5 @@
 import { env } from "~/env";
 import { AxiosResponse, Axios, AxiosError } from "axios";
-import { log } from "console";
 
 const axios = require("axios").default;
 
@@ -36,7 +35,7 @@ export class RegoApi {
 
     const response: AxiosResponse = await this.regoClient.request({
       method: method.toLowerCase(),
-      url: endpoint,
+      url: this.regoBaseUrl + endpoint,
       data: body,
       params: parameters,
       headers: {

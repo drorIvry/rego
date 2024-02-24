@@ -4,18 +4,18 @@ import { TaskDefinition } from "../models/taskDefinition";
 
 import { validate } from "class-validator";
 
-export class TaskDefinitions extends RegoApi {
-  public async getAllTaskDefinitions(api_key: string) {
+export class TaskDefinitionsApi extends RegoApi {
+  public async getAllTaskDefinitions(
+    api_key: string,
+  ): Promise<TaskDefinition[]> {
     const response: AxiosResponse = await this.invokeApi(
       "get",
       "/api/v1/task",
       api_key,
     );
 
-    validate();
-    const tasks: TaskDefinition[] = response.data.forEach((element: any) => {
-      return validate(element);
-    });
-    return response.data;
+    const tasks: TaskDefinition[] = response.data;
+    console.log(tasks[0]);
+    return tasks;
   }
 }

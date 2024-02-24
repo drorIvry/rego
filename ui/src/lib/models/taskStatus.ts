@@ -1,11 +1,23 @@
+export enum NumericTaskStatus {
+  READY = 100,
+  JOB_DEPLOYED = 200,
+  PENDING = 250,
+  RUNNING = 300,
+  TIMEOUT = 400,
+  PROC_ERROR = 410,
+  APP_ERROR = 420,
+  ABORTED = 430,
+  SUCCESS = 500,
+}
+
 export enum TaskStatus {
-    READY        = 100,
-	JOB_DEPLOYED = 200,
-	PENDING      = 250,
-	RUNNING      = 300,
-	TIMEOUT      = 400,
-	PROC_ERROR   = 410,
-	APP_ERROR    = 420,
-	ABORTED      = 430,
-	SUCCESS      = 500,
+  READY = "READY",
+  JOB_DEPLOYED = "JOB_DEPLOYED",
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  TIMEOUT = "TIMEOUT",
+  PROC_ERROR = "PROC_ERROR",
+  APP_ERROR = "APP_ERROR",
+  ABORTED = "ABORTED",
+  SUCCESS = "SUCCESS",
 }
