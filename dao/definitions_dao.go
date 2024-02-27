@@ -184,3 +184,26 @@ func UpdateDefinitionStatus(definitionId uuid.UUID, status models.Status, Organi
 		return
 	}
 }
+
+func CountTaskDefinitions(organizationId string) (int64, error) {
+	var count int64
+	result := initializers.GetTaskDefinitionsTable().Where(
+		"organization_id = ?",
+		organizationId,
+	).Count(
+		&count,
+	)
+
+	if result.Error != nil {
+		log.Error().Err(
+			result.Error,
+		).Str(
+			"organization_id",
+			organizationId,
+		).Msg(
+			"Couldn't count task definitions",
+		)
+	}
+
+	return count, result.Error
+}

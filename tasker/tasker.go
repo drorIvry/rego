@@ -30,6 +30,7 @@ func GetServer(port int) *http.Server {
 	{
 		// Definitions
 		v1.GET("/task", ginZerologger, controllers.GetAllTaskDefinitions)
+		v1.GET("/task/count", ginZerologger, controllers.CountTaskDefinitions)
 		v1.POST("/task", ginZerologger, controllers.CreateTaskDefinition)
 		v1.POST("/task/:definitionId/rerun", ginZerologger, controllers.RerunTask)
 		v1.GET("/task/:definitionId/latest", ginZerologger, controllers.GetLatestExecution)
