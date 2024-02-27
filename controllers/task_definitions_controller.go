@@ -73,7 +73,10 @@ func GetAllTaskDefinitions(c *gin.Context) {
 		return
 	}
 
-	tasks := dao.GetAllTaskDefinitions(apiKey.OrganizationId)
+	offset := ParseIntQueryParameter(c, "offset", 0)
+	limit := ParseIntQueryParameter(c, "limit", 10)
+
+	tasks := dao.GetAllTaskDefinitions(apiKey.OrganizationId, offset, limit)
 	c.IndentedJSON(http.StatusOK, tasks)
 }
 
@@ -261,5 +264,31 @@ func DeleteTaskDefinition(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "deleted",
+	})
+}
+
+// CountTaskDefinitions           godoc
+// @Summary      				  Counts the number of task definitions for an account
+// @Description                   Counts the number of task definitions for an account
+// @Tags                          definition
+// @Produce                       application/json
+// @Success                       200
+// @Router                        /api/v1/task/count [get]
+func CountTaskDefinitions(c *gin.Context) {
+	apiKey, authErr := AuthRequest(c)
+
+	if authErr != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	count, err := dao.CountTaskDefinitions(apiKey.OrganizationId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, c.Error(err))
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"count": count,
 	})
 }
